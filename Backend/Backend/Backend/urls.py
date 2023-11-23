@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowths, NewBox
+from growthsOUT.views import NGrowthOUT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,6 @@ urlpatterns = [
     path('boxlist/<user_id>', BoxListInfo),
     path('boxgrow/<box_id>/', BoxGrowths),
     path('newbox/', NewBox),
+
+    path('ngrowout/', NGrowthOUT),
 ]

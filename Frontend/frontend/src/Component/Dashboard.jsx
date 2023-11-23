@@ -8,32 +8,52 @@ const dashboard2 = {
   name: 'React_Dashboard',
   theme: {
     backgroundColor: 'black',
-    color: 'pink'
+    color: 'White'
   }
 };
 
 export function D2()
 {
+    // 在 D2 元件中設定 state 來管理接收到的訊息
+  const [ws, setws] = useState(null);
+  const [message, setMessage] = useState(' ');
+
     useEffect(() => {
-        console.log('123')
-        socket.emit('message', 'Hello from client');
+        // 建立 Socket.IO 連線
+        
+        setws(socket.connect())
 
-        // 設定接收伺服器訊息的事件
-        socket.on('message', (data) => {
-            console.log('Message from server:', data);
-        });
+        if(ws){
+            console.log(socket.id + 'success connect!');
+        }
+        socket.emit('getMessage', "Client sent to Server");
 
-        // client-side
-        socket.on("connect", () => {
-            console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
-        });
-
-        // 在 component unmount 時斷開連線
+        // 在元件卸載時斷開 Socket.IO 連線
         return () => {
-        socket.disconnect();
+        //   socket.disconnect();
         };
-    }, [])
-    return (<h2 style={dashboard2.theme}>Hello, {dashboard2.name}</h2>);
+    }, [ws]); // 空的依賴陣列確保這段程式碼只執行一次
+
+    // 監聽來自伺服器的訊息
+    socket.on('getMessage', (data) => {
+        console.log("From Server:" + data);
+        setMessage(data);
+    });
+
+    const sendMessage = () => {
+        //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
+        var time = new Date();
+        ws.emit('getMessage', time);
+    }
+
+    // 在 D2 元件中可以顯示接收到的訊息
+    return (
+        <div>
+        <h2 style={dashboard2.theme}>Hello, {dashboard2.name}</h2>
+        <p>Message from server: {message}</p>
+        <input type='button' value='送出訊息' onClick={sendMessage} />
+        </div>
+    );
 }
 
 // 建立 BoxInfo component
@@ -126,7 +146,6 @@ export function Dashboard()
         <BoxBtnList onButtonClick={handleButtonClick} />
         {boxdata && <BoxInfo data={boxdata} />}
         {/* {boxdata && <EditBtn btnInfo={boxdata} />} */}
-
         {growdata ? <GrowInfo data={growdata}/> : null}
         {/* {error && <div>Error: {error}</div>} */}
         {error ? <div>Error: {error}</div> : null}

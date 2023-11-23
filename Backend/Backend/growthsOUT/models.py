@@ -18,5 +18,5 @@ class growthOUT(models.Model):
 	boxid     = models.ManyToManyField(box, null=True, related_name='whichboxes')
 	
 	def __str__(self):
-		return self.id
+		return str(self.id)
 # Create your models here.
