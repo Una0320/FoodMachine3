@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowths, NewBox
 from growthsOUT.views import NGrowthOUT
+from growthsIN.views import NGrowthIN
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,6 @@ urlpatterns = [
     path('newbox/', NewBox),
 
     path('ngrowout/', NGrowthOUT),
+
+    path('ngrowin/', NGrowthIN),
 ]

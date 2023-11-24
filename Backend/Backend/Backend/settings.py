@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'growthsIN',
     'growthsOUT',
     'devices',
+    'socketio',
+    'socketioClient',
     'corsheaders',
 ]
 
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'socketio_client.middleware.SocketIOMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
 
@@ -61,6 +64,7 @@ MIDDLEWARE = [
 # for React
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
 )
 
 ROOT_URLCONF = 'Backend.urls'

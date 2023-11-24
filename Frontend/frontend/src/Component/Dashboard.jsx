@@ -20,36 +20,50 @@ export function D2()
 
     useEffect(() => {
         // 建立 Socket.IO 連線
-        
-        setws(socket.connect())
-
-        if(ws){
-            console.log(socket.id + 'success connect!');
+        // ws stores socket connection status
+        // When ws is empty (no connection), a connection is made.
+        if (!ws){
+            console.log("ws is null.");
+            setws(socket.connect())
+            console.log(ws);
         }
-        socket.emit('getMessage', "Client sent to Server");
+        if(ws)
+        {
+            // console.log(ws.id);
+            ws.emit('getMessage', "ws not null");
+        }
+
+        // // 監聽來自伺服器的訊息
+        // ws.on('getMessage', (data) => {
+        //     console.log("getMessage:" + data);
+        //     setMessage(data);
+        // });
+
+        // ws.on('updateEvent',(data) =>{
+        //     console.log("updateEvent:" + data);
+        //     // fetchData(cur_box);
+        //     setMessage(data);
+        // })
 
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
-        //   socket.disconnect();
+          socket.disconnect()
+            // setws(ws.disconect());
         };
     }, [ws]); // 空的依賴陣列確保這段程式碼只執行一次
 
-    // 監聽來自伺服器的訊息
-    socket.on('getMessage', (data) => {
-        console.log("From Server:" + data);
-        setMessage(data);
-    });
-
-    const sendMessage = () => {
+    function sendMessage()
+    {
         //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
         var time = new Date();
-        ws.emit('getMessage', time);
+        // ws.emit('getMessage', time);
+        ws.emit('clickbtn', 'React click.');
     }
 
     // 在 D2 元件中可以顯示接收到的訊息
     return (
         <div>
-        <h2 style={dashboard2.theme}>Hello, {dashboard2.name}</h2>
+        <h2 style={dashboard2.theme}>{dashboard2.name}</h2>
         <p>Message from server: {message}</p>
         <input type='button' value='送出訊息' onClick={sendMessage} />
         </div>
@@ -100,6 +114,7 @@ export function Dashboard()
   const [boxdata, setData] = useState(null);
   const [growdata, setGData] = useState(null);
   const [error, setError] = useState(null);
+  const [cur_box, setCurBox] = useState(null);
 
   const fetchData = async (boxId) => {
     try {
@@ -137,6 +152,7 @@ export function Dashboard()
 
   const handleButtonClick = (boxId) => {
     // Call fetchData with the selected boxId
+    setCurBox(boxId);
     fetchData(boxId);
   };
 
