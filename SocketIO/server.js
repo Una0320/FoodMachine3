@@ -59,7 +59,6 @@ io.on("connection", (socket) => {
 
     socket.on('clickbtn',message => {
         console.log("From React:" + message)
-        socket.emit('fromreact', message)
     })
 
     // 設定每30分鐘觸發一次事件

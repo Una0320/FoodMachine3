@@ -6,7 +6,7 @@ const BoxBtnList = ({ onButtonClick }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://192.168.1.213:8000/boxlist/1");
+      const response = await fetch("http://127.0.0.1:8000/boxlist/1");
       if (response.ok) {
         const jsonData = await response.json();
         setBoxList(jsonData);

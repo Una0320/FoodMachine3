@@ -6,6 +6,3 @@ import { io } from 'socket.io-client';
 // const URL = "http://192.168.1.212:4040";
 const URL = "http://127.0.0.1:3001";
 export const socket = io(URL);
-// export const socket = io(URL, {
-//     autoConnect: false
-// });

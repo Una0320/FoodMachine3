@@ -30,14 +30,15 @@ export function D2()
         if(ws)
         {
             // console.log(ws.id);
-            ws.emit('getMessage', "ws not null");
+            ws.on('getMessage', (data) => {
+              console.log("getMessage:" + data);
+              setMessage(data);
+          });
+            // ws.emit('getMessage', "ws not null");
         }
 
         // // 監聽來自伺服器的訊息
-        // ws.on('getMessage', (data) => {
-        //     console.log("getMessage:" + data);
-        //     setMessage(data);
-        // });
+        
 
         // ws.on('updateEvent',(data) =>{
         //     console.log("updateEvent:" + data);
@@ -47,10 +48,15 @@ export function D2()
 
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
-          socket.disconnect()
+          // socket.disconnect()
             // setws(ws.disconect());
         };
     }, [ws]); // 空的依賴陣列確保這段程式碼只執行一次
+
+    // ws.on('getMessage', (data) => {
+    //   console.log("getMessage:" + data);
+    //   setMessage(data);
+    // });
 
     function sendMessage()
     {
@@ -118,7 +124,7 @@ export function Dashboard()
 
   const fetchData = async (boxId) => {
     try {
-      const response = await fetch(`http://192.168.1.213:8000/boxinfo/${boxId}`);
+      const response = await fetch(`http://127.0.0.1:8000/boxinfo/${boxId}`);
       
       if (response.ok) {
         const jsonData = await response.json();
@@ -134,7 +140,7 @@ export function Dashboard()
     }
     // -----------------growth info-------------------
     try {
-      const response = await fetch(`http://192.168.1.213:8000/boxgrow/${boxId}/?start_date=2023-11-10`);
+      const response = await fetch(`http://127.0.0.1:8000/boxgrow/${boxId}/?start_date=2023-11-10`);
       
       if (response.ok) {
         const jsonData = await response.json();
