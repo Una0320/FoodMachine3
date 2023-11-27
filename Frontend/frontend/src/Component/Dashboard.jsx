@@ -12,70 +12,6 @@ const dashboard2 = {
   }
 };
 
-export function D2()
-{
-    // 在 D2 元件中設定 state 來管理接收到的訊息
-  const [ws, setws] = useState(null);
-  const [message, setMessage] = useState(' ');
-
-    useEffect(() => {
-        // 建立 Socket.IO 連線
-        // ws stores socket connection status
-        // When ws is empty (no connection), a connection is made.
-        if (!ws){
-            console.log("ws is null.");
-            setws(socket.connect())
-            console.log(ws);
-        }
-        if(ws)
-        {
-            // console.log(ws.id);
-            ws.on('getMessage', (data) => {
-              console.log("getMessage:" + data);
-              setMessage(data);
-          });
-            // ws.emit('getMessage', "ws not null");
-        }
-
-        // // 監聽來自伺服器的訊息
-        
-
-        // ws.on('updateEvent',(data) =>{
-        //     console.log("updateEvent:" + data);
-        //     // fetchData(cur_box);
-        //     setMessage(data);
-        // })
-
-        // 在元件卸載時斷開 Socket.IO 連線
-        return () => {
-          // socket.disconnect()
-            // setws(ws.disconect());
-        };
-    }, [ws]); // 空的依賴陣列確保這段程式碼只執行一次
-
-    // ws.on('getMessage', (data) => {
-    //   console.log("getMessage:" + data);
-    //   setMessage(data);
-    // });
-
-    function sendMessage()
-    {
-        //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
-        var time = new Date();
-        // ws.emit('getMessage', time);
-        ws.emit('clickbtn', 'React click.');
-    }
-
-    // 在 D2 元件中可以顯示接收到的訊息
-    return (
-        <div>
-        <h2 style={dashboard2.theme}>{dashboard2.name}</h2>
-        <p>Message from server: {message}</p>
-        <input type='button' value='送出訊息' onClick={sendMessage} />
-        </div>
-    );
-}
-
 // 建立 BoxInfo component
 // 使用專屬的 BoxInfo component 顯示 Box 資訊。
 const BoxInfo = ({ data }) => (
@@ -111,6 +47,85 @@ const GrowInfo = ({ data }) => (
     </table>
   </div>
 );
+
+export function D2()
+{
+    // 在 D2 元件中設定 state 來管理接收到的訊息
+    const [ws, setws] = useState(null);
+    const [message, setMessage] = useState([]);
+    const [isConnected, setIsConnected] = useState(socket.connect());
+    const [test, settest] = useState('');
+    //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
+
+    useEffect(() => {
+        // 建立 Socket.IO 連線
+        // ws stores socket connection status
+        // When ws is empty (no connection), a connection is made.
+        // if (!ws){
+        //     console.log("ws is null.");
+        //     setws(socket.connect())
+        //     console.log(ws);
+        // }
+        // if(ws)
+        // {
+        //     // console.log(ws.id);
+        //     ws.on('getMessage', (data) => {
+        //       console.log("getMessage:" + data);
+        //       setMessage(data);
+        //   });
+        // }
+        
+        // socket.on('connect', onConnect);
+        function getMessage(value){
+          settest("From Socket Server: " + value);
+          console.log(socket.id);
+          console.log(value);
+          //------------------------
+          //http://127.0.0.1:8000/boxinfo/1
+          fetch('http://127.0.0.1:8000/boxgrow/1/')
+            .then(response => {
+              response.json().then(text => {
+                console.log(test + ": " + text.users);  // 拿到 response.body 轉成的物件
+                setMessage(text);
+              })
+            })
+        }
+
+        function frontend_update(){
+          console.log('Event emited');
+          fetch('http://127.0.0.1:8000/boxgrow/2/')
+            .then(response => {
+              response.json().then(text => {
+                console.log(text);  // 拿到 response.body 轉成的物件
+                setMessage(text);
+              })
+            })
+        }
+        
+        function data_change(){
+          console.log('Empty Event');
+        }
+        socket.on('getMessage', getMessage);
+        socket.on('frontend_update', frontend_update)
+        socket.on('data_change', data_change);
+        // 在元件卸載時斷開 Socket.IO 連線
+        return () => {
+          // socket.disconnect()
+        };
+    }, []);
+
+
+    // 在 D2 元件中可以顯示接收到的訊息
+    return (
+        <div>
+        <h2 style={dashboard2.theme}>{dashboard2.name}</h2>
+        <p>{test}</p>
+        {/* {message && <BoxInfo data={message} />} */}
+        {message ? <GrowInfo data={message}/> : null}
+        {/* <input type='button' value='送出訊息' onClick={sendMessage} /> */}
+        </div>
+    );
+}
 
 // 建立 D2 component
 export function Dashboard()

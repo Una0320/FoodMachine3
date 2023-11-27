@@ -17,11 +17,11 @@ def NGrowthIN(request):
         # new one growthIN
         new_record = growthIN(
             timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            airtemp=growth_data['airtemp'],
+            airtemp=growth_data['temperature'],
             humidity=growth_data['humidity'],
-            luminance = growth_data['luminance'],
-            ledrgb = growth_data['ledrgb'],
-            sunlong = growth_data['sunlong'],
+            luminance = growth_data['light'],
+            ledrgb = growth_data['RGB'],
+            sunlong = growth_data['time'],
 
             boxid_id=growth_data['boxid'] # 使用外鍵名 + _id
 
@@ -32,6 +32,6 @@ def NGrowthIN(request):
         # new_record.boxid.set(growth_data['boxid'])
         
 
-        return JsonResponse({'message': 'Data saved successfully'}, status=201)
+        return JsonResponse({'message': 'post_success'}, status=201)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)

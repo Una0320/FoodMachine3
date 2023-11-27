@@ -47,14 +47,13 @@ const io = require("socket.io")(server, {
 // server-side
 io.on("connection", (socket) => {
     //經過連線後在 console 中印出訊息
-    console.log('Client: ', socket.id); // ojIckSD2jqNzOqIrAGzL
+    console.log('Client: ', socket.id); // EX:ojIckSD2jqNzOqIrAGzL
 
     //監聽透過 connection 傳進來的事件
     socket.on('getMessage', message => {
         //回傳 message 給發送訊息的 Client
-        var time = new Date();
         console.log("From Client:"+ message)
-        // socket.emit('getMessage', time)
+        
     })
 
     socket.on('clickbtn',message => {
@@ -63,10 +62,20 @@ io.on("connection", (socket) => {
 
     // 設定每30分鐘觸發一次事件
     const intervalId = setInterval(() => {
-        // 觸發事件，這裡假設事件名稱為 'updateEvent'
-        socket.emit('updateEvent', { message: 'Hello from server!' });
-    }, 5 * 60 * 1000); // 30分鐘的毫秒數
-
+        // 觸發事件，這裡假設事件名稱為 'getMessage'
+        var time = new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Taipei',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+          });
+        socket.emit('getMessage', time);
+    }, 1 * 60 * 1000); // 30分鐘的毫秒數
+    
     socket.on('disconnect', () =>{
         console.log('Disconnected');
         clearInterval(intervalId);
