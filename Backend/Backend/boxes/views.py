@@ -42,7 +42,6 @@ def BoxListInfo(request, user_id):
                         "users":[user.username for user in box_data.users.all()],
                         "plant":[seed.name for seed in box_data.plant.all()],
                         "device":[str(d.id) + " " + d.devicename for d in box_data.inwhichbox.all()]
-
             }
             data.append(box_info)
         return JsonResponse(data, safe=False)

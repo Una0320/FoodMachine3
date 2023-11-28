@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import { useState, useEffect } from 'react'
 import BoxBtnList from "./BoxBtnList";
 import { socket } from "../socket";
+import LedControl from "./LedControl";
 
 const dashboard2 = {
   name: 'React_Dashboard',
@@ -53,7 +54,7 @@ export function D2()
     // 在 D2 元件中設定 state 來管理接收到的訊息
     const [ws, setws] = useState(null);
     const [message, setMessage] = useState([]);
-    const [isConnected, setIsConnected] = useState(socket.connect());
+    // const [isConnected, setIsConnected] = useState(socket.connect());
     const [test, settest] = useState('');
     //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
 
@@ -179,7 +180,8 @@ export function Dashboard()
 
   return (
     <div>
-        <D2></D2>
+        {/* <D2></D2> */}
+        <LedControl></LedControl>
         <BoxBtnList onButtonClick={handleButtonClick} />
         {boxdata && <BoxInfo data={boxdata} />}
         {/* {boxdata && <EditBtn btnInfo={boxdata} />} */}

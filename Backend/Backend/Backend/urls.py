@@ -20,7 +20,7 @@ from django.urls import include, path
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowths, NewBox
 from growthsOUT.views import NGrowthOUT
 from growthsIN.views import NGrowthIN
-from devices.views import UpdateDevice
+from devices.views import DeviceInfo, UpdateDevice
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -33,5 +33,6 @@ urlpatterns = [
 
     path('ngrowin/', NGrowthIN),
 
-    path('editdevice/<box_id>/<device_id>/', UpdateDevice)
+    path('editdevice/<box_id>/<device_id>/', UpdateDevice),
+    path('deviceinfo/<box_id>', DeviceInfo),
 ]
