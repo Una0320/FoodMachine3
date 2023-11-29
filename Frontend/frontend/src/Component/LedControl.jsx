@@ -16,9 +16,10 @@ const DeviceInfo = ({ data }) => (
     </div>
 );
 
-const LedControl = () =>
+const LedControl = ( {socket} ) =>
 {
     const [Ledstatus, setLedstatus] = useState();
+
     useEffect(() => {
         const fetchData = async (boxId) => {
             try {
@@ -37,22 +38,54 @@ const LedControl = () =>
             }
         };
         fetchData(1);
+        console.log(socket.connected);
+          
     }, []);
 
     function onSubmit(event){
-        alert('submit');
         // 阻止預設行為, 整個畫面被換頁了
         // 原來是因為提交 form 的時候本來就會因為傳送資料而換頁。所以就需要使用 event.preventDefault() 
         event.preventDefault();
 
+        // 讀取表單數據
+        //使用 FormData(form) 來建立這個對象時，它會收集表單中的所有輸入元素的數據，然後將這些數據按照表單中輸入元素的 name 屬性打包成一個對象。
+        const form = event.target;
+        const formData = new FormData(form);
+        console.log(formData);
+        // formData.get(name),  表單中輸入元素的 name 屬性來指定
+        console.log(formData.get('brightness'));
+
+        const formJson = Object.fromEntries(formData.entries());
+        console.log(formJson);
+        //將 JavaScript 物件轉換為 JSON 字串
+        console.log(JSON.stringify(formJson));
+        socket.emit('ledcontrol', JSON.stringify(formJson));
+        alert('submit');
     }
+
     return(
         <div>
             {Ledstatus && <DeviceInfo data={Ledstatus}></DeviceInfo>}
+
             <h3>Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3>
             <form onSubmit={onSubmit}>
+                <label htmlFor="brightness">Brightness:
+                <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue="0" />
+                </label>
 
-                <button type="submit" value = "submit">Submit</button>
+                <label htmlFor="red">Red:
+                <input type="number" id="red" name="red" min="0" max="255" defaultValue="128" />
+                </label>
+
+                <label htmlFor="green">Green:
+                <input type="number" id="green" name="green" min="0" max="255" defaultValue="128" />
+                </label>
+
+                <label htmlFor="blue">Blue:
+                <input type="number" id="blue" name="blue" min="0" max="255" defaultValue="128" />
+                </label>
+
+                <button type="submit" value="Submit">Submit</button>
             </form>
         </div>
     );

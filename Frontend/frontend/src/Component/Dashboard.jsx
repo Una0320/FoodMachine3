@@ -54,7 +54,7 @@ export function D2()
     // 在 D2 元件中設定 state 來管理接收到的訊息
     const [ws, setws] = useState(null);
     const [message, setMessage] = useState([]);
-    // const [isConnected, setIsConnected] = useState(socket.connect());
+    const [isConnected, setIsConnected] = useState(socket.connect());
     const [test, settest] = useState('');
     //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
 
@@ -106,6 +106,7 @@ export function D2()
         function data_change(){
           console.log('Empty Event');
         }
+
         socket.on('getMessage', getMessage);
         socket.on('frontend_update', frontend_update)
         socket.on('data_change', data_change);
@@ -123,12 +124,12 @@ export function D2()
         <p>{test}</p>
         {/* {message && <BoxInfo data={message} />} */}
         {message ? <GrowInfo data={message}/> : null}
-        {/* <input type='button' value='送出訊息' onClick={sendMessage} /> */}
+        <LedControl socket={isConnected}></LedControl>
         </div>
     );
 }
 
-// 建立 D2 component
+
 export function Dashboard()
 {
   // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
@@ -180,8 +181,8 @@ export function Dashboard()
 
   return (
     <div>
-        {/* <D2></D2> */}
-        <LedControl></LedControl>
+        <D2></D2>
+        {/* <LedControl></LedControl> */}
         <BoxBtnList onButtonClick={handleButtonClick} />
         {boxdata && <BoxInfo data={boxdata} />}
         {/* {boxdata && <EditBtn btnInfo={boxdata} />} */}

@@ -76,6 +76,9 @@ io.on("connection", (socket) => {
         socket.emit('getMessage', time);
     }, 1 * 60 * 1000); // 30分鐘的毫秒數
     
+    socket.on('ledcontrol', message => {
+        console.log("From React:" + message);
+    })
     socket.on('disconnect', () =>{
         console.log('Disconnected');
         clearInterval(intervalId);

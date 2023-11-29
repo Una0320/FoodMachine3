@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from datetime import datetime
+from datetime import time
 
 from boxes.models import box
 from .models import device
@@ -41,7 +42,17 @@ def UpdateDevice(request, box_id, device_id):
         current_device = current_box.inwhichbox.get(id=device_id)
         
         for key, value in data.items():
-            setattr(current_device, key, value)
+            if key == 'RGB':
+                setattr(current_box, "parameter", value)
+            elif key == "brightness":
+                setattr(current_box, "devicemode", value)
+            elif key == 'closetime':
+                # 如果鍵是 'opentime' 或 'closetime'，則解析列表 [小時, 分鐘] 並創建 TimeField
+                setattr(current_device, 'closeTime', time(*value))
+            elif key == 'opentime':
+                setattr(current_device, 'openTime', time(*value))
+            else:
+                setattr(current_device, key, value)
             current_device.save()
 
         return JsonResponse({'message': 'Device updated successfully'}, status=200)
