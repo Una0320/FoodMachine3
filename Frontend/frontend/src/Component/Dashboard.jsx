@@ -35,6 +35,8 @@ const GrowInfo = ({ data }) => (
         <tr>
           <th>Timestamp</th>
           <th>Airtemp</th>
+          <th>Humidity</th>
+          <th>Luminance</th>
         </tr>
       </thead>
       <tbody>
@@ -42,6 +44,8 @@ const GrowInfo = ({ data }) => (
           <tr key={index}>
             <td>{(record.timestamp).replace("T", " ")}</td>
             <td>{record.airtemp}</td>
+            <td>{record.humidity}</td>
+            <td>{record.luminance}</td>
           </tr>
         ))}
       </tbody>
@@ -94,9 +98,9 @@ export function D2()
 
         function frontend_update(){
           console.log('Event emited');
-          fetch('http://127.0.0.1:8000/boxgrow/2/')
+          fetch('http://127.0.0.1:8000/boxgrow/1/?start_date=2023-11-30')
             .then(response => {
-              response.json().then(text => {
+                response.json().then(text => {
                 console.log(text);  // 拿到 response.body 轉成的物件
                 setMessage(text);
               })
@@ -132,63 +136,63 @@ export function D2()
 
 export function Dashboard()
 {
-  // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
-  // 當收到伺服器回應後，使用 setData 函數更新狀態，以便在元件中顯示資料。
-  const [boxdata, setData] = useState(null);
-  const [growdata, setGData] = useState(null);
-  const [error, setError] = useState(null);
-  const [cur_box, setCurBox] = useState(null);
+    // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
+    // 當收到伺服器回應後，使用 setData 函數更新狀態，以便在元件中顯示資料。
+    const [boxdata, setData] = useState(null);
+    const [growdata, setGData] = useState(null);
+    const [error, setError] = useState(null);
+    const [cur_box, setCurBox] = useState(null);
 
-  const fetchData = async (boxId) => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/boxinfo/${boxId}`);
-      
-      if (response.ok) {
-        const jsonData = await response.json();
-        console.log(jsonData.users);
-        setData(jsonData);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message);
-      }
-    } 
-    catch (error) {
-      console.error('An error occurred:', error);
-    }
-    // -----------------growth info-------------------
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/boxgrow/${boxId}/?start_date=2023-11-10`);
-      
-      if (response.ok) {
-        const jsonData = await response.json();
-        setGData(jsonData);
-        console.log(jsonData);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message);
-      }
-    } 
-    catch (error) {
-      console.error('An error occurred:', error);
-    }
-  };
+    const fetchData = async (boxId) => {
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/boxinfo/${boxId}`);
+          
+          if (response.ok) {
+            const jsonData = await response.json();
+            console.log(jsonData.users);
+            setData(jsonData);
+          } else {
+            const errorData = await response.json();
+            setError(errorData.message);
+          }
+        } 
+        catch (error) {
+          console.error('An error occurred:', error);
+        }
+        // -----------------growth info-------------------
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/boxgrow/${boxId}/?start_date=2023-11-10 14:40:00`);
+          
+          if (response.ok) {
+            const jsonData = await response.json();
+            setGData(jsonData);
+            console.log(jsonData);
+          } else {
+            const errorData = await response.json();
+            setError(errorData.message);
+          }
+        } 
+        catch (error) {
+          console.error('An error occurred:', error);
+        }
+    };
 
-  const handleButtonClick = (boxId) => {
-    // Call fetchData with the selected boxId
-    setCurBox(boxId);
-    fetchData(boxId);
-  };
+    const handleButtonClick = (boxId) => {
+      // Call fetchData with the selected boxId
+      setCurBox(boxId);
+      fetchData(boxId);
+    };
 
-  return (
-    <div>
-        <D2></D2>
-        {/* <LedControl></LedControl> */}
-        <BoxBtnList onButtonClick={handleButtonClick} />
-        {boxdata && <BoxInfo data={boxdata} />}
-        {/* {boxdata && <EditBtn btnInfo={boxdata} />} */}
-        {growdata ? <GrowInfo data={growdata}/> : null}
-        {/* {error && <div>Error: {error}</div>} */}
-        {error ? <div>Error: {error}</div> : null}
-    </div>
-  );
+    return (
+      <div>
+          <D2></D2>
+          {/* <LedControl></LedControl> */}
+          <BoxBtnList onButtonClick={handleButtonClick} />
+          {boxdata && <BoxInfo data={boxdata} />}
+          {/* {boxdata && <EditBtn btnInfo={boxdata} />} */}
+          {growdata ? <GrowInfo data={growdata}/> : null}
+          {/* {error && <div>Error: {error}</div>} */}
+          {error ? <div>Error: {error}</div> : null}
+      </div>
+    );
 }

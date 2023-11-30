@@ -18,5 +18,5 @@ class growthIN(models.Model):
 	boxid     = models.ForeignKey(box, on_delete=models.SET_NULL, null=True, related_name='whichbox')
 	
 	def __str__(self):
-		return self.id
+		return str(self.id)
 # Create your models here.

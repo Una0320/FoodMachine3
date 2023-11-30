@@ -55,7 +55,7 @@ def UpdateDevice(request, box_id, device_id):
                 setattr(current_device, key, value)
             current_device.save()
 
-        return JsonResponse({'message': 'Device updated successfully'}, status=200)
+        return JsonResponse({'message': True}, status=200)
 
     except box.DoesNotExist:
         return JsonResponse({'error': 'Box not found'}, status=404)

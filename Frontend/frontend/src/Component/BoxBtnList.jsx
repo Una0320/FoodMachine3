@@ -18,6 +18,11 @@ const BoxBtnList = ({ onButtonClick }) => {
           console.error('An error occurred:', error);
         }
     };
+
+    function addnewBox()
+    {
+        
+    }
     useEffect(() => {
 
         fetchData();
@@ -30,6 +35,7 @@ const BoxBtnList = ({ onButtonClick }) => {
             {box.name}
           </button>
         ))}
+        <button onClick={addnewBox}>➕</button>
       </div>
     );
 };
