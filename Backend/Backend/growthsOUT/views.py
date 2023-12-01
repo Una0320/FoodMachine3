@@ -16,15 +16,15 @@ def NGrowthOUT(request):
 
         # new one growthOUT
         new_record = growthOUT(
-            timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            watertemp=growth_data['watertemp'],
+            timestamp  = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            watertemp  = growth_data['watertemp'],
             waterlevel = growth_data['waterlevel'],
-            airtemp=growth_data['airtemp'],
-            humidity=growth_data['humidity'],
-            oxygen=growth_data['oxygen'],
-            co2=growth_data['co2'],
-            ec=growth_data['ec'],
-            ph=growth_data['ph'],
+            airtemp  = growth_data['airtemp'],
+            humidity = growth_data['humidity'],
+            oxygen   = growth_data['oxygen'],
+            co2 = growth_data['co2'],
+            ec  = growth_data['ec'],
+            ph  = growth_data['ph'],
 
             # boxid_id=growth_data['boxid'] # 使用外鍵名 + _id
 

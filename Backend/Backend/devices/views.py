@@ -46,11 +46,15 @@ def UpdateDevice(request, box_id, device_id):
                 setattr(current_box, "parameter", value)
             elif key == "brightness":
                 setattr(current_box, "devicemode", value)
-            elif key == 'closetime':
-                # 如果鍵是 'opentime' 或 'closetime'，則解析列表 [小時, 分鐘] 並創建 TimeField
-                setattr(current_device, 'closeTime', time(*value))
-            elif key == 'opentime':
-                setattr(current_device, 'openTime', time(*value))
+            # 如果鍵是 'opentime' 或 'closetime'，則解析列表 [小時, 分鐘] 並創建 TimeField
+            # elif key == 'closetime':
+            #     setattr(current_device, 'closeTime', time(*value))
+            # elif key == 'opentime':
+            #     setattr(current_device, 'openTime', time(*value))
+            elif (key == 'opentime') or (key == 'closetime'):
+                setattr(current_device, key, time(*value))
+            elif key == 'boxid':
+                continue
             else:
                 setattr(current_device, key, value)
             current_device.save()

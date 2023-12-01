@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from boxes.views import BoxInfo, BoxListInfo, BoxGrowths, NewBox
+from boxes.views import BoxInfo, BoxListInfo, BoxGrowthsIN, BoxGrowthsOUT, NewBox
 from growthsOUT.views import NGrowthOUT
 from growthsIN.views import NGrowthIN
 from devices.views import DeviceInfo, UpdateDevice
@@ -26,7 +26,8 @@ urlpatterns = [
 
     path('boxinfo/<box_id>', BoxInfo),
     path('boxlist/<user_id>', BoxListInfo),
-    path('boxgrow/<box_id>/', BoxGrowths),
+    path('boxgrowin/<box_id>/', BoxGrowthsIN),
+    path('boxgrowout/', BoxGrowthsOUT),
     path('newbox/', NewBox),
 
     path('ngrowout/', NGrowthOUT),

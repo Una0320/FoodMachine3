@@ -10,6 +10,7 @@ from itertools import chain
 
 from .models import box
 from devices.models import device
+from growthsOUT.models import growthOUT
 # from users.models import user
 
 @require_http_methods(["GET"])
@@ -51,7 +52,7 @@ def BoxListInfo(request, user_id):
 
 @require_http_methods(["GET"])
 @csrf_exempt
-def BoxGrowths(request, box_id):
+def BoxGrowthsIN(request, box_id):
     try:
         '''
         # 找到特定的 box
@@ -59,53 +60,76 @@ def BoxGrowths(request, box_id):
         # 獲取 box 中的 growthIN
         growth_records = targetBox.whichbox.all()
         '''
-       
-        # Separate growthIN & growthOUT
-        growth_out_results = box.objects.get(id=box_id).whichboxes.filter(boxid__isnull=False)
-        growth_in_results = box.objects.get(id=box_id).whichbox.filter(boxid__id=box_id)
 
-        # Merge growthIN & growthOUT
-        # combined_grow = box.objects.get(id=box_id).whichboxes.filter(Q(growthout__isnull=False) | Q(growthin__isnull=False))
-        combined_grow = chain(growth_in_results, growth_out_results)
+        growth_in_results = box.objects.get(id=box_id).whichbox.filter(boxid__id=box_id)
 
         # 獲取日期範圍
         start_date = request.GET.get('start_date', None)
-        # print(start_date)
         end_date = request.GET.get('end_date', None)
-        # print(end_date)
 
         # 過濾不符合時間條件的growthreocrd資料
         if start_date:
-            # growth_records = growth_records.filter(timestamp__gte=start_date)
-            # combined_grow = combined_grow.filter(timestamp__gte = start_date)
-            growth_out_results = growth_out_results.filter(timestamp__gte = start_date)
-            growth_in_results = growth_in_results.filter(timestamp__gte = start_date)
+            growth_in_results = growth_in_results.filter(timestamp__range=[start_date, '2999-12-31 23:59:59'])
 
         if end_date:
-            # growth_records = growth_records.filter(timestamp__lte=end_date)
-            # combined_grow = combined_grow.filter(timestamp__lte=end_date)
-            growth_out_results = growth_out_results.filter(timestamp__lte=end_date)
-            growth_in_results = growth_in_results.filter(timestamp__lte=end_date)
+            growth_in_results = growth_in_results.filter(timestamp__range=['1970-01-01 00:00:00', end_date])
 
         # 獲取要返回的屬性列表，如果 attributes 未提供，則默認返回所有屬性
         attributes_param = request.GET.get('attributes', None)
         # 如果沒有指定 attributes 參數，預設會傳回所有屬性
         attributes = attributes_param.split(',') if attributes_param else [
-            'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen', 'co2', 'ec', 'ph', 'waterlevel', 'luminance', 'ledrgb', 'sunlong'
+            'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen',
+            'co2', 'ec', 'ph', 'waterlevel', 'luminance', 'ledrgb', 'sunlong'
         ]
 
         # 將 growthrecords 序列化為 JSON 格式，只包含指定屬性
         growth_records_data = list(growth_in_results.values())
-        # growth_records_data = []
-        # for record in growth_in_results:
-        #     record_data = {}
-        #     # for attr in attributes:
-        #     for key, value in record.items():
-        #         record_data[key] = getattr(record, key)
-        #     growth_records_data.append(record_data)
-
 
         return JsonResponse(growth_records_data, safe=False)
+    except box.DoesNotExist:
+        return JsonResponse({'message': 'Box with ID not found'}, status=404)
+
+@require_http_methods(["GET"])
+@csrf_exempt
+def BoxGrowthsOUT(request):
+    try:
+        '''
+        # 找到特定的 box
+        targetBox = box.objects.get(id=box_id)
+        # 獲取 box 中的 growthIN
+        growth_records = targetBox.whichbox.all()
+        '''
+        box_ids = request.GET.get('box_id', None).split(",")
+        print(type(box_ids[0]))
+        growth_out_results = growthOUT.objects.filter(boxid__in=box_ids)
+
+        # 獲取日期範圍
+        start_date = request.GET.get('start_date', None)
+        end_date   = request.GET.get('end_date', None)
+
+        # 過濾不符合時間條件的growthreocrd資料
+        if start_date:
+            growth_out_results = growth_out_results.filter(timestamp__range=[start_date, '2999-12-31 23:59:59'])
+
+        if end_date:
+            growth_out_results = growth_out_results.filter(timestamp__range=['1970-01-01 00:00:00', end_date])
+
+        # 獲取要返回的屬性列表，如果 attributes 未提供，則默認返回所有屬性
+        attributes_param = request.GET.get('attributes', None)
+        # 如果沒有指定 attributes 參數，預設會傳回所有屬性
+        attributes = attributes_param.split(',') if attributes_param else [
+            'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen', 'co2', 'ec', 'ph', 'waterlevel']
+
+        # 將 growthrecords 序列化為 JSON 格式
+        outdata = []
+        for record in list(growth_out_results.values()):
+            print(record)
+            r = {}
+            for attr in attributes:
+                r[attr] = record[attr]
+            outdata.append(r)
+
+        return JsonResponse(outdata, safe=False)
     except box.DoesNotExist:
         return JsonResponse({'message': 'Box with ID not found'}, status=404)
     
@@ -114,10 +138,7 @@ def BoxGrowths(request, box_id):
 @csrf_exempt
 def NewBox(request):
     newBox_json = json.loads(request.body)
-    # Test
-    # tempstring = newBox_json['key1']+","+newBox_json['key2']
-    # return HttpResponse(tempstring)
-
+    
     newBox = box()
     newBox.save()
     for key, value in newBox_json.items():

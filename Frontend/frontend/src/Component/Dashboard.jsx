@@ -87,7 +87,7 @@ export function D2()
           console.log(value);
           //------------------------
           //http://127.0.0.1:8000/boxinfo/1
-          fetch('http://127.0.0.1:8000/boxgrow/1/')
+          fetch('http://127.0.0.1:8000/boxgrowin/1/')
             .then(response => {
               response.json().then(text => {
                 console.log(test + ": " + text.users);  // 拿到 response.body 轉成的物件
@@ -96,9 +96,9 @@ export function D2()
             })
         }
 
-        function frontend_update(){
+        function ngrowin_update(){
           console.log('Event emited');
-          fetch('http://127.0.0.1:8000/boxgrow/1/?start_date=2023-11-30')
+          fetch('http://127.0.0.1:8000/boxgrowin/1/?start_date=2023-11-30')
             .then(response => {
                 response.json().then(text => {
                 console.log(text);  // 拿到 response.body 轉成的物件
@@ -112,7 +112,7 @@ export function D2()
         }
 
         socket.on('getMessage', getMessage);
-        socket.on('frontend_update', frontend_update)
+        socket.on('ngrowin_update', ngrowin_update)
         socket.on('data_change', data_change);
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
@@ -161,7 +161,7 @@ export function Dashboard()
         }
         // -----------------growth info-------------------
         try {
-          const response = await fetch(`http://127.0.0.1:8000/boxgrow/${boxId}/?start_date=2023-11-10 14:40:00`);
+          const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=2023-11-10 14:40:00`);
           
           if (response.ok) {
             const jsonData = await response.json();
