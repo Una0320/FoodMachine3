@@ -17,7 +17,7 @@ def DeviceInfo(request, box_id):
         # 取得特定box_id的相關device
         device_data = device.objects.filter(boxid__id=box_id)
         device_data = list(device_data.values())
-        # print(device_data)
+        print(device_data)
 
         return JsonResponse(device_data, status=200, safe = False)
 
@@ -35,7 +35,7 @@ def DeviceInfo(request, box_id):
 def UpdateDevice(request, box_id, device_id):
     try:
         data = json.loads(request.body)
-        print(data)
+        print("PUT device\n"+data)
 
         # 取得與 box_id 相關的 box
         current_box = box.objects.get(id=box_id)
@@ -43,9 +43,11 @@ def UpdateDevice(request, box_id, device_id):
         
         for key, value in data.items():
             if key == 'RGB':
-                setattr(current_box, "parameter", value)
+                rgb_dict = {}
+                rgb_dict['RGB']=value
+                setattr(current_device, "parameter", rgb_dict)
             elif key == "brightness":
-                setattr(current_box, "devicemode", value)
+                setattr(current_device, "devicemode", value)
             # 如果鍵是 'opentime' 或 'closetime'，則解析列表 [小時, 分鐘] 並創建 TimeField
             # elif key == 'closetime':
             #     setattr(current_device, 'closeTime', time(*value))

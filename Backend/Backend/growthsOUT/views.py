@@ -35,6 +35,6 @@ def NGrowthOUT(request):
         new_record.boxid.set(growth_data['boxid'])
         
 
-        return JsonResponse({'message': 'post_success'}, status=201)
+        return JsonResponse({'message': True}, status=201)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)

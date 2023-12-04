@@ -21,15 +21,13 @@ def NGrowthIN(request):
             humidity=growth_data['humidity'],
             luminance = growth_data['light'],
             sunlong = growth_data['time'],
-
+            # ledrgb = growth_data['RGB'],
             boxid_id=growth_data['boxid'] # 使用外鍵名 + _id
 
-            # Current Fixed boxid = 2
         )
         rgb_dict['RGB']=growth_data['RGB']
         new_record.ledrgb = rgb_dict
         new_record.save()
-        # new_record.boxid.set(growth_data['boxid'])
         
 
         return JsonResponse({'message': True}, status=201)

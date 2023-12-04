@@ -56,7 +56,6 @@ const GrowInfo = ({ data }) => (
 export function D2()
 {
     // 在 D2 元件中設定 state 來管理接收到的訊息
-    const [ws, setws] = useState(null);
     const [message, setMessage] = useState([]);
     const [isConnected, setIsConnected] = useState(socket.connect());
     const [test, settest] = useState('');
@@ -97,8 +96,8 @@ export function D2()
         }
 
         function ngrowin_update(){
-          console.log('Event emited');
-          fetch('http://127.0.0.1:8000/boxgrowin/1/?start_date=2023-11-30')
+          console.log('N-growin update');
+          fetch('http://127.0.0.1:8000/boxgrowin/1/?start_date=2023-12-04')
             .then(response => {
                 response.json().then(text => {
                 console.log(text);  // 拿到 response.body 轉成的物件
@@ -107,12 +106,16 @@ export function D2()
             })
         }
         
+        function ngrowout_update(){
+          console.log('Ngrowout_update')
+        }
         function data_change(){
           console.log('Empty Event');
         }
 
         socket.on('getMessage', getMessage);
         socket.on('ngrowin_update', ngrowin_update)
+        socket.on('ngrowout_update', ngrowout_update)
         socket.on('data_change', data_change);
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {

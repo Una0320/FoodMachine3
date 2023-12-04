@@ -10,7 +10,7 @@ const DeviceInfo = ({ data }) => (
                 <p>Dev name: {dev.devicename}</p>
                 <p>Box ID: {dev.boxid_id}</p>
                 <p>RGB: {dev.parameter.RGB[0]}, {dev.parameter.RGB[1]}, {dev.parameter.RGB[2]}</p>
-                <p>亮度: {dev.devicemode}</p>
+                {/* <p>亮度: {dev.devicemode}</p> */}
             </div>
         ))}
     </div>
@@ -20,26 +20,27 @@ const LedControl = ( {socket} ) =>
 {
     const [Ledstatus, setLedstatus] = useState();
 
-    useEffect(() => {
-        const fetchData = async (boxId) => {
-            try {
-                const response = await fetch(`http://127.0.0.1:8000/deviceinfo/${boxId}`);
-                
-                if (response.ok) {
-                    const jsonData = await response.json();
-                    setLedstatus(jsonData);
-                } else {
-                    const errorData = await response.json();
-                    console.log(errorData)
-                }
-            } 
-            catch (error) {
-                console.error('An error occurred:', error);
+    const fetchData = async (boxId) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/deviceinfo/${boxId}`);
+            
+            if (response.ok) {
+                const jsonData = await response.json();
+                setLedstatus(jsonData);
+            } else {
+                const errorData = await response.json();
+                console.log(errorData)
             }
-        };
+        } 
+        catch (error) {
+            console.error('An error occurred:', error);
+        }
+    };
+
+    useEffect(() => {    
         fetchData(1);
         console.log(socket.connected);
-          
+        
     }, []);
 
     function time2array(timeString)
@@ -85,6 +86,7 @@ const LedControl = ( {socket} ) =>
         socket.emit('LED_ctrl', JSON.stringify(newFormJson));
 
         alert('submit');
+        fetchData(1);
     }
 
     return(
@@ -94,7 +96,7 @@ const LedControl = ( {socket} ) =>
             <h3>Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3>
             <form onSubmit={onSubmit}>
                 <label htmlFor="brightness">Brightness:
-                <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue="0" />
+                <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue= {Ledstatus ? Ledstatus[0].devicemode:null} />
                 </label>
 
                 <label htmlFor="red">Red:
