@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 from datetime import datetime
 from django.db.models import Q
 from itertools import chain
@@ -93,15 +94,16 @@ def BoxGrowthsIN(request, box_id):
 @csrf_exempt
 def BoxGrowthsOUT(request):
     try:
-        '''
-        # 找到特定的 box
-        targetBox = box.objects.get(id=box_id)
-        # 獲取 box 中的 growthIN
-        growth_records = targetBox.whichbox.all()
-        '''
         box_ids = request.GET.get('box_id', None).split(",")
-        print(type(box_ids[0]))
-        growth_out_results = growthOUT.objects.filter(boxid__in=box_ids)
+        
+        growth_out_results = (
+            growthOUT.objects
+            .filter(boxid__id__in=box_ids)
+            .values('id', 'timestamp', 'watertemp', 'waterlevel', 'airtemp', 'humidity', 'oxygen', 'co2', 'ec', 'ph')
+            .annotate(box_count=Count('boxid'))
+            .filter(box_count=len(box_ids))  # 过滤匹配所有 box_id 的记录
+        )
+        # growth_out_results = growthOUT.objects.filter(boxid__in=box_ids)
 
         # 獲取日期範圍
         start_date = request.GET.get('start_date', None)
@@ -118,12 +120,12 @@ def BoxGrowthsOUT(request):
         attributes_param = request.GET.get('attributes', None)
         # 如果沒有指定 attributes 參數，預設會傳回所有屬性
         attributes = attributes_param.split(',') if attributes_param else [
-            'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen', 'co2', 'ec', 'ph', 'waterlevel']
+            'id', 'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen', 'co2', 'ec', 'ph', 'waterlevel']
 
         # 將 growthrecords 序列化為 JSON 格式
         outdata = []
         for record in list(growth_out_results.values()):
-            print(record)
+            # print(record)
             r = {}
             for attr in attributes:
                 r[attr] = record[attr]
@@ -138,7 +140,7 @@ def BoxGrowthsOUT(request):
 @csrf_exempt
 def NewBox(request):
     newBox_json = json.loads(request.body)
-    
+    print(newBox_json['boxname'])
     newBox = box()
     newBox.save()
     for key, value in newBox_json.items():
@@ -148,7 +150,7 @@ def NewBox(request):
                 newBox.boxname = newBox_json['boxname']
             else:
                 if box.objects.latest('id'):
-                    lastest_id = box.objects.latest('id').id + 1
+                    lastest_id = box.objects.latest('id').id
                 # lastest_id 包含了最新一筆資料的 ID
                 else:
                     # 處理資料表為空的情況
@@ -168,16 +170,16 @@ def NewBox(request):
                 newBox.plant.add(value)
     newBox.save()
 
-    # Set closeTime for the device (if provided in the JSON)
-    if newBox_json['closeTime']:
-        default_device = device(devicename='LED', devicestatus='active', boxid=newBox, closeTime=datetime.strptime(newBox_json['closeTime'], "%Y-%m-%d %H:%M:%S"))
-    else:
-        default_device = device(devicename='LED', devicestatus='active', boxid=newBox)
+    # # Set closeTime for the device (if provided in the JSON)
+    # if newBox_json['closeTime']:
+    #     default_device = device(devicename='LED', devicestatus='active', boxid=newBox, closeTime=datetime.strptime(newBox_json['closeTime'], "%Y-%m-%d %H:%M:%S"))
+    # else:
+    #     default_device = device(devicename='LED', devicestatus='active', boxid=newBox)
 
-    default_device.openTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Set openTime to the box's timestamp
-    default_device.save()
+    # default_device.openTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Set openTime to the box's timestamp
+    # default_device.save()
 
-    return HttpResponse(f"Create new box, boxname = {newBox.boxname}")
+    return JsonResponse({'message':True}, safe=False)
 
 @require_http_methods(["PUT"])
 @csrf_exempt

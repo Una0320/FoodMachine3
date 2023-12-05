@@ -17,7 +17,7 @@ def DeviceInfo(request, box_id):
         # 取得特定box_id的相關device
         device_data = device.objects.filter(boxid__id=box_id)
         device_data = list(device_data.values())
-        print(device_data)
+        # print(device_data)
 
         return JsonResponse(device_data, status=200, safe = False)
 

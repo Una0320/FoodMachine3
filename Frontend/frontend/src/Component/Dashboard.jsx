@@ -130,7 +130,7 @@ export function D2()
         <h2 style={dashboard2.theme}>{dashboard2.name}</h2>
         <p>{test}</p>
         {/* {message && <BoxInfo data={message} />} */}
-        {message ? <GrowInfo data={message}/> : null}
+        {/* {message ? <GrowInfo data={message}/> : null} */}
         <LedControl socket={isConnected}></LedControl>
         </div>
     );

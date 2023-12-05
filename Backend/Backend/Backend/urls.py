@@ -17,13 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from users.views import UserList
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowthsIN, BoxGrowthsOUT, NewBox
 from growthsOUT.views import NGrowthOUT
 from growthsIN.views import NGrowthIN
 from devices.views import DeviceInfo, UpdateDevice
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    path("userlist/", UserList),
     path('boxinfo/<box_id>', BoxInfo),
     path('boxlist/<user_id>', BoxListInfo),
     path('boxgrowin/<box_id>/', BoxGrowthsIN),

@@ -14,6 +14,16 @@ def NGrowthOUT(request):
     try:
         growth_data = json.loads(request.body)
 
+        growth_data['watertemp']  = growth_data.get('watertemp', None)
+        growth_data['waterlevel'] = growth_data.get('waterlevel', None)
+        growth_data['airtemp']    = growth_data.get('airtemp', None)
+        growth_data['humidity']   = growth_data.get('humidity', None)
+        growth_data['oxygen'] = growth_data.get('oxygen', None)
+        growth_data['co2']    = growth_data.get('co2', None)
+        growth_data['ec'] = growth_data.get('ec', None)
+        growth_data['ph'] = growth_data.get('ph', None)
+        growth_data['boxid'] = growth_data.get('boxid', None)
+
         # new one growthOUT
         new_record = growthOUT(
             timestamp  = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
