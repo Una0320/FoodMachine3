@@ -79,14 +79,21 @@ def BoxGrowthsIN(request, box_id):
         attributes_param = request.GET.get('attributes', None)
         # 如果沒有指定 attributes 參數，預設會傳回所有屬性
         attributes = attributes_param.split(',') if attributes_param else [
-            'timestamp', 'watertemp', 'airtemp', 'humidity', 'oxygen',
-            'co2', 'ec', 'ph', 'waterlevel', 'luminance', 'ledrgb', 'sunlong'
+            'timestamp', 'airtemp', 'humidity', 'luminance', 'ledrgb', 'sunlong'
         ]
 
         # 將 growthrecords 序列化為 JSON 格式，只包含指定屬性
-        growth_records_data = list(growth_in_results.values())
+        # growth_records_data = list(growth_in_results.values())
+        # 將 growthrecords 序列化為 JSON 格式
+        indata = []
+        for record in list(growth_in_results.values()):
+            # print(record)
+            r = {}
+            for attr in attributes:
+                r[attr] = record[attr]
+            indata.append(r)
 
-        return JsonResponse(growth_records_data, safe=False)
+        return JsonResponse(indata, safe=False)
     except box.DoesNotExist:
         return JsonResponse({'message': 'Box with ID not found'}, status=404)
 

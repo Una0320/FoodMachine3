@@ -35,7 +35,7 @@ def DeviceInfo(request, box_id):
 def UpdateDevice(request, box_id, device_id):
     try:
         data = json.loads(request.body)
-        print("PUT device\n"+data)
+        print(data)
 
         # 取得與 box_id 相關的 box
         current_box = box.objects.get(id=box_id)

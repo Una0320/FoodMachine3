@@ -39,7 +39,7 @@ const BoxBtnList = ({ onButtonClick }) => {
         <div>
             {boxList.map((box) => (
                 <button key={box.id} onClick={() => onButtonClick(box.id)}>
-                  {box.name}
+                    {box.name}
                 </button>
             ))}
             <button onClick={addnewBox}>➕</button>

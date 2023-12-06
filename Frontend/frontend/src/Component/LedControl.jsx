@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { socket } from "../socket";
+import '../CSS/LedCtrl.css'
 
 const DeviceInfo = ({ data }) => (
     <div>
@@ -83,6 +83,7 @@ const LedControl = ( {socket} ) =>
         //const newFormJsonString = JSON.stringify(newFormJson);
         //將 JavaScript 物件轉換為 JSON 字串
         console.log(JSON.stringify(newFormJson));
+        console.log(socket.connected)
         socket.emit('LED_ctrl', JSON.stringify(newFormJson));
 
         alert('submit');
@@ -90,37 +91,50 @@ const LedControl = ( {socket} ) =>
     }
 
     return(
-        <div>
+        <div className="container">
             {Ledstatus && <DeviceInfo data={Ledstatus}></DeviceInfo>}
 
-            <h3>Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3>
-            <form onSubmit={onSubmit}>
-                <label htmlFor="brightness">Brightness:
-                <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue= {Ledstatus ? Ledstatus[0].devicemode:null} />
-                </label>
+            {/* <h3 className="heading">Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3> */}
+            <form onSubmit={onSubmit} className="form">
+                <div className="input-container">
+                    <label htmlFor="brightness" className="label">Brightness:
+                    <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue= {Ledstatus ? Ledstatus[0].devicemode:null} className="input"/>
+                    </label>
+                </div>
+                <div className="input-container">
+                    <label htmlFor="red">Red:
+                    <input type="number" id="red" name="red" min="0" max="255" defaultValue= {Ledstatus ? Ledstatus[0].parameter['RGB'][0]:null} className="input"/>
+                    </label>
+                </div>
 
-                <label htmlFor="red">Red:
-                <input type="number" id="red" name="red" min="0" max="255" defaultValue= {Ledstatus ? Ledstatus[0].parameter['RGB'][0]:null} />
-                </label>
-                {/* {console.log(Ledstatus[0].parameter['RGB'][0])} */}
+                <div className="input-container">
+                    <label htmlFor="green">Green:
+                    <input type="number" id="green" name="green" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][1]:null} className="input"/>
+                    </label>
+                </div>
 
-                <label htmlFor="green">Green:
-                <input type="number" id="green" name="green" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][1]:null} />
-                </label>
+                <div className="input-container">
+                    <label htmlFor="blue">Blue:
+                    <input type="number" id="blue" name="blue" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][2]:null} className="input"/>
+                    </label>
+                </div>
 
-                <label htmlFor="blue">Blue:
-                <input type="number" id="blue" name="blue" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][2]:null} />
-                </label>
+                <div className="time-container">
+                    <div className="input-container">
+                        <label htmlFor="opentime" className="label">
+                            Open Time:
+                        </label>
+                        <input type="time" id="opentime" name="opentime" min="1" max="24" defaultValue="12" className="input" />
+                    </div>
 
-                <label htmlFor="opentime">opentime:
-                <input type="time" id="opentime" name="opentime" min="1" max="24" defaultValue="12" />
-                </label>
-
-                <label htmlFor="closetime">closetime:
-                <input type="time" id="closetime" name="closetime" min="1" max="24" defaultValue="12" />
-                </label>
-
-                <button type="submit" value="Submit">Submit</button>
+                    <div className="input-container">
+                        <label htmlFor="closetime" className="label">
+                            Close Time:
+                        </label>
+                        <input type="time" id="closetime" name="closetime" min="1" max="24" defaultValue="12" className="input" />
+                    </div>
+                </div>
+                <button type="submit" value="Submit" className="submit-button">Submit</button>
             </form>
         </div>
     );

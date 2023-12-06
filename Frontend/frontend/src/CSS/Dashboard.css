@@ -1,0 +1,71 @@
+/* dashboard.css */
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 95vh; /* 將高度設定為視窗的高度 */
+    overflow: hidden; /* 如果不想顯示滾動條的話 */
+  }
+  
+  .dashboard-title {
+    color: #0078d4;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .box-info {
+    flex-grow: 1;
+    max-width: 60%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+
+  .middlePic-container {
+    flex-grow: 1;
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .upper-section {
+    flex-grow: 1;
+    max-height: 50%; /* 調整上半部分高度 */
+    overflow: hidden; /* 如果需要滾動顯示，請移除這行 */
+  }
+  
+  .lower-section {
+    flex-grow: 1;
+    max-height: 50%; /* 調整下半部分高度 */
+    overflow: hidden; /* 如果需要滾動顯示，請移除這行 */
+  }
+  
+  .device-info {
+    flex-grow: 1;
+    max-width: 40%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+  .grow-info-container {
+    height: 90%; /* 這裡的高度可以根據需要調整 */
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    
+  }
+  .grow-info {
+    overflow-y: auto; /* 添加這一行 */
+    text-align: center;
+    max-height: 500px; /* 調整最大高度，請根據需要調整 */
+  }  
