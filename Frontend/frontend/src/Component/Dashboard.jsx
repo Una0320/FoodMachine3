@@ -58,7 +58,7 @@ const dashboard2 = {
 //   </div>
 // );
 
-export function D2() {
+export function D2({ ngrowindata }) {
     // 在 D2 元件中設定 state 來管理接收到的訊息
     const [message, setMessage] = useState([]);
     const [isConnected, setIsConnected] = useState(socket.connect());
@@ -106,21 +106,29 @@ export function D2() {
                 response.json().then((text) => {
                     console.log(text); // 拿到 response.body 轉成的物件
                     setMessage(text);
+                    ngrowindata(text);
                 });
             });
         }
 
         function ngrowout_update() {
             console.log("Ngrowout_update");
+            fetch(
+              "http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=2023-12-07")
+              .then((response) => {
+                response.json().then((text) => {
+                  console.log(text);
+              });
+            });
         }
-        function data_change() {
-            console.log("Empty Event");
+        function box_log(value) {
+            console.log(value);
         }
 
         socket.on("getMessage", getMessage);
         socket.on("ngrowin_update", ngrowin_update);
         socket.on("ngrowout_update", ngrowout_update);
-        socket.on("data_change", data_change);
+        socket.on("box_log", box_log);
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
             // socket.disconnect()
@@ -143,6 +151,7 @@ export function Dashboard() {
     const [growdata, setGData] = useState(null);
     const [error, setError] = useState(null);
     const [cur_box, setCurBox] = useState(null);
+    const [d2Message, setD2Message] = useState(""); // 新增 state 來儲存 D2 的 message
 
     const fetchData = async (boxId) => {
         try {
@@ -164,7 +173,7 @@ export function Dashboard() {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=2023-11-30 16:40:00`
+                `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=2023-12-07`
             );
 
             if (response.ok) {
@@ -186,6 +195,11 @@ export function Dashboard() {
         fetchData(boxId);
     };
 
+    // 處理從 D2 來的 message
+    const handleMessageFromD2 = (message) => {
+      setD2Message(message);
+    };
+
     return (
         <div className="dashboard-container">
             <h2 className="dashboard-title" style={dashboard2.theme}>
@@ -195,11 +209,15 @@ export function Dashboard() {
                 <div className="box-info">
                     {boxdata && <BoxInfo data={boxdata} />}
                     <BoxBtnList onButtonClick={handleButtonClick} />
-                    {growdata ? (
+                    {d2Message ? (
                         <div className="grow-info-container">
-                            <GrowInfo data={growdata} />
+                            <GrowInfo data={d2Message} />
                         </div>
-                    ) : null}
+                    ) : growdata ? (
+                      <div className="grow-info-container">
+                          <GrowInfo data={growdata} />
+                      </div>
+                    ):null}
                 </div>
 
                 {/* <div className="middlePic-container">
@@ -215,7 +233,7 @@ export function Dashboard() {
                 </div> */}
 
                 <div className="device-info">
-                    <D2></D2>
+                    <D2 ngrowindata={handleMessageFromD2}></D2>
                     {/* <LedControl socket={isConnected}></LedControl> */}
                 </div>
             </div>
