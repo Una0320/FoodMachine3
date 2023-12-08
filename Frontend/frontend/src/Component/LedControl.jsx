@@ -66,8 +66,8 @@ const LedControl = ( {socket} ) =>
         formJson['boxid'] = 1;
         formJson['opentime'] = time2array(formJson['opentime'])
         formJson['closetime'] = time2array(formJson['closetime'])
-        formJson['RGB'] = [parseInt(formJson['red']), parseInt(formJson['green']), parseInt(formJson['blue'])];
         formJson['brightness'] = parseFloat(formJson['brightness'])
+        formJson['RGB'] = [parseInt(formJson['red']), parseInt(formJson['green']), parseInt(formJson['blue'])];
 
         // 要刪除的 keys
         const keysToDelete = ['red', 'green', 'blue'];

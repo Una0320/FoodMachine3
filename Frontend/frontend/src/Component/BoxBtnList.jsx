@@ -12,7 +12,7 @@ const BoxBtnList = ({ onButtonClick }) => {
             if (response.ok) {
                 const jsonData = await response.json();
                 setBoxList(jsonData);
-                // console.log(jsonData)
+                console.log(jsonData)
             } else {
                 console.log(`HTTP error! Status: ${response.status}`);
             }
