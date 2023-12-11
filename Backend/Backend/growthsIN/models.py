@@ -12,7 +12,7 @@ class growthIN(models.Model):
 	sunlong   = models.FloatField(null=True, blank=True)# 日照時長
 	
 	# 生長狀況圖片
-	cur_Image = models.ImageField(null=True, blank=True)
+	cur_Image = models.ImageField(upload_to='growin/', null=True, blank=True)
 	
 	# ForeignKey
 	boxid     = models.ForeignKey(box, on_delete=models.SET_NULL, null=True, related_name='whichbox')

@@ -1,4 +1,6 @@
 import json
+import base64
+from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -21,10 +23,11 @@ def NGrowthIN(request):
             humidity=growth_data['humidity'],
             luminance = growth_data['light'],
             sunlong = growth_data['time'],
-            # ledrgb = growth_data['RGB'],
             boxid_id=growth_data['boxid'] # 使用外鍵名 + _id
 
         )
+        img_binary = base64.b64decode(growth_data['img'])
+        new_record.cur_Image.save(new_record.timestamp+'.jpg', ContentFile(img_binary), save=True)
         rgb_dict['RGB']=growth_data['RGB']
         new_record.ledrgb = rgb_dict
         new_record.save()

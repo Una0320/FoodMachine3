@@ -8,6 +8,7 @@ import BoxInfo from "./BoxInfo";
 import GrowInfo from "./GrowInfo";
 import { socket } from "../socket";
 import LedControl from "./LedControl";
+import VideoStream from "./VideoStream";
 import LineChartCom from './LineChartCom'
 
 const dashboard2 = {
@@ -176,7 +177,7 @@ export function Dashboard() {
     };
 
     // 處理從 D2 來的 message
-    const handleMessageFromD2 = (message) => {
+    const hxandleMessageFromD2 = (message) => {
       setD2Message(message);
     };
 
@@ -204,22 +205,26 @@ export function Dashboard() {
                     ):null} */}
                 </div>
 
-                {/* <div className="middlePic-container">
-                    <div className="upper-section"> */}
+                <div className="middlePic-container">
+                    <div className="upper-section">
                         {/* 上半部分放置圖片 */}
                         {/* {cur_box&&<LineChartCom data={cur_box}></LineChartCom>} */}
                         {/* <img src="your-upper-image-url.jpg" alt="Upper Section" /> */}
-                    {/* </div>
+                            {/* <D2 ngrowindata={handleMessageFromD2}></D2> */}
+                        <LedControl socket={isConnected}></LedControl>
+                    </div>
                     <div className="lower-section">
                         {/* 下半部分放置圖片 */}
-                        {/* <img src="your-lower-image-url.jpg" alt="Lower Section" />
+                        <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
+                        {/* <img src="http://192.168.1.201:8080/javascript_simple.html" /> */}
+                        {/* <img src="your-lower-image-url.jpg" alt="Lower Section" /> */}
                     </div>
-                </div> */}
-
-                <div className="device-info">
-                    {/* <D2 ngrowindata={handleMessageFromD2}></D2> */}
-                    <LedControl socket={isConnected}></LedControl>
                 </div>
+
+                {/* <div className="device-info">
+                    <D2 ngrowindata={handleMessageFromD2}></D2>
+                    <LedControl socket={isConnected}></LedControl>
+                </div> */}
             </div>
         </div>
     );

@@ -92,9 +92,10 @@ const LedControl = ( {socket} ) =>
 
     return(
         <div className="container">
-            {Ledstatus && <DeviceInfo data={Ledstatus}></DeviceInfo>}
+            {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>}
 
             {/* <h3 className="heading">Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3> */}
+            <div className="right-column">
             <form onSubmit={onSubmit} className="form">
                 <div className="input-container">
                     <label htmlFor="brightness" className="label">Brightness:
@@ -102,19 +103,19 @@ const LedControl = ( {socket} ) =>
                     </label>
                 </div>
                 <div className="input-container">
-                    <label htmlFor="red">Red:
+                    <label htmlFor="red" className="label">Red:
                     <input type="number" id="red" name="red" min="0" max="255" defaultValue= {Ledstatus ? Ledstatus[0].parameter['RGB'][0]:null} className="input"/>
                     </label>
                 </div>
 
                 <div className="input-container">
-                    <label htmlFor="green">Green:
+                    <label htmlFor="green" className="label">Green:
                     <input type="number" id="green" name="green" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][1]:null} className="input"/>
                     </label>
                 </div>
 
                 <div className="input-container">
-                    <label htmlFor="blue">Blue:
+                    <label htmlFor="blue" className="label">Blue:
                     <input type="number" id="blue" name="blue" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][2]:null} className="input"/>
                     </label>
                 </div>
@@ -136,6 +137,7 @@ const LedControl = ( {socket} ) =>
                 </div>
                 <button type="submit" value="Submit" className="submit-button">Submit</button>
             </form>
+            </div>
         </div>
     );
 };

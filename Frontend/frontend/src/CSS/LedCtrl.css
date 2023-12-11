@@ -1,76 +1,83 @@
 /* LedComponent.css */
 
 .container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* 讓內容置中 */
-  }
-  
-  .heading {
-    font-size: 18px;
-    color: #0078d4;
-    margin-bottom: 20px; /* 與下方的form有一點間隔 */
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 讓內容在水平方向上置中 */
-  }
-  
-  .input-container {
-    margin-bottom: 15px;
-    width: 70%; /* 調整input container的寬度 */
-  }
-  
-  .label {
-    margin-bottom: 5px;
-    color: #333;
-    font-size: 14px;
-  }
-  
-  .input {
-    width: 100%; /* 使input擁有100%的寬度 */
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    box-sizing: border-box; /* 避免寬度超出設定值 */
-  }
-    input[type="number"],
-    input[type="time"] {
-    line-height: 1.5; /* 控制垂直居中 */
-    vertical-align: middle; /* 控制垂直居中 */
-    /* 如果有需要，你也可以添加其他樣式，例如 padding, margin, width 等等 */
-    }
-  
-  .submit-button {
-    padding: 10px 20px;
-    background-color: #0078d4;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-  }
+  display: flex;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  .time-container {
-    display: flex;
-    justify-content: space-between; /* 讓內容在水平方向上分散對齊 */
-    margin-bottom: 15px;
-  }
-  
-  .time-container label{
-    white-space: nowrap; /* 讓 label 文本不換行 */
-    min-width: 80px; /* 設定一個最小寬度 */
-    margin-right: 15px; /* 添加右邊的 margin */
-  }
+.left-column,
+.right-column {
+  flex: 1;
+  margin: 0 5px; /* 調整左右邊距，根據你的需求調整 */
+}
 
-  .time-container input {
-    display: block; /* 將 label 和 input 顯示為 block */
-    margin-right: 15px; /* 添加右邊的 margin */
-  }
+.right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* 將 .right-column 元素內容靠右 */
+  margin: 0 5px; /* 調整左右邊距，根據你的需求調整 */
+}
+
+.info {
+  margin-bottom: 20px;
+  /* Add any additional styling for the information section */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container {
+  margin-bottom: 0px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* 內容靠右 */
+  align-items: center; /* 垂直居中對齊 */
+}
+
+.label,
+.input {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: flex-end; /* 內容靠右 */
+  align-items: center; /* 垂直居中對齊 */
+}
+
+.label {
+  margin-right: 10px; /* 調整 label 與 input 之間的間距 */
+  color: #333;
+  font-size: 16px;
+  min-width: 100px; /* 設定最小寬度 */
+}
+
+.input {
+  width: 200px; /* 或者你想要的固定寬度 */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input[type="number"],
+input[type="time"] {
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #0078d4;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}

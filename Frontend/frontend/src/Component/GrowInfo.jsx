@@ -2,13 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/Dashboard.css'
 const GrowInfo = ({ socket, boxId }) => {
-
+    let objectDate = new Date();
+    let day = objectDate.getDate();
+    let month = objectDate.getMonth() + 1;
+    let year = objectDate.getFullYear();
+    let fulldate = year + "-" + month + "-" + day;
     const [data, setdata] = useState([]);
     const fetchgrowdata = async (boxId) => {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=2023-12-08`
+                `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}`
             );
 
             if (response.ok) {

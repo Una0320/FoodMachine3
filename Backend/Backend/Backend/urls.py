@@ -15,7 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
 from django.urls import include, path
+from django.conf.urls.static import static
 
 from users.views import UserList
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowthsIN, BoxGrowthsOUT, NewBox
@@ -39,4 +41,4 @@ urlpatterns = [
 
     path('editdevice/<box_id>/<device_id>/', UpdateDevice),
     path('deviceinfo/<box_id>', DeviceInfo),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
