@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { useState, useEffect } from "react";
 import "../CSS/Dashboard.css";
+import { Link } from 'react-router-dom';
 
 import BoxBtnList from "./BoxBtnList";
 import BoxInfo from "./BoxInfo";
@@ -148,7 +149,7 @@ export function Dashboard() {
         function ngrowout_update() {
             console.log("Ngrowout_update");
             fetch(
-              "http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=2023-12-07")
+              "http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=2023-12-12")
               .then((response) => {
                 response.json().then((text) => {
                   console.log(text);
@@ -182,50 +183,63 @@ export function Dashboard() {
     };
 
     return (
-        <div className="dashboard-container">
-            <h2 className="dashboard-title" style={dashboard2.theme}>
-                {dashboard2.name}
-            </h2>
-            <div className="dashboard-content">
-                <div className="box-info">
-                    {/* {boxdata && <BoxInfo data={boxdata} />} */}
-                    {cur_box ? <BoxInfo socket={ isConnected } boxId={ cur_box }></BoxInfo> :
-                                <BoxInfo socket={ isConnected } boxId={ 1 } />}
-                    <BoxBtnList onButtonClick={handleButtonClick} />
-                    {cur_box ? <GrowInfo socket={ isConnected } boxId={ cur_box }></GrowInfo> :
-                                <GrowInfo socket={ isConnected } boxId={ 1 } />}
-                    {/* {d2Message ? (
+            <div className="dashboard-container">
+                <h2 className="dashboard-title" style={dashboard2.theme}>
+                    {dashboard2.name}
+                </h2>
+                <nav>
+                    <ul>
+                    <li>
+                        <Link to="/historypic">History Pic</Link>
+                    </li>
+                    {/* <li>
+                        <Link to="/detailinfo">Detail Info</Link>
+                    </li> */}
+                    <li>
+                        <Link to="/ledctrl">Led Control</Link>
+                    </li>
+                    </ul>
+                </nav>
+                <div className="dashboard-content">
+                    <div className="box-info">
+                        {/* {boxdata && <BoxInfo data={boxdata} />} */}
+                        {cur_box ? <BoxInfo socket={ isConnected } boxId={ cur_box }></BoxInfo> :
+                                    <BoxInfo socket={ isConnected } boxId={ 1 } />}
+                        <BoxBtnList onButtonClick={handleButtonClick} />
+                        {cur_box ? <GrowInfo socket={ isConnected } boxId={ cur_box }></GrowInfo> :
+                                    <GrowInfo socket={ isConnected } boxId={ 1 } />}
+                        {/* {d2Message ? (
+                            <div className="grow-info-container">
+                                <GrowInfo data={d2Message} />
+                            </div>
+                        ) : growdata ? (
                         <div className="grow-info-container">
-                            <GrowInfo data={d2Message} />
+                            <GrowInfo data={growdata} />
                         </div>
-                    ) : growdata ? (
-                      <div className="grow-info-container">
-                          <GrowInfo data={growdata} />
-                      </div>
-                    ):null} */}
-                </div>
+                        ):null} */}
+                    </div>
 
-                <div className="middlePic-container">
-                    <div className="upper-section">
-                        {/* 上半部分放置圖片 */}
-                        {/* {cur_box&&<LineChartCom data={cur_box}></LineChartCom>} */}
-                        {/* <img src="your-upper-image-url.jpg" alt="Upper Section" /> */}
-                            {/* <D2 ngrowindata={handleMessageFromD2}></D2> */}
+                    <div className="middlePic-container">
+                        <div className="upper-section">
+                            {/* 上半部分放置圖片 */}
+                            {/* {cur_box&&<LineChartCom data={cur_box}></LineChartCom>} */}
+                            {/* <img src="your-upper-image-url.jpg" alt="Upper Section" /> */}
+                                {/* <D2 ngrowindata={handleMessageFromD2}></D2> */}
+                            <LedControl socket={isConnected}></LedControl>
+                        </div>
+                        <div className="lower-section">
+                            {/* 下半部分放置圖片 */}
+                            <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
+                            {/* <img src="http://192.168.1.201:8080/javascript_simple.html" /> */}
+                            {/* <img src="your-lower-image-url.jpg" alt="Lower Section" /> */}
+                        </div>
+                    </div>
+
+                    {/* <div className="device-info">
+                        <D2 ngrowindata={handleMessageFromD2}></D2>
                         <LedControl socket={isConnected}></LedControl>
-                    </div>
-                    <div className="lower-section">
-                        {/* 下半部分放置圖片 */}
-                        <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
-                        {/* <img src="http://192.168.1.201:8080/javascript_simple.html" /> */}
-                        {/* <img src="your-lower-image-url.jpg" alt="Lower Section" /> */}
-                    </div>
+                    </div> */}
                 </div>
-
-                {/* <div className="device-info">
-                    <D2 ngrowindata={handleMessageFromD2}></D2>
-                    <LedControl socket={isConnected}></LedControl>
-                </div> */}
             </div>
-        </div>
     );
 }

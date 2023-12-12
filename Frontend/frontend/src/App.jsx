@@ -3,6 +3,9 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { Dashboard } from './Component/Dashboard'
+import HistoryPic from './Component/HistoryPic'
+import LedControl from './Component/LedControl'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 function App() {
@@ -30,7 +33,14 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      <Dashboard></Dashboard>
+      {/* <Dashboard></Dashboard> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Dashboard />}/>
+          <Route path="historypic" element={<HistoryPic />} />
+          <Route path="ledctrl" element={<LedControl />}/>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
