@@ -1,0 +1,51 @@
+/* AddBoxForm.css */
+
+.add-box-form-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-box-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .add-box-form input[type="text"],
+  .add-box-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .add-box-form button {
+    padding: 10px 20px;
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .add-box-form button,
+  .add-box-form .close-button {
+    margin-right: 10px;
+  }
+  
+  .add-box-form .close-button {
+    background-color: #ddd;
+    color: #333;
+  }
+  
+  /* Optional: Style for multiple select */
+  .add-box-form select[multiple] {
+    height: 100px; /* You can adjust the height based on your design */
+  }
+  

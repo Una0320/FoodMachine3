@@ -2,9 +2,11 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import {SocketProvider} from './Component/SocketContext'
 import { Dashboard } from './Component/Dashboard'
 import HistoryPic from './Component/HistoryPic'
-import LedControl from './Component/LedControl'
+import LedCtrlPage from './Component/LedCtrlPage'
+import BoxPage from './Component/BoxPage'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
@@ -34,13 +36,16 @@ function App() {
         Click on the Vite and React logos to learn more
       </p> */}
       {/* <Dashboard></Dashboard> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Dashboard />}/>
-          <Route path="historypic" element={<HistoryPic />} />
-          <Route path="ledctrl" element={<LedControl />}/>
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+            <SocketProvider>
+                <Routes>
+                    <Route path='/' element={<Dashboard />}/>
+                    <Route path='/box/:boxId' element={<BoxPage />} />
+                    <Route path="historypic" element={<HistoryPic />} />
+                    <Route path="ledctrl" element={<LedCtrlPage />}/>
+                </Routes>
+            </SocketProvider>
+        </BrowserRouter>
     </>
   )
 }

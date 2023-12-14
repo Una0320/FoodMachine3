@@ -11,8 +11,8 @@ const VideoStream = ({ streamUrl }) => {
                 width="700"
                 height="450"
                 src={streamUrl}
-                frameborder="0"
-                allowfullscreen
+                frameBorder="0"
+                allowFullScreen
             ></iframe>
         </div>
     );

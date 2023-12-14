@@ -144,5 +144,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Record Growing Image
-MEDIA_ROOT = os.path.join(BASE_DIR, 'growin')
-MEDIA_URL = '/growin/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pic')
+MEDIA_URL = '/pic/'

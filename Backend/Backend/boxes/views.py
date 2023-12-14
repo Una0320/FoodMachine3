@@ -75,11 +75,14 @@ def BoxGrowthsIN(request, box_id):
         if end_date:
             growth_in_results = growth_in_results.filter(timestamp__range=['1970-01-01 00:00:00', end_date])
 
+         # 反向排序，最近的時間在前面
+        growth_in_results = growth_in_results.order_by('-timestamp')
+
         # 獲取要返回的屬性列表，如果 attributes 未提供，則默認返回所有屬性
         attributes_param = request.GET.get('attributes', None)
         # 如果沒有指定 attributes 參數，預設會傳回所有屬性
         attributes = attributes_param.split(',') if attributes_param else [
-            'timestamp', 'airtemp', 'humidity', 'luminance', 'ledrgb', 'sunlong'
+            'timestamp', 'airtemp', 'humidity', 'luminance', 'ledrgb', 'sunlong', 'cur_Image'
         ]
 
         # 將 growthrecords 序列化為 JSON 格式，只包含指定屬性
@@ -110,7 +113,6 @@ def BoxGrowthsOUT(request):
             .annotate(box_count=Count('boxid'))
             .filter(box_count=len(box_ids))  # 过滤匹配所有 box_id 的记录
         )
-        # growth_out_results = growthOUT.objects.filter(boxid__in=box_ids)
 
         # 獲取日期範圍
         start_date = request.GET.get('start_date', None)
@@ -123,6 +125,8 @@ def BoxGrowthsOUT(request):
         if end_date:
             growth_out_results = growth_out_results.filter(timestamp__range=['1970-01-01 00:00:00', end_date])
 
+        growth_out_results = growth_out_results.order_by('-timestamp')
+        
         # 獲取要返回的屬性列表，如果 attributes 未提供，則默認返回所有屬性
         attributes_param = request.GET.get('attributes', None)
         # 如果沒有指定 attributes 參數，預設會傳回所有屬性

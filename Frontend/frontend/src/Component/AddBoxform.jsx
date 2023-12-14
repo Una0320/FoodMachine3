@@ -1,5 +1,5 @@
 // AddBoxForm.jsx
-
+import '../CSS/AddBoxform.css'
 import React, { useEffect, useState } from "react";
 
 const AddBoxForm = ({ onClose, onBoxAdded }) => {
@@ -11,7 +11,7 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
     });
 
     const [UserOptions, setUserOptions] = useState([]);
-    const [plantOptions, setPlantOptions] = useState([]);
+    // const [plantOptions, setPlantOptions] = useState([]);
 
     const handleInputChange = (e) => {
         const { name, value, options } = e.target;
@@ -88,16 +88,17 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
         }, []); //empty array means only run in first render
 
     return (
-    <div>
+    <div className='add-box-form-container'>
         <form onSubmit={handleSubmit}>
-            <label>
+            <label className='add-box-form label'>
                 New Boxname:
-                <input type="text" name="boxname" value={boxData.boxname} onChange={handleInputChange} />
+                <input className='add-box-form input' type="text" name="boxname" value={boxData.boxname} onChange={handleInputChange} />
             </label>
-            <label>
+            <label className='add-box-form label'>
                 Box User: 
                 {/* <input type="text" name="name" value={boxData.users} onChange={handleInputChange} /> */}
                 <select
+                    className='add-box-form-select'
                     name="users"
                     multiple
                     value={boxData.users}
@@ -109,9 +110,9 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
                 </select>
             </label>
             {/* 其他 box 屬性的輸入欄位 */}
-            <button type="submit">Add Box</button>
+            <button className='add-box-form-button' type="submit">Add Box</button>
         </form>
-        <button onClick={onClose}>Close</button>
+        <button className='add-box-form-close-button' onClick={onClose}>Close</button>
     </div>
     );
 };

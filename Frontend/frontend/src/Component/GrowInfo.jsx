@@ -1,13 +1,17 @@
 // GrowInfo.jsx
 import React, { useState, useEffect } from 'react';
 import '../CSS/Dashboard.css'
+
 const GrowInfo = ({ socket, boxId }) => {
+
+    //Today's date
     let objectDate = new Date();
     let day = objectDate.getDate();
     let month = objectDate.getMonth() + 1;
     let year = objectDate.getFullYear();
     let fulldate = year + "-" + month + "-" + day;
     const [data, setdata] = useState([]);
+
     const fetchgrowdata = async (boxId) => {
         // -----------------growth info-------------------
         try {
@@ -42,13 +46,13 @@ const GrowInfo = ({ socket, boxId }) => {
             // });
             fetchgrowdata(boxId);
         }
-
+        socket.off("ngrowin_update")
         socket.on("ngrowin_update", ngrowin_update);
-    }, [boxId]);
+    }, []);
 
     return(
         <div className="grow-info">
-            <h2>GrowthRecords</h2>
+            {/* <h2>GrowthRecords</h2> */}
             <table style={{ margin: '0 auto', borderCollapse: 'collapse', width: '100%' }}>
                 <thead>
                     <tr>

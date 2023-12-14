@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { useSocket } from './SocketContext';
 import '../CSS/LedCtrl.css'
 
 const DeviceInfo = ({ data }) => (
@@ -16,9 +17,10 @@ const DeviceInfo = ({ data }) => (
     </div>
 );
 
-const LedControl = ( {socket} ) =>
+const LedCtrlPage = ( ) =>
 {
     const [Ledstatus, setLedstatus] = useState();
+    const socket = useSocket();
 
     const fetchData = async (boxId) => {
         try {
@@ -92,9 +94,9 @@ const LedControl = ( {socket} ) =>
 
     return(
         <div className="container">
-            {/* <h2>LED Control</h2>
+            <h2>LED Control</h2>
             <button onClick={() => window.history.back()}>Go Back</button>
-             */}
+            
             {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>}
             {/* <h3 className="heading">Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3> */}
             <div className="right-column">
@@ -144,4 +146,4 @@ const LedControl = ( {socket} ) =>
     );
 };
 
-export default LedControl;
+export default LedCtrlPage;

@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { useState, useEffect } from "react";
 import "../CSS/Dashboard.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import BoxBtnList from "./BoxBtnList";
 import BoxInfo from "./BoxInfo";
 import GrowInfo from "./GrowInfo";
-import { socket } from "../socket";
+// import { socket } from "../socket";
+import { useSocket } from "./SocketContext";
 import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
 import LineChartCom from './LineChartCom'
@@ -113,9 +114,19 @@ export function Dashboard() {
     const [d2Message, setD2Message] = useState(""); // 新增 state 來儲存 D2 的 message
 
     const [message, setMessage] = useState([]);
-    const [isConnected, setIsConnected] = useState(socket.connect());
+    // const [isConnected, setIsConnected] = useState(socket.connect());
+    const socket = useSocket();
+
     const [test, settest] = useState("");
     //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
+
+    const navigate = useNavigate();
+
+    let objectDate = new Date();
+    let day = objectDate.getDate();
+    let month = objectDate.getMonth() + 1;
+    let year = objectDate.getFullYear();
+    let fulldate = year + "-" + month + "-" + day;
 
     useEffect(() => {
 
@@ -149,7 +160,7 @@ export function Dashboard() {
         function ngrowout_update() {
             console.log("Ngrowout_update");
             fetch(
-              "http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=2023-12-12")
+              `http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=${fulldate}`)
               .then((response) => {
                 response.json().then((text) => {
                   console.log(text);
@@ -163,7 +174,7 @@ export function Dashboard() {
 
         socket.on("getMessage", getMessage);
         // socket.on("ngrowin_update", ngrowin_update);
-        socket.on("ngrowout_update", ngrowout_update);
+        // socket.on("ngrowout_update", ngrowout_update);
         socket.on("box_log", box_log);
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
@@ -175,6 +186,7 @@ export function Dashboard() {
         // Call fetchData with the selected boxId
         setCurBox(boxId);
         // fetchData(boxId);
+        navigate(`/box/${boxId}`);
     };
 
     // 處理從 D2 來的 message
@@ -203,11 +215,11 @@ export function Dashboard() {
                 <div className="dashboard-content">
                     <div className="box-info">
                         {/* {boxdata && <BoxInfo data={boxdata} />} */}
-                        {cur_box ? <BoxInfo socket={ isConnected } boxId={ cur_box }></BoxInfo> :
-                                    <BoxInfo socket={ isConnected } boxId={ 1 } />}
+                        {/* {cur_box ? <BoxInfo socket={ socket } boxId={ cur_box }></BoxInfo> :
+                                    <BoxInfo socket={ socket } boxId={ 1 } />} */}
                         <BoxBtnList onButtonClick={handleButtonClick} />
-                        {cur_box ? <GrowInfo socket={ isConnected } boxId={ cur_box }></GrowInfo> :
-                                    <GrowInfo socket={ isConnected } boxId={ 1 } />}
+                        {/* {cur_box ? <GrowInfo socket={ socket } boxId={ cur_box }></GrowInfo> :
+                                    <GrowInfo socket={ socket } boxId={ 1 } />} */}
                         {/* {d2Message ? (
                             <div className="grow-info-container">
                                 <GrowInfo data={d2Message} />
@@ -225,7 +237,7 @@ export function Dashboard() {
                             {/* {cur_box&&<LineChartCom data={cur_box}></LineChartCom>} */}
                             {/* <img src="your-upper-image-url.jpg" alt="Upper Section" /> */}
                                 {/* <D2 ngrowindata={handleMessageFromD2}></D2> */}
-                            <LedControl socket={isConnected}></LedControl>
+                            <LedControl socket={socket}></LedControl>
                         </div>
                         <div className="lower-section">
                             {/* 下半部分放置圖片 */}
