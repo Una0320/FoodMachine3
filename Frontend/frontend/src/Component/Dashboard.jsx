@@ -14,7 +14,7 @@ import VideoStream from "./VideoStream";
 import LineChartCom from './LineChartCom'
 
 const dashboard2 = {
-    name: "Dashboard",
+    name: "FoodMachine",
     theme: {
         backgroundColor: "black",
         color: "White",
@@ -204,9 +204,6 @@ export function Dashboard() {
                     <li>
                         <Link to="/historypic">History Pic</Link>
                     </li>
-                    {/* <li>
-                        <Link to="/detailinfo">Detail Info</Link>
-                    </li> */}
                     <li>
                         <Link to="/ledctrl">Led Control</Link>
                     </li>

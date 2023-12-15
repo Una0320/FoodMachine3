@@ -37,6 +37,7 @@ body {
     width: 100%;
     height: flex;
     object-fit: cover;  /* 保持圖片比例並填充容器 */
+    border-radius: 20px;
 }
 
 .history-scroll {
@@ -51,4 +52,6 @@ body {
 .history-scroll img {
     width: 100%;
     height: auto;
+    border-radius: 20px;
+    opacity: 0.5; /* 數值越小，越透明。 */
 }

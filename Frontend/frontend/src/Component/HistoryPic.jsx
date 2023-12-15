@@ -7,7 +7,7 @@ const HistoryPic = () => {
 
     //Today's date
     let objectDate = new Date();
-    let day = objectDate.getDate();
+    let day = objectDate.getDate() - 1;
     let month = objectDate.getMonth() + 1;
     let year = objectDate.getFullYear();
     let fulldate = year + "-" + month + "-" + day;

@@ -4,8 +4,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 95vh; /* 將高度設定為視窗的高度 */
-    overflow: hidden; /* 如果不想顯示滾動條的話 */
+    height: 100%; /* 將高度設定為視窗的高度 */
+    /* background-image: linear-gradient(#c0ebd7, #f98d74); */
+    /* background-image: linear-gradient(#EAF2FF, #FBDE9C); */
+    overflow: auto;
   }
   
   .dashboard-title {
@@ -40,13 +42,13 @@
   .upper-section {
     flex-grow: 1;
     max-height: 50%; /* 調整上半部分高度 */
-    overflow: hidden; /* 如果需要滾動顯示，請移除這行 */
+    /* overflow: hidden; 如果需要滾動顯示，請移除這行 */
   }
   
   .lower-section {
     flex-grow: 1;
     max-height: 50%; /* 調整下半部分高度 */
-    overflow: hidden; /* 如果需要滾動顯示，請移除這行 */
+    /* overflow: hidden; 如果需要滾動顯示，請移除這行 */
   }
   
   .device-info {
