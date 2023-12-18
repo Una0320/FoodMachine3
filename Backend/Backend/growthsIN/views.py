@@ -26,8 +26,9 @@ def NGrowthIN(request):
             boxid_id=growth_data['boxid'] # 使用外鍵名 + _id
 
         )
-        img_binary = base64.b64decode(growth_data['img'])
-        new_record.cur_Image.save(new_record.timestamp+'.jpg', ContentFile(img_binary), save=True)
+        if growth_data['img']:
+            img_binary = base64.b64decode(growth_data['img'])
+            new_record.cur_Image.save(new_record.timestamp+'.jpg', ContentFile(img_binary), save=True)
         rgb_dict['RGB']=growth_data['RGB']
         new_record.ledrgb = rgb_dict
         new_record.save()

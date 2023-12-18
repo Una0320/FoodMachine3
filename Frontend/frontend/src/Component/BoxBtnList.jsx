@@ -11,6 +11,7 @@ import humidit from '../icon/humidity.png'
 const BoxBtnList = ({ onButtonClick }) => {
     const [boxList, setBoxList] = useState([]);
     const [showAddBoxModal, setShowAddBoxModal] = useState(false);
+    const [selectedBox, setSelectedBox] = useState(1);
 
     const fetchData = async () => {
         try {
@@ -61,31 +62,21 @@ const BoxBtnList = ({ onButtonClick }) => {
             {boxList.map((box) => (
                 <button
                 key={box.id}
-                onClick={() => onButtonClick(box.id)}
-                className="box-button" // Apply the common button style
+                onClick={() => {
+                    onButtonClick(box.id);
+                    setSelectedBox(box.id);
+                }}
+                className={`nav-button ${selectedBox === box.id ? 'active' : ''}`}
+                // className="box-button" // Apply the common button style
                 >
-                <div className="box-info">
-                    {/* Display icons and corresponding information */}
-                    <div className="box-info-item">
-                        {/* <img src="icon_boxname.png" alt="boxname icon" /> */}
+                <div>
+                    <div>
                         {box.name}
                     </div>
-                    <div className="box-info-item">
-                        <img src={airtemp} alt="airtemp icon" />
-                        22.3{/* {box.airtemp} */}
-                    </div>
-                    <div className="box-info-item">
-                        <img src={humidit} alt="humidity icon" />
-                        131{/* {box.humidity} */}
-                    </div>
-                    <div className="box-info-item">
-                        <img src={luminan} alt="luminance icon" />
-                        1000{box.luminance}
-                    </div>
-                    <div className="box-info-item">
-                        <img src={sunlong} alt="airtemp icon" />
-                        12{/* {box.sunlong} */}
-                    </div>
+                    {/* <div className="box-info-item"> */}
+                        {/* <img src={airtemp} alt="airtemp icon" /> */}
+                        {/* 22.3{box.airtemp} */}
+                    {/* </div> */}
                 </div>
                 </button>
             ))}

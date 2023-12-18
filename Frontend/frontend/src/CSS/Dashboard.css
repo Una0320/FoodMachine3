@@ -71,3 +71,80 @@
     text-align: center;
     max-height: 500px; /* 調整最大高度，請根據需要調整 */
   }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+  
+  .dashboard {
+    display: flex;
+    height: 95vh;
+    background-color: #1c1c1c; /* 深色底色 */
+    margin: 0; /* 移除额外的 margin */
+    overflow: auto;
+}
+  
+  .sidebar {
+    width: 20%;
+    background-color: #333; /* 較淺的左側導覽列底色 */
+    color: #fff; /* 字體淺色 */
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  .nav-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .nav-button:hover {
+    background-color: #ddd; /* 按鈕淺色底色 */
+    color: #333; /* 字體深色 */
+  }
+  
+  .nav-button.active {
+    background-color: #ddd; /* 按鈕淺色底色 */
+    color: #333; /* 字體深色 */
+  }
+  
+  .content {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* 添加此行，为 .box 之间添加间隔 */
+    height: 100%;
+}
+
+.box {
+    flex: 0 0 calc(50% - 20px);
+    height: 50%;
+    padding: 15px;
+    background-color: lightgray;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: transform 0.5s ease-in-out; /* 添加过渡效果，持续0.5秒，缓慢加速减速 */
+  transform-origin: left bottom; /* 设置变换原点为左下角 */
+}
+
+.box.expanded {
+  transform: scale(1.9);
+  z-index: 1; /* 确保展开的盒子在最上层 */
+}

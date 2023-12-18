@@ -30,3 +30,23 @@
     height: 30px;
   }
   
+  .nav-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .nav-button:hover {
+    background-color: #ddd; /* 按鈕淺色底色 */
+    color: #333; /* 字體深色 */
+  }
+  .nav-button.active {
+    background-color: #ddd; /* 按鈕淺色底色 */
+    color: #333; /* 字體深色 */
+  }

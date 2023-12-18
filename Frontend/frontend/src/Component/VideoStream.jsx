@@ -8,8 +8,7 @@ const VideoStream = ({ streamUrl }) => {
             {/* <h2>Video Stream</h2> */}
             <iframe
                 title="video-stream"
-                width="700"
-                height="450"
+                style={{ width: '100%', height: '420px', minWidth: 'min-content', minHeight: 'min-content' }}
                 src={streamUrl}
                 frameBorder="0"
                 allowFullScreen
