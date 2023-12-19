@@ -80,10 +80,10 @@
   
   .dashboard {
     display: flex;
-    height: 95vh;
+    height: 100%;
     background-color: #1c1c1c; /* 深色底色 */
     margin: 0; /* 移除额外的 margin */
-    overflow: auto;
+    /* overflow: auto; */
 }
   
   .sidebar {
@@ -130,7 +130,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 20px; /* 添加此行，为 .box 之间添加间隔 */
-    height: 100%;
+    /* height: 100%; */
 }
 
 .box {
