@@ -200,6 +200,7 @@ export function Dashboard() {
     const handleOutsideClick = () => {
         setIsBox3Expanded(false);
     };
+
     const boxContent = isBox3Expanded ? (
         <div>
           {/* 新的内容 */}
@@ -212,7 +213,10 @@ export function Dashboard() {
             <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
         </div>
     );
-      
+
+    const handleSettingBtnClick = () => {
+        navigate('/ledctrl')
+    }
 
     return (
             // <div className="dashboard-container">
@@ -272,17 +276,21 @@ export function Dashboard() {
             // </div>
             <div className="dashboard">
                 <div className="sidebar">
-                    <div className="title">FoodMachine</div>
+                    {/* <div className="title">FoodMachine</div> */}
+                    <img src={'/foodmachine.png'} alt="FoodMachine"></img>
                     <BoxBtnList onButtonClick={handleButtonClick}></BoxBtnList>
+                    <button className="setting-button" onClick={handleSettingBtnClick}>
+                        <img src={'/setting.png'} alt="Settings"></img>
+                    </button>
                     {/* <button className="nav-button" data-target="addBox">ADD Box</button> */}
                 </div>
                 <div className="content">
                     <div className="box" id="box1">
                         <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
                     </div>
-                    <div className="box" id="box2">
+                    {/* <div className="box" id="box2">
                         <LedControl socket={socket}></LedControl>
-                    </div>
+                    </div> */}
                     <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
                         {boxContent}
                         {/* 空白处点击时，恢复状态 */}
