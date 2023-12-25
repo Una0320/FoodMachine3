@@ -4,6 +4,8 @@
     flex-wrap: wrap;
     padding-top: 20px;
     justify-content: center; /* 水平置中 */
+    overflow-y: auto; /* 啟用垂直滾動條 */
+    max-height: 500px; /* 調整最大高度，避免過長 */
   }
   
   .box-button {

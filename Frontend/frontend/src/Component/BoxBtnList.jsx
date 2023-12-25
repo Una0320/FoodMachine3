@@ -58,28 +58,31 @@ const BoxBtnList = ({ onButtonClick }) => {
     };
 
     return (
-        <div className="box-btn-list">
-            {boxList.map((box) => (
-                <button
-                key={box.id}
-                onClick={() => {
-                    onButtonClick(box.id);
-                    setSelectedBox(box.id);
-                }}
-                className={`nav-button ${selectedBox === box.id ? 'active' : ''}`}
-                // className="box-button" // Apply the common button style
-                >
-                <div>
+        <div>
+            <div className="box-btn-list">
+                {boxList.map((box) => (
+                    <button
+                    key={box.id}
+                    onClick={() => {
+                        onButtonClick(box.id);
+                        setSelectedBox(box.id);
+                    }}
+                    className={`nav-button ${selectedBox === box.id ? 'active' : ''}`}
+                    // className="box-button" // Apply the common button style
+                    >
                     <div>
-                        {box.name}
+                        <div>
+                            {box.name}
+                        </div>
+                        {/* <div className="box-info-item"> */}
+                            {/* <img src={airtemp} alt="airtemp icon" /> */}
+                            {/* 22.3{box.airtemp} */}
+                        {/* </div> */}
                     </div>
-                    {/* <div className="box-info-item"> */}
-                        {/* <img src={airtemp} alt="airtemp icon" /> */}
-                        {/* 22.3{box.airtemp} */}
-                    {/* </div> */}
-                </div>
-                </button>
-            ))}
+                    </button>
+                ))}
+                
+            </div>
             <button onClick={addnewBox} className="add-box-button">
                 ➕
             </button>

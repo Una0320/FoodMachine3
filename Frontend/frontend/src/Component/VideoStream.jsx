@@ -1,16 +1,17 @@
 // VideoStream.jsx
 import React from 'react';
 import { useEffect, useState } from 'react';
+import '../CSS/Streaming.css'
 
 const VideoStream = ({ streamUrl }) => {
     return (
-        // <div>
+        // <div className='videobox'>
             <iframe
                 title="video-stream"
-                style={{ width: '100%', height: '100%', minWidth: 'min-content', minHeight: 'min-content' }}
+                style={{ width: '100%', height: '100%' }}
                 src={streamUrl}
                 frameBorder="0"
-                allowFullScreen
+                allowFullScreen="true"
             ></iframe>
         // </div>
     );

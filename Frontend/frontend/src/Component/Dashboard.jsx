@@ -288,9 +288,12 @@ export function Dashboard() {
                     <div className="box" id="box1">
                         <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
                     </div>
-                    {/* <div className="box" id="box2">
-                        <LedControl socket={socket}></LedControl>
-                    </div> */}
+                    <div className="box" id="box2">
+                        <button>val1</button>
+                        <button>val2</button>
+                        <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
+                        <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT>
+                    </div>
                     <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
                         {boxContent}
                         {/* 空白处点击时，恢复状态 */}
@@ -298,7 +301,7 @@ export function Dashboard() {
                         {/* <img src={'/sunlong.png'} alt="Sunlong"></img> */}
                         {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN> */}
                     </div>
-                    <div className="box" id="box4">
+                    <div className="box4" id="box4">
                         <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT>
                     </div>
                 </div>
