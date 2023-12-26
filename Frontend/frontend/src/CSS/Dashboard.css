@@ -1,57 +1,6 @@
 /* dashboard.css */
 
-.dashboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%; /* 將高度設定為視窗的高度 */
-    /* background-image: linear-gradient(#c0ebd7, #f98d74); */
-    /* background-image: linear-gradient(#EAF2FF, #FBDE9C); */
-    overflow: auto;
-  }
-  
-  .dashboard-title {
-    color: #0078d4;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .box-info {
-    flex-grow: 1;
-    max-width: 60%;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    margin-right: 20px;
-  }
-
-  .middlePic-container {
-    flex-grow: 1;
-    max-width: 50%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .upper-section {
-    flex-grow: 1;
-    max-height: 50%; /* 調整上半部分高度 */
-    /* overflow: hidden; 如果需要滾動顯示，請移除這行 */
-  }
-  
-  .lower-section {
-    flex-grow: 1;
-    max-height: 50%; /* 調整下半部分高度 */
-    /* overflow: hidden; 如果需要滾動顯示，請移除這行 */
-  }
-  
-  .device-info {
+.device-info {
     flex-grow: 1;
     max-width: 100%;
     padding: 20px;
@@ -59,6 +8,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
   }
+
   .grow-info-container {
     height: 90%; /* 這裡的高度可以根據需要調整 */
     margin: 0;
@@ -83,11 +33,12 @@
     height: 100%;
     background-color: #655147; /* 深木色背景 */
     margin: 0; /* 移除额外的 margin */
-    /* overflow: auto; */
+    overflow: hidden;
 }
   
   .sidebar {
-    width: 7%;
+    flex: 1;
+    /* width: 7%; */
     background-color:  #8b735b; /* 木質左側導覽列底色 */
     color: #fff; /* 字體淺色 */
     align-items: center; /* 將內容置中 */
@@ -98,6 +49,7 @@
     max-width: 100%;
     height: auto; /* 保持圖片比例 */
   }
+
   .setting-button {
     width: 80%;
     padding: 20px; /* 調整 padding 以滿足你的需求 */
@@ -139,13 +91,26 @@
   }
   
   .content {
-    width: 100%;
+    flex: 14;
+    /* width: 100%; */
     padding: 20px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px; /* 添加此行，为 .box 之间添加间隔 */
-    /* height: 100%; */
+    /* flex-wrap: wrap; */
+    flex-direction: column;
+    align-items: stretch; /*依主軸的 flex-direction 下，flex-item 被拉伸以填滿整個容器*/
+  }
+
+.content_up{
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  overflow: hidden;
+}
+
+.content_down{
+  flex: 1;
+  padding: 20px;
+  overflow: hidden;
 }
 
 .box {
@@ -159,16 +124,39 @@
   transform-origin: left bottom; /* 设置变换原点为左下角 */
 }
 
-#box2 {
-  /* 其他樣式... */
+.up_left {
+  flex: 1;
+}
+.up_right {
+  flex: 1;
   display: flex;
-  flex-direction: row; /* 讓內容垂直排列 */
-
-  /* 在這裡添加其他可能的樣式 */
+  flex-direction: column;
+  max-width: 50%; /* 添加这一行，限制最大宽度为50% */
 }
 
-.box4{
-  width: 300px;
+.up_right_title{
+  flex: 1;
+  color: #d9d2ba; /* 字體淺色 */
+  /* align-items: center;
+  justify-content: center;  */
+}
+
+.up_right_btnArea{
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: stretch; 
+  flex-wrap: wrap;
+  gap: 24px;
+
+}
+
+.up_right_btnArea button {
+  /* 共用樣式 */
+  width: 120px; /* 固定寬度 */
+  height: 120px; /* 固定高度 */
+  border-radius: 10px; /* 圓角 */
 }
 
 .box.expanded {

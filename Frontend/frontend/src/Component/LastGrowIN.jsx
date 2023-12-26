@@ -45,13 +45,19 @@ const LastGrowIN = ({ socket, boxId }) => {
     return(
         <div className="grow-info">
             {data ? (
-                <h2>
-                    {data.timestamp && data.timestamp.replace("T", " ")}<br/>
-                    {data.luminance}<br/>
-                    {data.airtemp}<br/>
-                    {data.humidity}<br/>
-                    {data.sunlong}<br/>
-                </h2>
+                <div>
+                    <button onClick={() => handleButtonClick(index)}> {data.luminance}</button>
+                    <button onClick={() => handleButtonClick(index)}> {data.airtemp}</button>
+                    <button onClick={() => handleButtonClick(index)}> {data.humidity}</button>
+                    <button onClick={() => handleButtonClick(index)}> {data.sunlong}</button>
+                </div>
+                // <h2>
+                //     {data.timestamp && data.timestamp.replace("T", " ")}<br/>
+                //     {data.luminance}<br/>
+                //     {data.airtemp}<br/>
+                //     {data.humidity}<br/>
+                //     {data.sunlong}<br/>
+                // </h2>
             ) : (
                 <p>No data available</p>
             )}

@@ -13,6 +13,7 @@ import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
 import LastGrowIN from "./LastGrowIN";
 import LastGrowOUT from "./LastGrowOUT";
+import LastGrowAll from "./LastGrowAll";
 import BoxPage from "./BoxPage";
 
 const dashboard2 = {
@@ -274,6 +275,7 @@ export function Dashboard() {
             //         </div> */}
             //     </div>
             // </div>
+
             <div className="dashboard">
                 <div className="sidebar">
                     {/* <div className="title">FoodMachine</div> */}
@@ -285,26 +287,28 @@ export function Dashboard() {
                     {/* <button className="nav-button" data-target="addBox">ADD Box</button> */}
                 </div>
                 <div className="content">
-                    <div className="box" id="box1">
-                        <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
+                    <div className="content_up">
+                        <div className="up_left" id="box1">
+                            <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
+                            {/*Another camera -  http://192.168.1.187:81/stream */}
+                        </div>
+                        <div className="up_right" id="box2">
+                            {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
+                            <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT> */}
+                            <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
+
+                        </div>
                     </div>
-                    <div className="box" id="box2">
-                        <button>val1</button>
-                        <button>val2</button>
-                        <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
-                        <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT>
-                    </div>
-                    <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
-                        {boxContent}
-                        {/* 空白处点击时，恢复状态 */}
-                        {isBox3Expanded && <div className="overlay" onClick={handleOutsideClick}></div>}
-                        {/* <img src={'/sunlong.png'} alt="Sunlong"></img> */}
-                        {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN> */}
-                    </div>
-                    <div className="box4" id="box4">
-                        <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT>
+                    <div className="content_down">
+                        <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
+                            {boxContent}
+                            {/* 空白处点击时，恢复状态 */}
+                            {isBox3Expanded && <div className="overlay" onClick={handleOutsideClick}></div>}
+                            {/* <img src={'/sunlong.png'} alt="Sunlong"></img> */}
+                            {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN> */}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>        
     );
 }
