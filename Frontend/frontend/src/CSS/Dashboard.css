@@ -111,6 +111,8 @@
   flex: 1;
   padding: 20px;
   overflow: hidden;
+  background-color: #fff;
+  border-radius: 10px;
 }
 
 .box {
@@ -157,6 +159,7 @@
   width: 120px; /* 固定寬度 */
   height: 120px; /* 固定高度 */
   border-radius: 10px; /* 圓角 */
+  white-space: pre-wrap; /* 按鈕文字自動換行 */
 }
 
 .box.expanded {

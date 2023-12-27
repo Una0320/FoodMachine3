@@ -21,9 +21,9 @@ const LastGrowAll = ({ socket, boxId }) => {
             );
 
             if (response.ok) {
-                const jsonData = await response.json();
-                setdata(jsonData[0]);
-                console.log(jsonData[0]);
+                const json_inData = await response.json();
+                setdata(json_inData[0]);
+                console.log(json_inData[0]);
             } else {
                 const errorData = await response.json();
                 setError(errorData.message);
@@ -41,9 +41,9 @@ const LastGrowAll = ({ socket, boxId }) => {
             );
 
             if (response.ok) {
-                const jsonData = await response.json();
-                setoutdata(jsonData[0]);
-                // console.log(jsonData);
+                const json_outData = await response.json();
+                setoutdata(json_outData[0]);
+                // console.log(json_outData);
             } else {
                 const errorData = await response.json();
                 setError(errorData.message);
@@ -77,16 +77,27 @@ const LastGrowAll = ({ socket, boxId }) => {
 
     return(
         <>
-            <h1 className='up_right_title'> {data.timestamp && data.timestamp.replace("T", " ")}</h1>
+            {data ? 
+                (<h1 className='up_right_title'> {data.timestamp && data.timestamp.replace("T", " ")}</h1>)
+                :(<h1> {objectDate.toLocaleTimeString()} </h1>)
+            }
             <div className='up_right_btnArea'>
                 {/* Data buttons */}
-                {data &&
-                    <>
-                    <button onClick={() => handleButtonClick(index)}>{data.luminance || ''}</button>
+                {data ?
+                    (<>
+                    <button onClick={() => handleButtonClick(index)}>Brightness{data.luminance || ''}</button>
                     <button onClick={() => handleButtonClick(index)}>{data.airtemp || ''}</button>
                     <button onClick={() => handleButtonClick(index)}>{data.humidity || ''}</button>
                     <button onClick={() => handleButtonClick(index)}>{data.sunlong || ''}</button>
-                    </>
+                    </>) :
+                    (
+                        <>
+                        <button onClick={() => handleButtonClick(index)}>Brightness{''}</button>
+                        <button onClick={() => handleButtonClick(index)}>Airtemp{''}</button>
+                        <button onClick={() => handleButtonClick(index)}>Humidity{''}</button>
+                        <button onClick={() => handleButtonClick(index)}>Sunshine Duration{''}</button>
+                        </>
+                    )
                 }
 
                 {/* Outdata buttons */}
@@ -101,12 +112,12 @@ const LastGrowAll = ({ socket, boxId }) => {
                     </>) : 
                     (
                         <>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>Watertemp{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>Out Humidity{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>Out Airtemp{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>pH{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>EC{''}</button>
+                    <button onClick={() => handleButtonClick(index)}>CO2{''}</button>
                     </>
                     )
                 }

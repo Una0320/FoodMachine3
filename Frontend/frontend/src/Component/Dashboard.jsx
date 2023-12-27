@@ -15,6 +15,7 @@ import LastGrowIN from "./LastGrowIN";
 import LastGrowOUT from "./LastGrowOUT";
 import LastGrowAll from "./LastGrowAll";
 import BoxPage from "./BoxPage";
+import LineChartCom from "./LineChartCom";
 
 const dashboard2 = {
     name: "FoodMachine",
@@ -173,7 +174,7 @@ export function Dashboard() {
         }
 
         function box_log(value) {
-            console.log(value);
+            console.log(new Date() + ":" + value);
         }
 
         socket.on("getMessage", getMessage);
@@ -300,13 +301,11 @@ export function Dashboard() {
                         </div>
                     </div>
                     <div className="content_down">
-                        <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
+                        <LineChartCom></LineChartCom>
+                        {/* <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
                             {boxContent}
-                            {/* 空白处点击时，恢复状态 */}
                             {isBox3Expanded && <div className="overlay" onClick={handleOutsideClick}></div>}
-                            {/* <img src={'/sunlong.png'} alt="Sunlong"></img> */}
-                            {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN> */}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>        
