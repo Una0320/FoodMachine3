@@ -10,8 +10,77 @@ const LastGrowAll = ({ socket, boxId }) => {
     let month = objectDate.getMonth() + 1;
     let year = objectDate.getFullYear();
     let fulldate = year + "-" + month + "-" + day;
+
+    //Fetch data
     const [data, setdata] = useState([]);
     const [outdata, setoutdata] = useState([]);
+
+    //line chart visibility
+    // 狀態用來追蹤 data buttons 的顯示和隱藏
+    const [chartDataVisibility, setChartDataVisibility] = useState({
+        luminance: true,
+        airtemp: true,
+        humidity: true,
+        sunlong: true,
+    });
+
+    // 狀態用來追蹤 out data buttons 的顯示和隱藏
+    const [outChartDataVisibility, setOutChartDataVisibility] = useState({
+        watertemp: true,
+        humidity: true,
+        airtemp: true,
+        ph: true,
+        ec: true,
+        co2: true,
+    });
+
+    // 處理 data buttons 和 out data buttons 的點擊事件
+    const handleButtonClick = (index) => {
+        // 處理 data buttons
+        if (data) {
+            switch (index) {
+                case 0:
+                    setChartDataVisibility({ ...chartDataVisibility, luminance: !chartDataVisibility.luminance });
+                    console.log(chartDataVisibility)
+                    break;
+                case 1:
+                    setChartDataVisibility({ ...chartDataVisibility, airtemp: !chartDataVisibility.airtemp });
+                    break;
+                case 2:
+                    setChartDataVisibility({ ...chartDataVisibility, humidity: !chartDataVisibility.humidity });
+                    break;
+                case 3:
+                    setChartDataVisibility({ ...chartDataVisibility, sunlong: !chartDataVisibility.sunlong });
+                    break;
+                default:
+                    break;
+            }
+        } else if (outdata) {
+            // 處理 out data buttons
+            switch (index) {
+                case 0:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, watertemp: !outChartDataVisibility.watertemp });
+                    break;
+                case 1:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, humidity: !outChartDataVisibility.humidity });
+                    break;
+                case 2:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, airtemp: !outChartDataVisibility.airtemp });
+                    break;
+                case 3:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, ph: !outChartDataVisibility.ph });
+                    break;
+                case 4:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, ec: !outChartDataVisibility.ec });
+                    break;
+                case 5:
+                    setOutChartDataVisibility({ ...outChartDataVisibility, co2: !outChartDataVisibility.co2 });
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     const fetchINdata = async (boxId) => {
         // -----------------growth info-------------------
@@ -63,7 +132,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         }
         
         function ngrowin_update() {
-            console.log("N-growin update");
+            console.log("N-growin_LastGrow");
             fetchINdata(boxId);
         }
 
@@ -71,8 +140,12 @@ const LastGrowAll = ({ socket, boxId }) => {
         socket.off("ngrowout_update");
         socket.on("ngrowout_update", ngrowout_update);
 
-        socket.off("ngrowin_update")
+        // socket.off("ngrowin_update")
         socket.on("ngrowin_update", ngrowin_update);
+        return () => {
+            // 在组件卸载时取消事件监听
+            socket.off("ngrowin_update")
+        };
     }, [boxId]);
 
     return(
@@ -85,10 +158,10 @@ const LastGrowAll = ({ socket, boxId }) => {
                 {/* Data buttons */}
                 {data ?
                     (<>
-                    <button onClick={() => handleButtonClick(index)}>Brightness{data.luminance || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{data.airtemp || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{data.humidity || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{data.sunlong || ''}</button>
+                        <button onClick={() => handleButtonClick(0)}>Brightness {data.luminance || ''}</button>
+                        <button onClick={() => handleButtonClick(1)}>airtemp {data.airtemp || ''}</button>
+                        <button onClick={() => handleButtonClick(2)}>Humidity {data.humidity || ''}</button>
+                        <button onClick={() => handleButtonClick(3)}>Sunshine Duration {data.sunlong || ''}</button>
                     </>) :
                     (
                         <>

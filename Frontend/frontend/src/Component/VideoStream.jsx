@@ -8,7 +8,7 @@ const VideoStream = ({ streamUrl }) => {
         // <div className='videobox'>
             <iframe
                 title="video-stream"
-                style={{ width: 'auto', height: 'auto' }}
+                style={{ width: '650px', height: 'auto' }}
                 src={streamUrl}
                 frameBorder="0"
                 allowFullScreen="true"

@@ -291,7 +291,7 @@ export function Dashboard() {
                     <div className="content_up">
                         <div className="up_left" id="box1">
                             <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
-                            {/*Another camera -  http://192.168.1.187:81/stream */}
+                            {/*Another camera -  http://192.168.1.187:81/stream || http://192.168.1.201:8080/javascript_simple.html*/}
                         </div>
                         <div className="up_right" id="box2">
                             {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
@@ -301,7 +301,7 @@ export function Dashboard() {
                         </div>
                     </div>
                     <div className="content_down">
-                        <LineChartCom></LineChartCom>
+                        <LineChartCom socket={socket}></LineChartCom>
                         {/* <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
                             {boxContent}
                             {isBox3Expanded && <div className="overlay" onClick={handleOutsideClick}></div>}
