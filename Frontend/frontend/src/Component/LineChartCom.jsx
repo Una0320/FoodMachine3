@@ -7,6 +7,13 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const LineChartCom = ({ socket }) => {
 
+    //Today's date
+    let objectDate = new Date();
+    let day = objectDate.getDate();
+    let month = objectDate.getMonth() + 1;
+    let year = objectDate.getFullYear();
+    let fulldate = year + "-" + month + "-" + day;
+
     const [chartdata, setchartdata] = useState([]);
     const [maxAirtemp, setMaxAirtemp] = useState('auto');
     const [minAirtemp, setMinAirtemp] = useState(0);
@@ -17,10 +24,10 @@ const LineChartCom = ({ socket }) => {
 
     const fetchData = async (boxid) => {
         try {
-            const startDate = ('2023-12-28');
+            // const startDate = ('2023-12-29');
             const attributes = 'timestamp,luminance,airtemp,humidity';
 
-            const encodedURL = `http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=${(startDate)}&attributes=${(attributes)}`;
+            const encodedURL = `http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=${fulldate}&attributes=${(attributes)}`;
 
             const response = await fetch(encodedURL);
             // const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=2023-11-05 & attributes=timestamp,airtemp`);
