@@ -37,20 +37,20 @@
   .nav-button {
     display: block;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
     text-align: center;
     background-color: transparent;
-    color: #fff;
+    color: #E0E0E0;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
   }
   .nav-button:hover {
-    background-color: #ddd; /* 按鈕淺色底色 */
-    color: #333; /* 字體深色 */
+    background-color: #E0E0E0; /* 淡灰色辅助背景 */
+    color: #30475e; /* 深蓝色按钮文本 */
   }
-  .nav-button.active {
-    background-color: #ddd; /* 按鈕淺色底色 */
-    color: #333; /* 字體深色 */
+  .nav-button.active, .add-box-button {
+    background-color: #E0E0E0; /* 淡灰色辅助背景 */
+    color: #30475e; /* 深蓝色按钮文本 */
   }

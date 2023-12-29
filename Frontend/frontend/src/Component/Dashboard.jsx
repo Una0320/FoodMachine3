@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import "../CSS/Dashboard.css";
 import { Link, useNavigate } from 'react-router-dom';
 
+// import { socket } from "../socket";
+import { useSocket } from "./SocketContext";
+import { ChartCtrlProvider } from "./ChartCtlContext";
+
 import BoxBtnList from "./BoxBtnList";
 import BoxInfo from "./BoxInfo";
 import GrowInfo from "./GrowInfo";
-// import { socket } from "../socket";
-import { useSocket } from "./SocketContext";
 import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
 import LastGrowIN from "./LastGrowIN";
@@ -118,6 +120,7 @@ export function Dashboard() {
     const [d2Message, setD2Message] = useState(""); // 新增 state 來儲存 D2 的 message
 
     const [message, setMessage] = useState([]);
+
     // const [isConnected, setIsConnected] = useState(socket.connect());
     const socket = useSocket();
 
@@ -278,6 +281,7 @@ export function Dashboard() {
             // </div>
 
             <div className="dashboard">
+                <ChartCtrlProvider>
                 <div className="sidebar">
                     {/* <div className="title">FoodMachine</div> */}
                     <img src={'/foodmachine.png'} alt="FoodMachine"></img>
@@ -308,6 +312,7 @@ export function Dashboard() {
                         </div> */}
                     </div>
                 </div>
+                </ChartCtrlProvider>
             </div>        
     );
 }

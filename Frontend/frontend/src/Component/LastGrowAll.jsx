@@ -1,6 +1,8 @@
 // LastGrowAll.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../CSS/Dashboard.css'
+import '../CSS/LastGrowAll.css'
+import { useCtrline } from './ChartCtlContext';
 
 const LastGrowAll = ({ socket, boxId }) => {
 
@@ -16,71 +18,7 @@ const LastGrowAll = ({ socket, boxId }) => {
     const [outdata, setoutdata] = useState([]);
 
     //line chart visibility
-    // 狀態用來追蹤 data buttons 的顯示和隱藏
-    const [chartDataVisibility, setChartDataVisibility] = useState({
-        luminance: true,
-        airtemp: true,
-        humidity: true,
-        sunlong: true,
-    });
-
-    // 狀態用來追蹤 out data buttons 的顯示和隱藏
-    const [outChartDataVisibility, setOutChartDataVisibility] = useState({
-        watertemp: true,
-        humidity: true,
-        airtemp: true,
-        ph: true,
-        ec: true,
-        co2: true,
-    });
-
-    // 處理 data buttons 和 out data buttons 的點擊事件
-    const handleButtonClick = (index) => {
-        // 處理 data buttons
-        if (data) {
-            switch (index) {
-                case 0:
-                    setChartDataVisibility({ ...chartDataVisibility, luminance: !chartDataVisibility.luminance });
-                    console.log(chartDataVisibility)
-                    break;
-                case 1:
-                    setChartDataVisibility({ ...chartDataVisibility, airtemp: !chartDataVisibility.airtemp });
-                    break;
-                case 2:
-                    setChartDataVisibility({ ...chartDataVisibility, humidity: !chartDataVisibility.humidity });
-                    break;
-                case 3:
-                    setChartDataVisibility({ ...chartDataVisibility, sunlong: !chartDataVisibility.sunlong });
-                    break;
-                default:
-                    break;
-            }
-        } else if (outdata) {
-            // 處理 out data buttons
-            switch (index) {
-                case 0:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, watertemp: !outChartDataVisibility.watertemp });
-                    break;
-                case 1:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, humidity: !outChartDataVisibility.humidity });
-                    break;
-                case 2:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, airtemp: !outChartDataVisibility.airtemp });
-                    break;
-                case 3:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, ph: !outChartDataVisibility.ph });
-                    break;
-                case 4:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, ec: !outChartDataVisibility.ec });
-                    break;
-                case 5:
-                    setOutChartDataVisibility({ ...outChartDataVisibility, co2: !outChartDataVisibility.co2 });
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
 
     const fetchINdata = async (boxId) => {
         // -----------------growth info-------------------
@@ -158,40 +96,62 @@ const LastGrowAll = ({ socket, boxId }) => {
                 {/* Data buttons */}
                 {data ?
                     (<>
-                        <button onClick={() => handleButtonClick(0)}>Brightness {data.luminance || ''}</button>
-                        <button onClick={() => handleButtonClick(1)}>airtemp {data.airtemp || ''}</button>
-                        <button onClick={() => handleButtonClick(2)}>Humidity {data.humidity || ''}</button>
-                        <button onClick={() => handleButtonClick(3)}>Sunshine Duration {data.sunlong || ''}</button>
+                        <button className={`${chartVisibilityMap['luminance'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('luminance')}>Brightness {data.luminance || ''}</button>
+                        <button className={`${chartVisibilityMap['inairtemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('inairtemp')}>airtemp {data.airtemp || ''}</button>
+                        <button className={`${chartVisibilityMap['inhumidity'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('inhumidity')}>Humidity {data.humidity || ''}</button>
+                        <button className={`${chartVisibilityMap['sunlong'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('sunlong')}>Sunshine Duration {data.sunlong || ''}</button>
                     </>) :
                     (
                         <>
-                        <button onClick={() => handleButtonClick(index)}>Brightness{''}</button>
-                        <button onClick={() => handleButtonClick(index)}>Airtemp{''}</button>
-                        <button onClick={() => handleButtonClick(index)}>Humidity{''}</button>
-                        <button onClick={() => handleButtonClick(index)}>Sunshine Duration{''}</button>
+                        <button className={`${chartVisibilityMap['luminance'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('luminance')}>Brightness {''}</button>
+                        <button className={`${chartVisibilityMap['inairtemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('inairtemp')}>airtemp {''}</button>
+                        <button className={`${chartVisibilityMap['inhumidity'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('inhumidity')}>Humidity {''}</button>
+                        <button className={`${chartVisibilityMap['sunlong'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('sunlong')}>Sunshine Duration {''}</button>
                         </>
                     )
                 }
 
                 {/* Outdata buttons */}
                 {outdata ?
-                    (<>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.watertemp || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.humidity || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.airtemp || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.ph || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.ec || ''}</button>
-                    <button onClick={() => handleButtonClick(index)}>{outdata.co2 || ''}</button>
-                    </>) : 
                     (
                         <>
-                    <button onClick={() => handleButtonClick(index)}>Watertemp{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>Out Humidity{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>Out Airtemp{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>pH{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>EC{''}</button>
-                    <button onClick={() => handleButtonClick(index)}>CO2{''}</button>
-                    </>
+                        <button className={`${chartVisibilityMap['watertemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('watertemp')}>Out watertemp {outdata.watertemp || ''}</button>
+                        <button className={`${chartVisibilityMap['outhumidity'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('outhumidity')}>Out Humidity {outdata.humidity || ''}</button>
+                        <button className={`${chartVisibilityMap['outairtemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('outairtemp')}>Out Airtemp {outdata.airtemp || ''}</button>
+                        <button className={`${chartVisibilityMap['ph'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('ph')}>pH {outdata.ph || ''}</button>
+                        <button className={`${chartVisibilityMap['ec'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('ec')}>EC {outdata.ec || ''}</button>
+                        <button className={`${chartVisibilityMap['co2'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('co2')}>CO2 {outdata.co2 || ''}</button>
+                        </>
+                    ) : 
+                    (
+                        <>
+                        <button className={`${chartVisibilityMap['watertemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('watertemp')}>Out Watertemp {''}</button>
+                        <button className={`${chartVisibilityMap['outhumidity'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('outhumidity')}>Out Humidity {''}</button>
+                        <button className={`${chartVisibilityMap['outairtemp'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('outairtemp')}>Out Airtemp {''}</button>
+                        <button className={`${chartVisibilityMap['ph'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('ph')}>pH {''}</button>
+                        <button className={`${chartVisibilityMap['ec'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('ec')}>EC {''}</button>
+                        <button className={`${chartVisibilityMap['co2'] ? 'btn-true' : 'btn-false'}`}
+                                onClick={() => toggleChartVisibility('co2')}>CO2 {''}</button>
+                        </>
                     )
                 }
             </div>

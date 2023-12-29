@@ -1,0 +1,29 @@
+/* 为 true 状态的按钮定义样式 */
+.btn-true {
+    /* 共用樣式 */
+    width: 120px; /* 固定寬度 */
+    height: 120px; /* 固定高度 */
+    border-radius: 10px; /* 圓角 */
+    white-space: pre-wrap; /*按鈕文字自動換行*/
+    background-color: #34495E; /* 深蓝色按钮背景 */
+    color: #E0E0E0; /* 白色按钮文本 */
+    font-size: 14pt;
+    text-align: center;
+    line-height: 30px;
+  }
+  
+  /* 为 false 状态的按钮定义样式 */
+  .btn-false {
+    /* 共用樣式 */
+    width: 120px; /* 固定寬度 */
+    height: 120px; /* 固定高度 */
+    border-radius: 10px; /* 圓角 */
+    white-space: pre-wrap; /* 按鈕文字自動換行 */
+    background-color: #E0E0E0;
+    color: #34495E;
+    font-size: 14pt;
+    text-align: center;
+    line-height: 30px;
+    /* border:3px #34495E solid; */
+  }
+  
