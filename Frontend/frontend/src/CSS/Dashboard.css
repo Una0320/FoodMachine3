@@ -78,9 +78,9 @@
 
 .content_down{
     flex: 1;
-    padding: 20px 20px 20px 20px;
+    padding: 10px 20px 20px 20px;
     overflow: hidden;
-    background-color: #E0E0E0; /* 淡灰色辅助背景 */
+    /* background-color: #E0E0E0; 淡灰色辅助背景 */
     border-radius: 10px;
 }
 
@@ -106,38 +106,34 @@
 .up_right {
     flex: 1;
     display: flex;
+    /* align-items: center; 垂直居中 */
     flex-direction: column;
     max-width: 50%; /* 添加这一行，限制最大宽度为50% */
 }
 
 .up_right_title{
-  flex: 1;
-  color: #694f3d; /* 深棕色标题 */
-  text-align: center;
-    line-height: 30px;
+    flex: 1;
+    /* color: #694f3d;
+    text-align: center;
+    line-height: 30px; */
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100vh; /* 设置高度为视口高度，以便垂直居中生效 */
+    margin: 0; /* 移除默认的外边距 */
 }
 
 .up_right_btnArea{
     flex: 2;
     display: flex;
     flex-direction: row;
-    justify-content: center; 
-    align-items: stretch; 
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     gap: 20px;
-    text-align: center;
+    text-align: right;
 
 }
-
-/* .up_right_btnArea button {
-    /* 共用樣式 */
-    /* width: 130px; 固定寬度 */
-    /* height: 130px; 固定高度 */
-    /* border-radius: 10px; 圓角 */
-    /* white-space: pre-wrap; 按鈕文字自動換行 */
-    /* text-align: center; */
-    /* line-height: 1em; */
-/* } */
 
 .box.expanded {
   transform: scale(1.9);

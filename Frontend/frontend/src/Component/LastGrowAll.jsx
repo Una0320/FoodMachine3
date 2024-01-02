@@ -99,7 +99,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <button className={`${chartVisibilityMap['luminance'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('luminance')}>Brightness {data.luminance || ''}</button>
                         <button className={`${chartVisibilityMap['inairtemp'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('inairtemp')}>airtemp {data.airtemp || ''}</button>
+                                onClick={() => toggleChartVisibility('inairtemp')}>Airtemp {data.airtemp || ''}</button>
                         <button className={`${chartVisibilityMap['inhumidity'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('inhumidity')}>Humidity {data.humidity || ''}</button>
                         <button className={`${chartVisibilityMap['sunlong'] ? 'btn-true' : 'btn-false'}`}
@@ -110,7 +110,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <button className={`${chartVisibilityMap['luminance'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('luminance')}>Brightness {''}</button>
                         <button className={`${chartVisibilityMap['inairtemp'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('inairtemp')}>airtemp {''}</button>
+                                onClick={() => toggleChartVisibility('inairtemp')}>Airtemp {''}</button>
                         <button className={`${chartVisibilityMap['inhumidity'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('inhumidity')}>Humidity {''}</button>
                         <button className={`${chartVisibilityMap['sunlong'] ? 'btn-true' : 'btn-false'}`}

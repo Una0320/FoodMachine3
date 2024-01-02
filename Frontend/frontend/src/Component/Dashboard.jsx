@@ -305,7 +305,7 @@ export function Dashboard() {
                         </div>
                     </div>
                     <div className="content_down">
-                        <LineChartCom socket={socket}></LineChartCom>
+                        <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
                         {/* <div className={`box ${isBox3Expanded ? "expanded" : ""}`} id="box3" onClick={handleBox3Click}>
                             {boxContent}
                             {isBox3Expanded && <div className="overlay" onClick={handleOutsideClick}></div>}

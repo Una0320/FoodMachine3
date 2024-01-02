@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 import { useCtrline } from './ChartCtlContext';
 
-const LineChartCom = ({ socket }) => {
+const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
     let objectDate = new Date();
@@ -15,6 +15,7 @@ const LineChartCom = ({ socket }) => {
     let fulldate = year + "-" + month + "-" + day //+ " 00:20";
 
     const [chartdata, setchartdata] = useState([]);
+    const [parameterExtremes, setParameterExtremes] = useState({}); // 用于存储每个参数的最大和最小值
     const [maxAirtemp, setMaxAirtemp] = useState('auto');
     const [minAirtemp, setMinAirtemp] = useState(0);
     const [maxHumidiy, setmaxHumidiy] = useState('auto');
@@ -23,6 +24,21 @@ const LineChartCom = ({ socket }) => {
     const [minBrightn, setminBrightn] = useState(0)
 
     const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
+    const [chartHeight, setChartHeight] = useState(464);
+
+
+    const calculateChartHeight = () => {
+        const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length;
+        const totalHeight = 464; // content_down高度
+        const minHeight = 50; // 每个图表的最小高度，根据需要调整
+        const padding = 5; // 图表之间的间距，根据需要调整
+      
+        // 计算每个图表的高度
+        const chartHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
+      
+        // 如果高度小于最小高度，则使用最小高度
+        return chartHeight < minHeight ? minHeight : chartHeight;
+    };
 
     const processTime = (data) => {
         return data.map(entry => {
@@ -62,11 +78,11 @@ const LineChartCom = ({ socket }) => {
     };
 
     useEffect(() => {
-        fetchData(1);
+        fetchData(boxId);
 
         function ngrowin_update() {
             console.log("N-growin_LineChart");
-            fetchData(1);
+            fetchData(boxId);
         }
 
         // socket.off("ngrowin_update")
@@ -76,56 +92,172 @@ const LineChartCom = ({ socket }) => {
             // 在组件卸载时取消事件监听
             socket.off("ngrowin_update")
         };
-    }, []);
+    }, [boxId]);
 
     /* 當 chartdata 更新時，airtempValues 也會被重新計算，確保了正確的最大和最小值。 */
     useEffect(() => {
-        const airtempValues = chartdata.map(entry => entry.airtemp);
-        setMaxAirtemp(Math.max(...airtempValues));
-        setMinAirtemp(Math.min(...airtempValues));
-        console.log(maxAirtemp);
+        // const airtempValues = chartdata.map(entry => entry.airtemp);
+        // setMaxAirtemp(Math.max(...airtempValues));
+        // setMinAirtemp(Math.min(...airtempValues));
+        // 計算每個參數的最大和最小值
+        const extremes = {};
+        chartdata.forEach(entry => {
+            Object.keys(entry).forEach(key => {
+            if (key !== 'timestamp') {
+                if (!extremes[key]) {
+                    extremes[key] = { min: entry[key], max: entry[key] };
+                } else {
+                    extremes[key].min = Math.floor(Math.min(extremes[key].min, entry[key]));
+                    extremes[key].max = Math.ceil(Math.max(extremes[key].max, entry[key]));
+                }
+            }
+            });
+        });
+        setParameterExtremes(extremes);
+        console.log(extremes);
     }, [chartdata]);
 
-    return (
-        <>
-        <ResponsiveContainer height={430} >
-            <LineChart
-                syncId="mySyncId"
-                data={chartdata}
-                margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-            >
-                <CartesianGrid strokeDasharray="1 1" />
-                <XAxis
-                    dataKey="timestamp"
-                    interval={5}/>       
-                {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
-                <YAxis padding={{ bottom: 20 }} />
-                <Tooltip />
-                <Legend verticalAlign="middle" layout="vertical" align="right" 
-                        wrapperStyle={{ width: '120px' }}/>
-                        
-                {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={null}/>) }
-                {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
-                {chartVisibilityMap['luminance'] && (<Line type="monotoneX" dataKey="luminance" stroke="#34495E" name="luminance" activeDot={{ r: 8 }}/>) }
-            </LineChart>
+    // 在每次 chartVisibilityMap 更新時動態計算高度
+    useEffect(() => {
+        const height = calculateChartHeight();
+        setChartHeight(height);
+    }, [chartVisibilityMap]);
 
-            {/* <LineChart
-                data={chartdata}
-                margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-                syncId="mySyncId"
-            >
-                <CartesianGrid strokeDasharray="1 1" />
-                <XAxis
+    return (
+        <div style={{ backgroundColor: '#E0E0E0', borderRadius: '10px', width:'100%'}}>
+            {chartVisibilityMap['inairtemp'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartdata}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
+                    dataKey="timestamp"
+                    interval={5}
+                    hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                parameterExtremes['airtemp']?.min || 'auto',
+                                parameterExtremes['airtemp']?.max || 'auto'
+                            ]}
+                    />
+                    {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={{ r: 3 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['inhumidity'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartdata}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                parameterExtremes['inhumidity']?.min || 'auto',
+                                parameterExtremes['inhumidity']?.max || 'auto'
+                            ]}
+                    />
+                    {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['luminance'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartdata}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
                     dataKey="timestamp"
                     interval={5}/>
-                <YAxis domain={[21, 34]} />
-                <Tooltip />
-                <Legend verticalAlign="middle" layout="vertical" align="right" 
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                parameterExtremes['luminance']?.min || 'auto',
+                                parameterExtremes['luminance']?.max || 'auto'
+                            ]}/>
+                    {chartVisibilityMap['luminance'] && (<Line type="monotoneX" dataKey="luminance" stroke="#34495E" name="luminance" activeDot={{ r: 8 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/>
-                {chartVisibilityMap['humidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
-            </LineChart> */}
-        </ResponsiveContainer>
-        </>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+        </div>
+        // <div style={{backgroundColor: '#E0E0E0', borderRadius:'10px'}}>
+        // <ResponsiveContainer height={chartHeight} >
+        //     <LineChart
+        //         syncId="mySyncId"
+        //         data={chartdata}
+        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+        //     >
+        //         <CartesianGrid strokeDasharray="1 1" />
+        //         <XAxis
+        //             dataKey="timestamp"
+        //             interval={5}/>       
+        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
+        //         <YAxis padding={{ bottom: 20 }} />
+        //         <Tooltip />
+        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
+        //                 wrapperStyle={{ width: '120px' }}/>
+                        
+        //         {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={null}/>) }
+        //         {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
+        //         {chartVisibilityMap['luminance'] && (<Line type="monotoneX" dataKey="luminance" stroke="#34495E" name="luminance" activeDot={{ r: 8 }}/>) }
+        //     </LineChart>
+        //     <LineChart
+        //         syncId="mySyncId"
+        //         data={chartdata}
+        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+        //     >
+        //         <CartesianGrid strokeDasharray="1 1" />
+        //         <XAxis
+        //             dataKey="timestamp"
+        //             interval={5}/>       
+        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
+        //         <YAxis padding={{ bottom: 20 }} />
+        //         <Tooltip />
+        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
+        //                 wrapperStyle={{ width: '120px' }}/>
+                        
+        //         {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={null}/>) }
+        //     </LineChart>
+
+        //     <LineChart
+        //         syncId="mySyncId"
+        //         data={chartdata}
+        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+        //     >
+        //         <CartesianGrid strokeDasharray="1 1" />
+        //         <XAxis
+        //             dataKey="timestamp"
+        //             interval={5}/>       
+        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
+        //         <YAxis padding={{ bottom: 20 }} />
+        //         <Tooltip />
+        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
+        //                 wrapperStyle={{ width: '120px' }}/>
+                        
+        //         {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
+        //     </LineChart>
+        // </div>
     );
 };
 
