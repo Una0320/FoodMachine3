@@ -16,7 +16,7 @@ import VideoStream from "./VideoStream";
 import LastGrowIN from "./LastGrowIN";
 import LastGrowOUT from "./LastGrowOUT";
 import LastGrowAll from "./LastGrowAll";
-import BoxPage from "./BoxPage";
+import VideoandPic from "./VideoandPic";
 import LineChartCom from "./LineChartCom";
 
 const dashboard2 = {
@@ -26,91 +26,6 @@ const dashboard2 = {
         color: "White",
     },
 };
-
-export function D2({ ngrowindata }) {
-    // 在 D2 元件中設定 state 來管理接收到的訊息
-    // const [message, setMessage] = useState([]);
-    // const [isConnected, setIsConnected] = useState(socket.connect());
-    // const [test, settest] = useState("");
-    // //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
-
-    // useEffect(() => {
-    //     // 建立 Socket.IO 連線
-    //     // ws stores socket connection status
-    //     // When ws is empty (no connection), a connection is made.
-    //     // if (!ws){
-    //     //     console.log("ws is null.");
-    //     //     setws(socket.connect())
-    //     //     console.log(ws);
-    //     // }
-    //     // if(ws)
-    //     // {
-    //     //     // console.log(ws.id);
-    //     //     ws.on('getMessage', (data) => {
-    //     //       console.log("getMessage:" + data);
-    //     //       setMessage(data);
-    //     //   });
-    //     // }
-
-    //     // socket.on('connect', onConnect);
-    //     function getMessage(value) {
-    //         settest("From Socket Server: " + value);
-    //         console.log(socket.id);
-    //         console.log(value);
-    //         //------------------------
-    //         //http://127.0.0.1:8000/boxinfo/1
-    //         fetch("http://127.0.0.1:8000/boxgrowin/1/").then((response) => {
-    //             response.json().then((text) => {
-    //                 console.log(test + ": " + text.users); // 拿到 response.body 轉成的物件
-    //                 setMessage(text);
-    //             });
-    //         });
-    //     }
-
-    //     function ngrowin_update() {
-    //         console.log("N-growin update");
-    //         fetch(
-    //             "http://127.0.0.1:8000/boxgrowin/1/?start_date=2023-12-08"
-    //         ).then((response) => {
-    //             response.json().then((text) => {
-    //                 console.log(text); // 拿到 response.body 轉成的物件
-    //                 setMessage(text);
-    //                 ngrowindata(text);
-    //             });
-    //         });
-    //     }
-
-    //     function ngrowout_update() {
-    //         console.log("Ngrowout_update");
-    //         fetch(
-    //           "http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=2023-12-07")
-    //           .then((response) => {
-    //             response.json().then((text) => {
-    //               console.log(text);
-    //           });
-    //         });
-    //     }
-    //     function box_log(value) {
-    //         console.log(value);
-    //     }
-
-    //     socket.on("getMessage", getMessage);
-    //     socket.on("ngrowin_update", ngrowin_update);
-    //     socket.on("ngrowout_update", ngrowout_update);
-    //     socket.on("box_log", box_log);
-    //     // 在元件卸載時斷開 Socket.IO 連線
-    //     return () => {
-    //         // socket.disconnect()
-    //     };
-    // }, []);
-
-    // 在 D2 元件中可以顯示接收到的訊息
-    return (
-        <div>
-            <LedControl socket={isConnected}></LedControl>
-        </div>
-    );
-}
 
 export function Dashboard() {
     // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
@@ -293,13 +208,12 @@ export function Dashboard() {
                 </div>
                 <div className="content">
                     <div className="content_up">
-                        <div className="up_left" id="box1">
-                            <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream>
+                        <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
+                        {/* <div className="up_left" id="box1"> */}
+                            {/* <VideoStream streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}></VideoStream> */}
                             {/*Another camera -  http://192.168.1.187:81/stream || http://192.168.1.201:8080/javascript_simple.html*/}
-                        </div>
+                        {/* </div> */}
                         <div className="up_right" id="box2">
-                            {/* <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
-                            <LastGrowOUT socket={socket} boxId={cur_box}></LastGrowOUT> */}
                             <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
 
                         </div>

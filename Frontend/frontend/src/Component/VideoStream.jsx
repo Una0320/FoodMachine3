@@ -8,11 +8,10 @@ const VideoStream = ({ streamUrl }) => {
         // <div className='videobox'>
             <iframe
                 title="video-stream"
-                style={{ width: '650px', height: 'auto' }}
+                className="stream-img" // 添加一个类名，用于设置样式
                 src={streamUrl}
-                frameBorder="0"
-                allowFullScreen="true"
-            ></iframe>
+                alt="video-stream"
+            />
         // </div>
     );
 };

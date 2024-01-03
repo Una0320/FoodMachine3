@@ -1,10 +1,26 @@
 .videobox {
     display: flex;
-  justify-content: center;
-  align-items: center;
+    justify-content: center;
+    align-items: center;
 }
 
 .videobox iframe {
     width: 100%;
     height: 100%;
+}
+
+.stream-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 0;
+  width: 75%; /* 设置图片宽度为父容器的100% */
+  height: 85%; /* 设置图片高度为父容器的100% */
+}
+
+.grow-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 0;
 }

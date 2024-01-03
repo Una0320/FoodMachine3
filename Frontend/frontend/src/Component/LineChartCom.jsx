@@ -16,12 +16,6 @@ const LineChartCom = ({ socket , boxId}) => {
 
     const [chartdata, setchartdata] = useState([]);
     const [parameterExtremes, setParameterExtremes] = useState({}); // 用于存储每个参数的最大和最小值
-    const [maxAirtemp, setMaxAirtemp] = useState('auto');
-    const [minAirtemp, setMinAirtemp] = useState(0);
-    const [maxHumidiy, setmaxHumidiy] = useState('auto');
-    const [minHumidiy, setminHumidiy] = useState(0)
-    const [maxBrightn, setmaxBrightn] = useState('auto');
-    const [minBrightn, setminBrightn] = useState(0)
 
     const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
     const [chartHeight, setChartHeight] = useState(464);
