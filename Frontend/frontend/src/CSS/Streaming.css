@@ -9,18 +9,46 @@
     height: 100%;
 }
 
-.stream-img {
+.streaming {
+
+  flex:7;
   max-width: 100%;
-  height: auto;
+  /* width: 100%; */
+  height: 90%;
+  aspect-ratio: 100 / 66;
   display: block;
   border: 0;
-  width: 75%; /* 设置图片宽度为父容器的100% */
-  height: 85%; /* 设置图片高度为父容器的100% */
+  flex-basis: 100px;
+  /* width: 75%; /* 设置图片宽度为父容器的100% */
+  /* height: 85%; 设置图片高度为父容器的100% */
 }
 
 .grow-img {
-  max-width: 100%;
+  flex:7;
+  width: 100%;
   height: auto;
-  display: block;
-  border: 0;
+  aspect-ratio: 100 / 66;
+  opacity: 0.5;
+  top: 0;
+  left: 20%; /* 调整这个值以控制露出的部分 */
+}
+.behind-img {
+  width: 65%;
+  height: auto;
+  aspect-ratio: 16 / 9; /* 设置宽高比例，这里使用 16:9 作为示例 */
+  opacity: 0.15;
+  position: absolute;
+  top: 0;
+  vertical-align: middle;
+  left: 20%;
+  top:10%;
+  /* z-index: 0; 确保图像位于视频之下 */
+}
+
+.leftbtn{
+  flex:1
+}
+
+.rightbtn{
+  flex: 1;
 }

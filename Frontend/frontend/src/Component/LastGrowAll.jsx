@@ -3,9 +3,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import '../CSS/Dashboard.css'
 import '../CSS/LastGrowAll.css'
 import { useCtrline } from './ChartCtlContext';
+import { useContent } from './ContentContext';
 
 const LastGrowAll = ({ socket, boxId }) => {
 
+    //{ socket, boxId }
     //Today's date
     let objectDate = new Date();
     let day = objectDate.getDate();
@@ -14,7 +16,10 @@ const LastGrowAll = ({ socket, boxId }) => {
     let fulldate = year + "-" + month + "-" + day;
 
     //Fetch data
+    const contentdata = useContent();
     const [data, setdata] = useState([]);
+
+
     const [outdata, setoutdata] = useState([]);
 
     //line chart visibility
@@ -78,7 +83,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         socket.off("ngrowout_update");
         socket.on("ngrowout_update", ngrowout_update);
 
-        // socket.off("ngrowin_update")
+        socket.off("ngrowin_update")
         socket.on("ngrowin_update", ngrowin_update);
         return () => {
             // 在组件卸载时取消事件监听

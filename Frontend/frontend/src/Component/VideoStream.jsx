@@ -8,7 +8,7 @@ const VideoStream = ({ streamUrl }) => {
         // <div className='videobox'>
             <iframe
                 title="video-stream"
-                className="stream-img" // 添加一个类名，用于设置样式
+                className="streaming" // 添加一个类名，用于设置样式
                 src={streamUrl}
                 alt="video-stream"
             />

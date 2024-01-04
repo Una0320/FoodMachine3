@@ -23,9 +23,9 @@ const LineChartCom = ({ socket , boxId}) => {
 
     const calculateChartHeight = () => {
         const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length;
-        const totalHeight = 464; // content_down高度
+        const totalHeight = 449; // content_down高度
         const minHeight = 50; // 每个图表的最小高度，根据需要调整
-        const padding = 5; // 图表之间的间距，根据需要调整
+        const padding = 15; // 图表之间的间距，根据需要调整
       
         // 计算每个图表的高度
         const chartHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
@@ -118,34 +118,8 @@ const LineChartCom = ({ socket , boxId}) => {
     }, [chartVisibilityMap]);
 
     return (
-        <div style={{ backgroundColor: '#E0E0E0', borderRadius: '10px', width:'100%'}}>
+        <div style={{ backgroundColor: '#E0E0E0', borderRadius: '10px', width:'100%', height:'100%'}}>
             {chartVisibilityMap['inairtemp'] &&
-                <ResponsiveContainer height={chartHeight}>
-                <LineChart
-                    syncId="mySyncId"
-                    data={chartdata}
-                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-                >
-                    <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis
-                    dataKey="timestamp"
-                    interval={5}
-                    hide/>
-                    <YAxis padding={{ bottom: 20 }} 
-                            domain={[
-                                parameterExtremes['airtemp']?.min || 'auto',
-                                parameterExtremes['airtemp']?.max || 'auto'
-                            ]}
-                    />
-                    {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={{ r: 3 }}/>) }
-                    <Tooltip />
-                    <Legend verticalAlign="middle" layout="vertical" align="right" 
-                        wrapperStyle={{ width: '120px' }}/>
-                </LineChart>
-                </ResponsiveContainer>
-            }
-
-            {chartVisibilityMap['inhumidity'] &&
                 <ResponsiveContainer height={chartHeight}>
                 <LineChart
                     syncId="mySyncId"
@@ -159,11 +133,47 @@ const LineChartCom = ({ socket , boxId}) => {
                         hide/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
+                                parameterExtremes['airtemp']?.min || 'auto',
+                                parameterExtremes['airtemp']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#8884d8' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['inairtemp'] && 
+                    (<Line type="monotoneX" dataKey="airtemp" 
+                            stroke="#8884d8" strokeWidth={2}
+                            name="Airtemp" activeDot={{ r: 8 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['inhumidity'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartdata}
+                    margin={{ top: 15, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
                                 parameterExtremes['inhumidity']?.min || 'auto',
                                 parameterExtremes['inhumidity']?.max || 'auto'
                             ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#82ca9d' }}
+                            axisLine={{ strokeWidth: 2 }}
                     />
-                    {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
+                    {chartVisibilityMap['inhumidity'] && 
+                    (<Line type="monotoneX" dataKey="humidity" 
+                            stroke="#82ca9d" strokeWidth={2}
+                            name="Humidity" activeDot={{ r: 8 }}/>) }
                     <Tooltip />
                     <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/>
@@ -179,15 +189,21 @@ const LineChartCom = ({ socket , boxId}) => {
                     margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
                 >
                     <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis
-                    dataKey="timestamp"
-                    interval={5}/>
+                    <XAxis dataKey="timestamp"
+                            interval={5}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#34495E' }}  // 設置刻度的樣式
+                            axisLine={{ strokeWidth: 2 }} />
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
                                 parameterExtremes['luminance']?.min || 'auto',
                                 parameterExtremes['luminance']?.max || 'auto'
-                            ]}/>
-                    {chartVisibilityMap['luminance'] && (<Line type="monotoneX" dataKey="luminance" stroke="#34495E" name="luminance" activeDot={{ r: 8 }}/>) }
+                            ]}
+                            tick={{ fontSize: 12, fontWeight: 'bold', fill: '#34495E' }}
+                            axisLine={{ strokeWidth: 2 }}/>
+                    {chartVisibilityMap['luminance'] && 
+                    (<Line type="monotoneX" dataKey="luminance" 
+                            stroke="#34495E" strokeWidth={2}
+                            name="Luminance" activeDot={{ r: 8 }}/>) }
                     <Tooltip />
                     <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/>

@@ -7,7 +7,7 @@
     padding-bottom: 20px;
     justify-content: space-between; /* 水平置中 */
     align-items: stretch;
-    gap: 10px;
+    gap: 5px;
     overflow-y: auto; /* 啟用垂直滾動條 */
     max-height: 500px; /* 調整最大高度，避免過長 */
   }

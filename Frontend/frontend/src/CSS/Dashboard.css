@@ -78,7 +78,7 @@
 
 .content_down{
     flex: 1;
-    padding: 10px 20px 20px 20px;
+    padding: 0px 20px 0px 20px;
     overflow: hidden;
     /* background-color: #E0E0E0; 淡灰色辅助背景 */
     border-radius: 10px;
@@ -96,13 +96,15 @@
 }
 
 .up_left {
-    flex: 1;
+    flex: 1.5;
     display: flex;
     background-color: #E0E0E0; /* 淡灰色辅助背景 */
     justify-content: space-around;
     align-items: center;
     width: 100%;
     border-radius: 10px;
+    gap: 24px;
+    position: relative;
 }
 .up_right {
     flex: 1;

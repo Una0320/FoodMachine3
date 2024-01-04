@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // import { socket } from "../socket";
 import { useSocket } from "./SocketContext";
 import { ChartCtrlProvider } from "./ChartCtlContext";
+import { ContentProvider } from "./ContentContext";
 
 import BoxBtnList from "./BoxBtnList";
 import BoxInfo from "./BoxInfo";
@@ -19,20 +20,12 @@ import LastGrowAll from "./LastGrowAll";
 import VideoandPic from "./VideoandPic";
 import LineChartCom from "./LineChartCom";
 
-const dashboard2 = {
-    name: "FoodMachine",
-    theme: {
-        backgroundColor: "black",
-        color: "White",
-    },
-};
 
 export function Dashboard() {
     // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
     // 當收到伺服器回應後，使用 setData 函數更新狀態，以便在元件中顯示資料。
     const [error, setError] = useState(null);
     const [cur_box, setCurBox] = useState(1);
-    const [d2Message, setD2Message] = useState(""); // 新增 state 來儲存 D2 的 message
 
     const [message, setMessage] = useState([]);
 
@@ -215,7 +208,7 @@ export function Dashboard() {
                         {/* </div> */}
                         <div className="up_right" id="box2">
                             <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
-
+                            {/* <LastGrowAll></LastGrowAll> */}
                         </div>
                     </div>
                     <div className="content_down">

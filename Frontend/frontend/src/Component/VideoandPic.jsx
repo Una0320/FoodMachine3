@@ -8,7 +8,7 @@ import '../CSS/Streaming.css'
 const VideoandPic = ({ socket , boxId}) =>{
     //Today's date
     let objectDate = new Date();
-    let day = objectDate.getDate() - 1;
+    let day = objectDate.getDate();
     let month = objectDate.getMonth() + 1;
     let year = objectDate.getFullYear();
     let fulldate = year + "-" + month + "-" + day;
@@ -33,7 +33,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 // 提取 cur_Image 值並設置到新的陣列
                 const indexes = jsonData.map(item => item.cur_Image);
                 setHistoryIndex(indexes);
-                console.log(historyIndex[0]);
+                console.log(historyIndex);
             } else {
                 const errorData = await response.json();
                 setError(errorData.message);
@@ -57,21 +57,26 @@ const VideoandPic = ({ socket , boxId}) =>{
 
     return (
         <div className="up_left" id="box1">
-            <button onClick={() => handleArrowClick('left')}>{'<'}</button>
+            <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button>
             
-                {currentShow === 0 && (
-            <VideoStream
-                streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
-                style={{ zIndex: 1 }}
-            />
+            {currentShow === 0 && (
+                <>
+                <VideoStream
+                    streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
+                    style={{ zIndex: 1 }}
+                />
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
+                className='behind-img '></img>
+                </>
             )}
+
             {currentShow > 0 && (
             <img
                 src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow - 1]}`}
-                className='grow-img'
+                className='behind-img '
             />
             )}
-            <button onClick={() => handleArrowClick('right')}>{'>'}</button>
+            <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button>
 
             
         </div>
