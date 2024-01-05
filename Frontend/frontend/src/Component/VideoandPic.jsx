@@ -16,6 +16,8 @@ const VideoandPic = ({ socket , boxId}) =>{
     const [historyIndex, setHistoryIndex] = useState([]);
     const [data, setdata] = useState([]);
     const [error, setError] = useState(null);
+
+    const [slideDirection, setSlideDirection] = useState(''); 
     //目前up_left要顯示的畫面
     //0 -> video streaming ; 1~data.length -> growth image
     const [currentShow, setcurrentShow] = useState(0);
@@ -50,8 +52,10 @@ const VideoandPic = ({ socket , boxId}) =>{
     const handleArrowClick = (direction) => {
         if (direction === 'left') {
             setcurrentShow((prevShow) => (prevShow > 0 ? prevShow - 1 : prevShow));
+            setSlideDirection(direction); // 设置 slideDirection
         } else {
           setcurrentShow((prevShow) => (prevShow < data.length ? prevShow + 1 : prevShow));
+          setSlideDirection(direction); // 设置 slideDirection
         }
     };
 
@@ -63,19 +67,28 @@ const VideoandPic = ({ socket , boxId}) =>{
                 <>
                 <VideoStream
                     streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
-                    style={{ zIndex: 1 }}
+                    className={`streaming`}
                 />
                 <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
                 className='behind-img '></img>
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
+                className='behind-img2'></img>
                 </>
             )}
 
             {currentShow > 0 && (
-            <img
-                src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow - 1]}`}
-                className='behind-img '
-            />
+                <>
+                <img
+                    src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow - 1]}`}
+                    className={`grow-img`}
+                />
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
+                    className='behind-img '></img>
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
+                    className='behind-img2'></img>
+                </>
             )}
+
             <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button>
 
             

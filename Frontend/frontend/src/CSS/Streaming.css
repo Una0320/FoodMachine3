@@ -15,34 +15,62 @@
   max-width: 100%;
   /* width: 100%; */
   height: 90%;
-  aspect-ratio: 100 / 66;
+  /* aspect-ratio: 100 / 66; */
   display: block;
   border: 0;
-  flex-basis: 100px;
+  /* flex-basis: 100px; */
+  z-index: 2;
   /* width: 75%; /* 设置图片宽度为父容器的100% */
   /* height: 85%; 设置图片高度为父容器的100% */
 }
 
 .grow-img {
   flex:7;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 100 / 66;
-  opacity: 0.5;
-  top: 0;
-  left: 20%; /* 调整这个值以控制露出的部分 */
+  max-width: 66%;
+  /* width: 400px; */
+  height: 85%;
+  /* aspect-ratio: 16 / 9; */
+  display: block;
+  border: 0;
+  /* flex-basis: 100px; */
+  z-index: 2;
+  right: 10px;
 }
+
 .behind-img {
   width: 65%;
   height: auto;
   aspect-ratio: 16 / 9; /* 设置宽高比例，这里使用 16:9 作为示例 */
-  opacity: 0.15;
+  opacity: 0.1;
   position: absolute;
   top: 0;
   vertical-align: middle;
   left: 20%;
-  top:10%;
-  /* z-index: 0; 确保图像位于视频之下 */
+  top:15%;
+  z-index: 1;
+}
+
+.behind-img2 {
+  width: 50%;
+  height: auto;
+  aspect-ratio: 16 / 9; /* 设置宽高比例，这里使用 16:9 作为示例 */
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  vertical-align: middle;
+  left: 40%;
+  top:25%;
+  z-index: 0;
+}
+
+.slide-out {
+  transform: translateX(-10%);
+  opacity: 0;
+}
+
+.slide-in {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .leftbtn{

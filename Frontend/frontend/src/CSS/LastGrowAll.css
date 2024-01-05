@@ -1,8 +1,8 @@
 /* 為 true 狀態的按鈕定義樣式 */
 .btn-true {
     /* 共用樣式 */
-    width: 120px; /* 固定寬度 */
-    height: 120px; /* 固定高度 */
+    width: 110px; /* 固定寬度 */
+    height: 110px; /* 固定高度 */
     border-radius: 10px; /* 圓角 */
     white-space: pre-wrap; /*按鈕文字自動換行*/
     background-color: #34495E; /* 深蓝色按钮背景 */
@@ -15,8 +15,8 @@
   /* 為 false 狀態的按鈕定義樣式 */
   .btn-false {
     /* 共用樣式 */
-    width: 120px; /* 固定寬度 */
-    height: 120px; /* 固定高度 */
+    width: 110px; /* 固定寬度 */
+    height: 110px; /* 固定高度 */
     border-radius: 10px; /* 圓角 */
     white-space: pre-wrap; /* 按鈕文字自動換行 */
     background-color: #E0E0E0;
