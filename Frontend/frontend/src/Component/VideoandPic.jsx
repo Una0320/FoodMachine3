@@ -2,8 +2,19 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import VideoStream from './VideoStream';
+
 import '../CSS/Dashboard.css'
 import '../CSS/Streaming.css'
+// import Swiper core and required modules
+import { Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 const VideoandPic = ({ socket , boxId}) =>{
     //Today's date
@@ -61,8 +72,47 @@ const VideoandPic = ({ socket , boxId}) =>{
 
     return (
         <div className="up_left" id="box1">
-            <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button>
+            {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button> */}
             
+            {/* <Swiper
+                effect='coverflow'
+                grabCursor={true}
+                centeredSlides = {true}
+                loop={true}
+                slidesPerView={'auto'}
+                coverflowEffect={{
+                    rotate:0,
+                    stretch:0,
+                    depth:250,
+                    modifier:2,
+                }}
+                pagination={{el:'.swiper-pagination', clickable:true}}
+                navigation={{
+                    nextEl:'swiper-button-next',
+                    prevEl:'swiper-button-prev',
+                    clickable:true,
+                }}
+                modules={[EffectCoverflow, Pagination, Navigation]}>
+
+                <SwiperSlide>
+                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`} className='grow-img'></img>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}></img>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+2]}`}></img>
+                </SwiperSlide>
+
+                <div className="slider-controler">
+                    <div className="swiper-button-prev slider-arrow">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                    </div>
+                    <div className="swiper-button-next slider-arrow">
+                    </div>
+                    <div className="swiper-pagination"></div>
+                </div>
+            </Swiper> */}
             {currentShow === 0 && (
                 <>
                 <VideoStream
@@ -89,7 +139,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 </>
             )}
 
-            <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button>
+            {/* <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button> */}
 
             
         </div>
