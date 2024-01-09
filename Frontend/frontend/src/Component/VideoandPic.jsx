@@ -2,19 +2,23 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import VideoStream from './VideoStream';
+import SwiperCom from './SwiperCom';
 
 import '../CSS/Dashboard.css'
 import '../CSS/Streaming.css'
 // import Swiper core and required modules
-import { Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper from 'react-id-swiper';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/navigation';
+import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+
+// import required modules
+// import { EffectCoverflow, Pagination } from 'swiper/modules';
+import ReactIdswiper from "react-id-swiper";
+
 
 const VideoandPic = ({ socket , boxId}) =>{
     //Today's date
@@ -33,6 +37,28 @@ const VideoandPic = ({ socket , boxId}) =>{
     //0 -> video streaming ; 1~data.length -> growth image
     const [currentShow, setcurrentShow] = useState(0);
 
+    // Swiper 輪播圖片參數
+    
+    const swiperParams = {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflowEffect: {
+            depth: 10,
+            rotate: 0,
+            stretch: 0,
+            slideShadows: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    };
     const fetchGrowPic = async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
@@ -70,50 +96,29 @@ const VideoandPic = ({ socket , boxId}) =>{
         }
     };
 
+    const renderSwiperSlides = () => {
+        return historyIndex.map((item, index) => (
+            <SwiperSlide key={index} className='swiper-slide'>
+                <div className='card'>
+                    <img src={`http://127.0.0.1:8000/pic/${item}`} alt={`Slide ${index}`} className='card_img' />
+                </div>
+            </SwiperSlide>
+        ));
+    };
+
     return (
         <div className="up_left" id="box1">
             {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button> */}
             
-            {/* <Swiper
-                effect='coverflow'
-                grabCursor={true}
-                centeredSlides = {true}
-                loop={true}
-                slidesPerView={'auto'}
-                coverflowEffect={{
-                    rotate:0,
-                    stretch:0,
-                    depth:250,
-                    modifier:2,
-                }}
-                pagination={{el:'.swiper-pagination', clickable:true}}
-                navigation={{
-                    nextEl:'swiper-button-next',
-                    prevEl:'swiper-button-prev',
-                    clickable:true,
-                }}
-                modules={[EffectCoverflow, Pagination, Navigation]}>
-
-                <SwiperSlide>
-                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`} className='grow-img'></img>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}></img>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+2]}`}></img>
-                </SwiperSlide>
-
-                <div className="slider-controler">
-                    <div className="swiper-button-prev slider-arrow">
-                    <ion-icon name="arrow-back-outline"></ion-icon>
-                    </div>
-                    <div className="swiper-button-next slider-arrow">
-                    </div>
-                    <div className="swiper-pagination"></div>
+            <ReactIdswiper {...swiperParams}>
+                <div style={{ backgroundImage:'url(http://lorempixel.com/600/600/nature/3)' }}>
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}></img></div>
+                <div style={{ backgroundImage:'url(http://lorempixel.com/600/600/nature/4)' }}>
+                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}></img>
                 </div>
-            </Swiper> */}
-            {currentShow === 0 && (
+            </ReactIdswiper>
+            {/* <SwiperCom items={historyIndex}></SwiperCom> */}
+            {/* {currentShow === 0 && (
                 <>
                 <VideoStream
                     streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
@@ -137,7 +142,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
                     className='behind-img2'></img>
                 </>
-            )}
+            )} */}
 
             {/* <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button> */}
 

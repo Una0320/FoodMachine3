@@ -25,6 +25,10 @@ const LastGrowAll = ({ socket, boxId }) => {
     //line chart visibility
     const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
 
+    let roundDecimal = function (val, precision) {
+        return Math.round(Math.round(val * Math.pow(10, (precision || 0) + 1)) / 10) / Math.pow(10, (precision || 0));
+    }
+
     const fetchINdata = async (boxId) => {
         // -----------------growth info-------------------
         try {
@@ -129,17 +133,17 @@ const LastGrowAll = ({ socket, boxId }) => {
                     (
                         <>
                         <button className={`${chartVisibilityMap['watertemp'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('watertemp')}>Out watertemp {outdata.watertemp || ''}</button>
+                                onClick={() => toggleChartVisibility('watertemp')}>Out watertemp {Math.round(outdata.watertemp*100)/100 || ''}</button>
                         <button className={`${chartVisibilityMap['outhumidity'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('outhumidity')}>Out Humidity {outdata.humidity || ''}</button>
+                                onClick={() => toggleChartVisibility('outhumidity')}>Out Humidity {Math.round(outdata.humidity*100)/100 || ''}</button>
                         <button className={`${chartVisibilityMap['outairtemp'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('outairtemp')}>Out Airtemp {outdata.airtemp || ''}</button>
+                                onClick={() => toggleChartVisibility('outairtemp')}>Out Airtemp {Math.round(outdata.airtemp*100)/100 || ''}</button>
                         <button className={`${chartVisibilityMap['ph'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('ph')}>pH {outdata.ph || ''}</button>
+                                onClick={() => toggleChartVisibility('ph')}>pH<br/>{Math.round(outdata.ph*100)/100 || ''}</button>
                         <button className={`${chartVisibilityMap['ec'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('ec')}>EC {outdata.ec || ''}</button>
                         <button className={`${chartVisibilityMap['co2'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('co2')}>CO2 {outdata.co2 || ''}</button>
+                                onClick={() => toggleChartVisibility('co2')}>CO2 {roundDecimal(outdata.co2,3) || ''}</button>
                         </>
                     ) : 
                     (
