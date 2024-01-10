@@ -211,63 +211,6 @@ const LineChartCom = ({ socket , boxId}) => {
                 </ResponsiveContainer>
             }
         </div>
-        // <div style={{backgroundColor: '#E0E0E0', borderRadius:'10px'}}>
-        // <ResponsiveContainer height={chartHeight} >
-        //     <LineChart
-        //         syncId="mySyncId"
-        //         data={chartdata}
-        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-        //     >
-        //         <CartesianGrid strokeDasharray="1 1" />
-        //         <XAxis
-        //             dataKey="timestamp"
-        //             interval={5}/>       
-        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
-        //         <YAxis padding={{ bottom: 20 }} />
-        //         <Tooltip />
-        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
-        //                 wrapperStyle={{ width: '120px' }}/>
-                        
-        //         {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={null}/>) }
-        //         {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
-        //         {chartVisibilityMap['luminance'] && (<Line type="monotoneX" dataKey="luminance" stroke="#34495E" name="luminance" activeDot={{ r: 8 }}/>) }
-        //     </LineChart>
-        //     <LineChart
-        //         syncId="mySyncId"
-        //         data={chartdata}
-        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-        //     >
-        //         <CartesianGrid strokeDasharray="1 1" />
-        //         <XAxis
-        //             dataKey="timestamp"
-        //             interval={5}/>       
-        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
-        //         <YAxis padding={{ bottom: 20 }} />
-        //         <Tooltip />
-        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
-        //                 wrapperStyle={{ width: '120px' }}/>
-                        
-        //         {chartVisibilityMap['inairtemp'] && (<Line type="monotoneX" dataKey="airtemp" stroke="#8884d8" name="Airtemp" dot={null}/>) }
-        //     </LineChart>
-
-        //     <LineChart
-        //         syncId="mySyncId"
-        //         data={chartdata}
-        //         margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-        //     >
-        //         <CartesianGrid strokeDasharray="1 1" />
-        //         <XAxis
-        //             dataKey="timestamp"
-        //             interval={5}/>       
-        //         {/* <YAxis domain={[minAirtemp?minAirtemp:0, maxAirtemp?maxAirtemp:'auto']} padding={{ bottom: 20 }} /> */}
-        //         <YAxis padding={{ bottom: 20 }} />
-        //         <Tooltip />
-        //         <Legend verticalAlign="middle" layout="vertical" align="right" 
-        //                 wrapperStyle={{ width: '120px' }}/>
-                        
-        //         {chartVisibilityMap['inhumidity'] && (<Line type="monotoneX" dataKey="humidity" stroke="#82ca9d" name="Humidity" activeDot={{ r: 8 }}/>) }
-        //     </LineChart>
-        // </div>
     );
 };
 

@@ -7,17 +7,17 @@ import SwiperCom from './SwiperCom';
 import '../CSS/Dashboard.css'
 import '../CSS/Streaming.css'
 // import Swiper core and required modules
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import Swiper from 'react-id-swiper';
+import Swiper from 'swiper';
+import { Navigation, Pagination, EffectCards, A11y, EffectCoverflow } from 'swiper/modules';
+Swiper.use([Navigation]);
+// import 'swiper/css/swiper.min.css';
+
+// import Swiper from 'react-id-swiper'
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-
-// import required modules
-// import { EffectCoverflow, Pagination } from 'swiper/modules';
-import ReactIdswiper from "react-id-swiper";
 
 
 const VideoandPic = ({ socket , boxId}) =>{
@@ -38,28 +38,44 @@ const VideoandPic = ({ socket , boxId}) =>{
     const [currentShow, setcurrentShow] = useState(0);
 
     // Swiper 輪播圖片參數
+    useEffect(() => {
+        const initSwiper = () => {
+          new Swiper('#mySwiper', {
+            effect: 'coverflow',
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            coverflowEffect: {
+                depth: 850,
+                rotate: 0,
+                stretch: 50,
+                modifier:1,
+                slideShadows: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                init:true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
+          });
+        };
     
-    const swiperParams = {
-        effect: 'coverflow',
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        coverflowEffect: {
-            depth: 10,
-            rotate: 0,
-            stretch: 0,
-            slideShadows: false,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-    };
-    const fetchGrowPic = async () => {
+        initSwiper();
+    
+        return () => {
+            // 在組件卸載時銷毀 Swiper 實例
+            const swiperInstance = document.querySelector('#mySwiper').swiper;
+            if (swiperInstance) {
+                swiperInstance.destroy();
+            }
+        };
+    }, [historyIndex]); // 注意這裡的依賴，確保在這些值發生變化時重新初始化 Swiper
+    
+    const fetchGrowPic = async (boxId) => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
 
@@ -83,8 +99,21 @@ const VideoandPic = ({ socket , boxId}) =>{
     };
 
     useEffect(() => {
-        fetchGrowPic();
-    }, []); // 只在組件 mount 時執行
+        fetchGrowPic(boxId);
+
+        function ngrowin_update() {
+            console.log("N-growin_VideoPic");
+            fetchGrowPic(boxId);
+        }
+
+        // socket.off("ngrowin_update")
+        socket.on("ngrowin_update", ngrowin_update);
+
+        return () => {
+            // 在组件卸载时取消事件监听
+            socket.off("ngrowin_update")
+        };
+    }, [boxId]);
 
     const handleArrowClick = (direction) => {
         if (direction === 'left') {
@@ -98,26 +127,58 @@ const VideoandPic = ({ socket , boxId}) =>{
 
     const renderSwiperSlides = () => {
         return historyIndex.map((item, index) => (
-            <SwiperSlide key={index} className='swiper-slide'>
-                <div className='card'>
-                    <img src={`http://127.0.0.1:8000/pic/${item}`} alt={`Slide ${index}`} className='card_img' />
+            <div key={index}class="swiper-slide">
+                <div class="card">
+                    <img
+                    src={`http://127.0.0.1:8000/pic/${item}`}
+                    alt=""
+                    class="card__img"
+                    />
                 </div>
-            </SwiperSlide>
+            </div>
         ));
     };
 
     return (
         <div className="up_left" id="box1">
             {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button> */}
-            
-            <ReactIdswiper {...swiperParams}>
-                <div style={{ backgroundImage:'url(http://lorempixel.com/600/600/nature/3)' }}>
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}></img></div>
-                <div style={{ backgroundImage:'url(http://lorempixel.com/600/600/nature/4)' }}>
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}></img>
+            <div class="swiper-button-prev">prev</div>
+            <div id="mySwiper" class="swiper-container">
+            {/* <Swiper {...swiperParams}> */}
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <iframe
+                                src={"http://192.168.1.201:8080/javascript_simple.html"}
+                                class="card__stream"
+                            />
+                        </div>
+                    </div>
+                    {renderSwiperSlides()}
+                    {/* <div class="swiper-slide">
+                    <div class="card">
+                        <img
+                        src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
+                        alt=""
+                        class="card__img"
+                        />
+                    </div>
+                    </div>
+                    <div class="swiper-slide">
+                    <div class="card">
+                        <img
+                        src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
+                        alt=""
+                        class="card__img"
+                        />
+                    </div>
+                    </div> */}
                 </div>
-            </ReactIdswiper>
-            {/* <SwiperCom items={historyIndex}></SwiperCom> */}
+                
+                {/* </Swiper> */}
+            </div>
+            <div class="swiper-button-next">next</div>
+            
             {/* {currentShow === 0 && (
                 <>
                 <VideoStream
