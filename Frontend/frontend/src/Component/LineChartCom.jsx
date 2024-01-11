@@ -8,59 +8,30 @@ import { useCtrline } from './ChartCtlContext';
 const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
-    let objectDate = new Date();
-    let day = objectDate.getDate();
-    let month = objectDate.getMonth() + 1;
-    let year = objectDate.getFullYear();
-    let fulldate = year + "-" + month + "-" + day //+ " 00:20";
-
-    const [chartdata, setchartdata] = useState([]);
-    const [parameterExtremes, setParameterExtremes] = useState({}); // 用于存储每个参数的最大和最小值
-
-    const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
+    const { chartVisibilityMap } = useCtrline();
     const [chartHeight, setChartHeight] = useState(464);
+    const [chartdata, setChartdata] = useState([]);
+    const [parameterExtremes, setParameterExtremes] = useState({});
 
-
-    const calculateChartHeight = () => {
-        const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length;
-        const totalHeight = 449; // content_down高度
-        const minHeight = 50; // 每个图表的最小高度，根据需要调整
-        const padding = 15; // 图表之间的间距，根据需要调整
-      
-        // 计算每个图表的高度
-        const chartHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
-      
-        // 如果高度小于最小高度，则使用最小高度
-        return chartHeight < minHeight ? minHeight : chartHeight;
+    // 時間格式
+    const formatDate = (timestamp) => {
+        const time = new Date(timestamp);
+        const hour = time.getHours();
+        const min = (time.getMinutes() === 0) ? '00' : time.getMinutes();
+        return `${hour}:${min}`;
     };
 
-    const processTime = (data) => {
-        return data.map(entry => {
-            const time = new Date(entry.timestamp);
-            const hour = time.getHours();
-            const min = (time.getMinutes()) == '0'? '00':time.getMinutes();
-            const formattedTime = `${hour}:${min}`;
-            
-            return {
-                ...entry,
-                timestamp: formattedTime
-            };
-        });
-    };
-
-    const fetchData = async (boxid) => {
+    // Database fetch data
+    const fetchData = async (boxid, date) => {
         try {
-            // const startDate = ('2023-12-29');
             const attributes = 'timestamp,luminance,airtemp,humidity';
-
-            const encodedURL = `http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=${fulldate}&attributes=${(attributes)}`;
-
+            const encodedURL = `http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=${date}&attributes=${attributes}`;
+    
             const response = await fetch(encodedURL);
-            // const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=2023-11-05 & attributes=timestamp,airtemp`);
             if (response.ok) {
                 const jsonData = await response.json();
-                const processedData = processTime(jsonData.reverse());
-                setchartdata(processedData);
+                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
+                setChartdata(processedData);
                 console.log(processedData);
             } else {
                 console.log(`HTTP error! Status: ${response.status}`);
@@ -68,53 +39,69 @@ const LineChartCom = ({ socket , boxId}) => {
         } catch (error) {
             console.error('An error occurred:', error);
         }
-
     };
 
-    useEffect(() => {
-        fetchData(boxId);
-
-        function ngrowin_update() {
-            console.log("N-growin_LineChart");
-            fetchData(boxId);
+    // 重新計算每個折線圖的高度
+    const calculateChartHeight = () => {
+        const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
+        const totalHeight = 449;
+        const minHeight = 50;
+        const padding = 15;
+        const calculatedHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
+        return calculatedHeight < minHeight ? minHeight : calculatedHeight;
+    };
+  
+    // 時間filter(Day, Hour)改變
+    const updateChart = () => {
+        const height = calculateChartHeight();
+        setChartHeight(height);
+    
+        let newDate = new Date();
+        let year = newDate.getFullYear();
+        let month = newDate.getMonth() + 1;
+        let day = newDate.getDate();
+        let hours = newDate.getHours();
+        let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
+    
+        if (chartVisibilityMap['daybtn']) {
+            fetchData(boxId, `${year}-${month}-${day}`);
+        } else {
+            fetchData(boxId, `${year}-${month}-${day} ${hours - 2}:${minutes}`);
         }
+    };
 
-        // socket.off("ngrowin_update")
-        socket.on("ngrowin_update", ngrowin_update);
-
-        return () => {
-            // 在组件卸载时取消事件监听
-            socket.off("ngrowin_update")
-        };
-    }, [boxId]);
-
-    /* 當 chartdata 更新時，airtempValues 也會被重新計算，確保了正確的最大和最小值。 */
+    // 隨時監聽socket - ngrowin_update事件
     useEffect(() => {
-        // const airtempValues = chartdata.map(entry => entry.airtemp);
-        // setMaxAirtemp(Math.max(...airtempValues));
-        // setMinAirtemp(Math.min(...airtempValues));
-        // 計算每個參數的最大和最小值
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth() + 1; // 注意月份從0開始，需要加1
+        let currentDay = currentDate.getDate();
+      
+        fetchData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
+        socket.on("ngrowin_update", updateChart);
+        return () => socket.off("ngrowin_update");
+    }, [boxId]);
+  
+    // 折線圖數據有更新，最大最小值重新計算
+    useEffect(() => {
         const extremes = {};
         chartdata.forEach(entry => {
             Object.keys(entry).forEach(key => {
-            if (key !== 'timestamp') {
-                if (!extremes[key]) {
-                    extremes[key] = { min: entry[key], max: entry[key] };
-                } else {
-                    extremes[key].min = Math.floor(Math.min(extremes[key].min, entry[key]));
-                    extremes[key].max = Math.ceil(Math.max(extremes[key].max, entry[key]));
+                if (key !== 'timestamp') {
+                    if (!extremes[key]) {
+                        extremes[key] = { min: entry[key], max: entry[key] };
+                        } else {
+                        extremes[key].min = Math.floor(Math.min(extremes[key].min, entry[key]));
+                        extremes[key].max = Math.ceil(Math.max(extremes[key].max, entry[key]));
+                    }
                 }
-            }
             });
         });
         setParameterExtremes(extremes);
-        console.log(extremes);
     }, [chartdata]);
-
-    // 在每次 chartVisibilityMap 更新時動態計算高度
+  
     useEffect(() => {
-        const height = calculateChartHeight();
-        setChartHeight(height);
+        updateChart();
     }, [chartVisibilityMap]);
 
     return (

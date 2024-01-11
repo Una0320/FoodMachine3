@@ -98,8 +98,8 @@ const LastGrowAll = ({ socket, boxId }) => {
     return(
         <>
             {data ? 
-                (<h1 className='up_right_title'> {data.timestamp && data.timestamp.replace("T", " ")}</h1>)
-                :(<h1> {objectDate.toLocaleTimeString()} </h1>)
+                (<h3 className='up_right_title'> {data.timestamp && data.timestamp.replace("T", " ")}</h3>)
+                :(<h3 className='up_right_title'> {objectDate.toLocaleTimeString()} </h3>)
             }
             <div className='up_right_btnArea'>
                 {/* Data buttons */}
@@ -163,6 +163,10 @@ const LastGrowAll = ({ socket, boxId }) => {
                         </>
                     )
                 }
+                <button className={`${chartVisibilityMap['hourbtn'] ? 'btn-true' : 'btn-false'}`}
+                        onClick={() => toggleChartVisibility('hourbtn')}>Hour</button>
+                <button className={`${chartVisibilityMap['daybtn'] ? 'btn-true' : 'btn-false'}`}
+                        onClick={() => toggleChartVisibility('daybtn')}>Day</button>
             </div>
         </>
     );

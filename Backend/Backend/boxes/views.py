@@ -6,8 +6,6 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from datetime import datetime
-from django.db.models import Q
-from itertools import chain
 
 from .models import box
 from devices.models import device
@@ -99,6 +97,7 @@ def BoxGrowthsIN(request, box_id):
         return JsonResponse(indata, safe=False)
     except box.DoesNotExist:
         return JsonResponse({'message': 'Box with ID not found'}, status=404)
+
 
 @require_http_methods(["GET"])
 @csrf_exempt

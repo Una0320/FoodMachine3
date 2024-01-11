@@ -40,38 +40,40 @@ const VideoandPic = ({ socket , boxId}) =>{
     // Swiper 輪播圖片參數
     useEffect(() => {
         const initSwiper = () => {
-          new Swiper('#mySwiper', {
-            effect: 'coverflow',
-            slidesPerView: 'auto',
-            centeredSlides: true,
-            coverflowEffect: {
-                depth: 850,
-                rotate: 0,
-                stretch: 50,
-                modifier:1,
-                slideShadows: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-                init:true,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
-          });
+            new Swiper('#mySwiper', {
+                effect: 'coverflow',
+                slidesPerView: 'auto',
+                grabCursor:true,
+                centeredSlides: true,
+                uniqueNavElements :false,
+                coverflowEffect: {
+                    depth: 760,
+                    rotate: 0,
+                    stretch: 25,
+                    modifier:1,
+                    slideShadows: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                    init:true,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
+            });
         };
     
         initSwiper();
     
         return () => {
-            // 在組件卸載時銷毀 Swiper 實例
-            const swiperInstance = document.querySelector('#mySwiper').swiper;
-            if (swiperInstance) {
-                swiperInstance.destroy();
-            }
+            // // 在組件卸載時銷毀 Swiper 實例
+            // const swiperInstance = document.querySelector('#mySwiper').swiper;
+            // if (swiperInstance) {
+            //     swiperInstance.destroy();
+            // }
         };
     }, [historyIndex]); // 注意這裡的依賴，確保在這些值發生變化時重新初始化 Swiper
     
@@ -127,7 +129,7 @@ const VideoandPic = ({ socket , boxId}) =>{
 
     const renderSwiperSlides = () => {
         return historyIndex.map((item, index) => (
-            <div key={index}class="swiper-slide">
+            <div key={index} class="swiper-slide">
                 <div class="card">
                     <img
                     src={`http://127.0.0.1:8000/pic/${item}`}
@@ -142,7 +144,9 @@ const VideoandPic = ({ socket , boxId}) =>{
     return (
         <div className="up_left" id="box1">
             {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button> */}
-            <div class="swiper-button-prev">prev</div>
+            <div class="swiper-button-prev">
+                <img src='/back.png'></img>
+            </div>
             <div id="mySwiper" class="swiper-container">
             {/* <Swiper {...swiperParams}> */}
                 <div class="swiper-wrapper">
@@ -155,29 +159,13 @@ const VideoandPic = ({ socket , boxId}) =>{
                         </div>
                     </div>
                     {renderSwiperSlides()}
-                    {/* <div class="swiper-slide">
-                    <div class="card">
-                        <img
-                        src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
-                        alt=""
-                        class="card__img"
-                        />
-                    </div>
-                    </div>
-                    <div class="swiper-slide">
-                    <div class="card">
-                        <img
-                        src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
-                        alt=""
-                        class="card__img"
-                        />
-                    </div>
-                    </div> */}
                 </div>
                 
                 {/* </Swiper> */}
             </div>
-            <div class="swiper-button-next">next</div>
+            <div class="swiper-button-next">
+                <img src='/next.png'></img>
+            </div>
             
             {/* {currentShow === 0 && (
                 <>

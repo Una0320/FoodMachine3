@@ -23,13 +23,30 @@ export function ChartCtrlProvider({ children }) {
         ph: false,
         ec: false,
         co2: false,
+
+        daybtn:true,
+        hourbtn:false,
     });
 
     const toggleChartVisibility = (chartId) => {
-        setChartVisibilityMap((prevMap) => ({
-        ...prevMap,
-        [chartId]: !prevMap[chartId],
-        }));
+        if (chartId === 'daybtn') {
+            setChartVisibilityMap((prevMap) => ({
+                ...prevMap,
+                daybtn: true,
+                hourbtn: false,
+            }));
+        } else if (chartId === 'hourbtn') {
+            setChartVisibilityMap((prevMap) => ({
+                ...prevMap,
+                daybtn: false,
+                hourbtn: true,
+            }));
+        } else {
+            setChartVisibilityMap((prevMap) => ({
+                ...prevMap,
+                [chartId]: !prevMap[chartId],
+            }));
+        }
     };
 
     return (
