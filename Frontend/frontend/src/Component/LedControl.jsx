@@ -16,7 +16,7 @@ const DeviceInfo = ({ data }) => (
     </div>
 );
 
-const LedControl = ( {socket} ) =>
+const LedControl = ( {socket, onBack} ) =>
 {
     const [Ledstatus, setLedstatus] = useState();
 
@@ -92,9 +92,9 @@ const LedControl = ( {socket} ) =>
 
     return(
         <div className="container">
-            {/* <h2>LED Control</h2>
-            <button onClick={() => window.history.back()}>Go Back</button>
-             */}
+            <h2>LED Control</h2>
+            <button onClick={onBack}>Go Back</button>
+            
             {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>}
             {/* <h3 className="heading">Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3> */}
             <div className="right-column">

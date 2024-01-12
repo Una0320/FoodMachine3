@@ -96,7 +96,7 @@
 }
 
 .up_left {
-    flex: 1.5;
+    flex: 1.2;
     display: flex;
     background-color: #E0E0E0; /* 淡灰色辅助背景 */
     /* flex-direction: column; */

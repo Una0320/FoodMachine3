@@ -9,10 +9,7 @@ import '../CSS/Streaming.css'
 // import Swiper core and required modules
 import Swiper from 'swiper';
 import { Navigation, Pagination, EffectCards, A11y, EffectCoverflow } from 'swiper/modules';
-Swiper.use([Navigation]);
-// import 'swiper/css/swiper.min.css';
-
-// import Swiper from 'react-id-swiper'
+// Swiper.use([Navigation]);
 
 // Import Swiper styles
 import 'swiper/css';
@@ -31,46 +28,67 @@ const VideoandPic = ({ socket , boxId}) =>{
     const [historyIndex, setHistoryIndex] = useState([]);
     const [data, setdata] = useState([]);
     const [error, setError] = useState(null);
-
-    const [slideDirection, setSlideDirection] = useState(''); 
-    //目前up_left要顯示的畫面
-    //0 -> video streaming ; 1~data.length -> growth image
-    const [currentShow, setcurrentShow] = useState(0);
-
+    
+    const initSwiper = () => {
+        new Swiper('#mySwiper', {
+            effect: 'coverflow',
+            slidesPerView: 'auto',
+            grabCursor:true,
+            centeredSlides: true,
+            speed:200,
+            coverflowEffect: {
+                depth: 760,
+                rotate: 0,
+                stretch: 200,
+                modifier:1,
+                slideShadows: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                init:true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
+        });
+    };
     // Swiper 輪播圖片參數
     useEffect(() => {
-        const initSwiper = () => {
-            new Swiper('#mySwiper', {
-                effect: 'coverflow',
-                slidesPerView: 'auto',
-                grabCursor:true,
-                centeredSlides: true,
-                uniqueNavElements :false,
-                coverflowEffect: {
-                    depth: 760,
-                    rotate: 0,
-                    stretch: 25,
-                    modifier:1,
-                    slideShadows: false,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                    init:true,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
-            });
-        };
+        // const initSwiper = () => {
+        //     new Swiper('#mySwiper', {
+        //         effect: 'coverflow',
+        //         slidesPerView: 'auto',
+        //         grabCursor:true,
+        //         centeredSlides: true,
+        //         speed:200,
+        //         coverflowEffect: {
+        //             depth: 760,
+        //             rotate: 0,
+        //             stretch: 200,
+        //             modifier:1,
+        //             slideShadows: false,
+        //         },
+        //         navigation: {
+        //             nextEl: '.swiper-button-next',
+        //             prevEl: '.swiper-button-prev',
+        //             init:true,
+        //         },
+        //         pagination: {
+        //             el: '.swiper-pagination',
+        //             clickable: true,
+        //         },
+        //         modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
+        //     });
+        // };
     
         initSwiper();
     
         return () => {
             // // 在組件卸載時銷毀 Swiper 實例
-            // const swiperInstance = document.querySelector('#mySwiper').swiper;
+            // const swiperInstance = document.querySelector('mySwiper').swiper;
             // if (swiperInstance) {
             //     swiperInstance.destroy();
             // }
@@ -84,13 +102,11 @@ const VideoandPic = ({ socket , boxId}) =>{
             if (response.ok) {
                 const jsonData = await response.json();
                 console.log(jsonData);
-                setdata(jsonData);
-                // setCurrentImageIndex(jsonData[0].cur_Image);
-
                 // 提取 cur_Image 值並設置到新的陣列
                 const indexes = jsonData.map(item => item.cur_Image);
+
+                // setdata(jsonData);
                 setHistoryIndex(indexes);
-                console.log(historyIndex);
             } else {
                 const errorData = await response.json();
                 setError(errorData.message);
@@ -103,38 +119,26 @@ const VideoandPic = ({ socket , boxId}) =>{
     useEffect(() => {
         fetchGrowPic(boxId);
 
-        function ngrowin_update() {
+        function ngrowin_updateVP() {
             console.log("N-growin_VideoPic");
             fetchGrowPic(boxId);
         }
-
-        // socket.off("ngrowin_update")
-        socket.on("ngrowin_update", ngrowin_update);
+        socket.off("ngrowin_update")
+        socket.on("ngrowin_update", ngrowin_updateVP);
 
         return () => {
-            // 在组件卸载时取消事件监听
             socket.off("ngrowin_update")
         };
     }, [boxId]);
 
-    const handleArrowClick = (direction) => {
-        if (direction === 'left') {
-            setcurrentShow((prevShow) => (prevShow > 0 ? prevShow - 1 : prevShow));
-            setSlideDirection(direction); // 设置 slideDirection
-        } else {
-          setcurrentShow((prevShow) => (prevShow < data.length ? prevShow + 1 : prevShow));
-          setSlideDirection(direction); // 设置 slideDirection
-        }
-    };
-
     const renderSwiperSlides = () => {
         return historyIndex.map((item, index) => (
-            <div key={index} class="swiper-slide">
-                <div class="card">
+            <div key={index} className="swiper-slide">
+                <div className="card">
                     <img
                     src={`http://127.0.0.1:8000/pic/${item}`}
                     alt=""
-                    class="card__img"
+                    className="card__img"
                     />
                 </div>
             </div>
@@ -143,31 +147,28 @@ const VideoandPic = ({ socket , boxId}) =>{
 
     return (
         <div className="up_left" id="box1">
-            {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button> */}
-            <div class="swiper-button-prev">
+            <div className="swiper-button-prev">
                 <img src='/back.png'></img>
             </div>
-            <div id="mySwiper" class="swiper-container">
-            {/* <Swiper {...swiperParams}> */}
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="card">
+            <div id="mySwiper" className="swiper-container">
+                <div className="swiper-wrapper">
+                    <div className="swiper-slide">
+                        <div className="card">
                             <iframe
                                 src={"http://192.168.1.201:8080/javascript_simple.html"}
-                                class="card__stream"
+                                className="card__stream"
                             />
                         </div>
                     </div>
-                    {renderSwiperSlides()}
+                    {historyIndex?renderSwiperSlides():renderSwiperSlides()}
                 </div>
-                
-                {/* </Swiper> */}
             </div>
-            <div class="swiper-button-next">
+            <div className="swiper-button-next">
                 <img src='/next.png'></img>
             </div>
-            
-            {/* {currentShow === 0 && (
+
+            {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button>
+            {currentShow === 0 && (
                 <>
                 <VideoStream
                     streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
@@ -191,9 +192,9 @@ const VideoandPic = ({ socket , boxId}) =>{
                 <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
                     className='behind-img2'></img>
                 </>
-            )} */}
+            )}
 
-            {/* <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button> */}
+            <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button> */}
 
             
         </div>
