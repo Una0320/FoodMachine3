@@ -1,6 +1,6 @@
 // VideoandPic.jsx
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import VideoStream from './VideoStream';
 import SwiperCom from './SwiperCom';
 
@@ -29,8 +29,11 @@ const VideoandPic = ({ socket , boxId}) =>{
     const [data, setdata] = useState([]);
     const [error, setError] = useState(null);
     
+    // Swiper 實例的參考
+    const swiperRef = useRef(null);
+
     const initSwiper = () => {
-        new Swiper('#mySwiper', {
+        swiperRef.current  = new Swiper('#mySwiper', {
             effect: 'coverflow',
             slidesPerView: 'auto',
             grabCursor:true,
@@ -87,13 +90,24 @@ const VideoandPic = ({ socket , boxId}) =>{
         initSwiper();
     
         return () => {
+            // 在組件卸載時銷毀 Swiper 實例
+            if (swiperRef.current) {
+                swiperRef.current.destroy();
+            }
             // // 在組件卸載時銷毀 Swiper 實例
             // const swiperInstance = document.querySelector('mySwiper').swiper;
             // if (swiperInstance) {
             //     swiperInstance.destroy();
             // }
         };
-    }, [historyIndex]); // 注意這裡的依賴，確保在這些值發生變化時重新初始化 Swiper
+    }, []); // 注意這裡的空依賴，表示只在組件創建和銷毀時執行一次
+
+    useEffect(() => {
+        // 提取 cur_Image 值並設置到新的陣列
+        const indexes = data.map(item => item.cur_Image);
+        setHistoryIndex(indexes);
+    }, [data]); // 這裡根據 data 變化更新 historyIndex
+
     
     const fetchGrowPic = async (boxId) => {
         try {
@@ -105,7 +119,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 // 提取 cur_Image 值並設置到新的陣列
                 const indexes = jsonData.map(item => item.cur_Image);
 
-                // setdata(jsonData);
+                setdata(jsonData);
                 setHistoryIndex(indexes);
             } else {
                 const errorData = await response.json();

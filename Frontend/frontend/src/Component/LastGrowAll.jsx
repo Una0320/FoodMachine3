@@ -18,12 +18,17 @@ const LastGrowAll = ({ socket, boxId }) => {
     //Fetch data
     const contentdata = useContent();
     const [data, setdata] = useState([]);
-
-
     const [outdata, setoutdata] = useState([]);
 
+    // 新增一個 state 來追蹤選擇的小時
+    const [selectedHour, setSelectedHour] = useState(2); // 初始值可為空字串或預設值
+
+    // 滑塊的範圍是2到23，步進值為1
+    const minHour = 2;
+    const maxHour = 23;
+
     //line chart visibility
-    const {chartVisibilityMap, toggleChartVisibility} = useCtrline()
+    const {chartVisibilityMap, toggleChartVisibility, updateSelectedHour} = useCtrline()
 
     let roundDecimal = function (val, precision) {
         return Math.round(Math.round(val * Math.pow(10, (precision || 0) + 1)) / 10) / Math.pow(10, (precision || 0));
@@ -141,9 +146,9 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <button className={`${chartVisibilityMap['ph'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('ph')}>pH<br/>{Math.round(outdata.ph*100)/100 || ''}</button>
                         <button className={`${chartVisibilityMap['ec'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('ec')}>EC<br/>{roundDecimal(outdata.ec, 3) || ''}</button>
+                                onClick={() => toggleChartVisibility('ec')}>EC<br/>{roundDecimal(outdata.ec, 3) || ''} ms/cm</button>
                         <button className={`${chartVisibilityMap['co2'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('co2')}>CO2 {roundDecimal(outdata.co2,3) || ''}</button>
+                                onClick={() => toggleChartVisibility('co2')}>CO2 {roundDecimal(outdata.co2,3) || ''} ppm</button>
                         </>
                     ) : 
                     (
@@ -157,14 +162,27 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <button className={`${chartVisibilityMap['ph'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('ph')}>pH {''}</button>
                         <button className={`${chartVisibilityMap['ec'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('ec')}>EC {''}</button>
+                                onClick={() => toggleChartVisibility('ec')}>EC {''} ms/cm</button>
                         <button className={`${chartVisibilityMap['co2'] ? 'btn-true' : 'btn-false'}`}
-                                onClick={() => toggleChartVisibility('co2')}>CO2 {''}</button>
+                                onClick={() => toggleChartVisibility('co2')}>CO2 {''} ppm</button>
                         </>
                     )
                 }
                 <button className={`${chartVisibilityMap['hourbtn'] ? 'btn-true' : 'btn-false'}`}
                         onClick={() => toggleChartVisibility('hourbtn')}>Hour</button>
+                {/* 使用滑塊來選擇小時 */}
+                <input
+                        type="range"
+                        min={minHour}
+                        max={maxHour}
+                        value={selectedHour}
+                        onChange={(e) => {
+                            const hourValue = parseInt(e.target.value, 10);
+                            setSelectedHour(hourValue);
+                            updateSelectedHour(hourValue); // 更新相應的狀態
+                        }}
+                    />
+                    <span>{selectedHour} 小時</span>
                 <button className={`${chartVisibilityMap['daybtn'] ? 'btn-true' : 'btn-false'}`}
                         onClick={() => toggleChartVisibility('daybtn')}>Day</button>
             </div>

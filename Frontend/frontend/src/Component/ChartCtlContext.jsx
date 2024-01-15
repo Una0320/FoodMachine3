@@ -24,6 +24,7 @@ export function ChartCtrlProvider({ children }) {
         ec: false,
         co2: false,
 
+        selectedHour: 2, // 新增選擇的小時
         daybtn:true,
         hourbtn:false,
     });
@@ -49,8 +50,15 @@ export function ChartCtrlProvider({ children }) {
         }
     };
 
+    const updateSelectedHour = (hour) => {
+        setChartVisibilityMap((prevMap) => ({
+            ...prevMap,
+            selectedHour: hour,
+        }));
+    };
+
     return (
-        <ChartCtlContext.Provider value={{ chartVisibilityMap, toggleChartVisibility }}>
+        <ChartCtlContext.Provider value={{ chartVisibilityMap, toggleChartVisibility, updateSelectedHour }}>
         {children}
         </ChartCtlContext.Provider>
     );

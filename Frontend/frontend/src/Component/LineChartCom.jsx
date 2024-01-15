@@ -9,9 +9,12 @@ const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
     const { chartVisibilityMap } = useCtrline();
-    const [chartHeight, setChartHeight] = useState(464);
+    const [chartHeight, setChartHeight] = useState(451);
     const [chartdata, setChartdata] = useState([]);
-    const [parameterExtremes, setParameterExtremes] = useState({});
+    const [chartoutdata, setChartoutdata] = useState([]);
+    const [paraExtremes, setParaExtremes] = useState({});
+    const [paraoutExtremes, setParaoutExtremes] = useState({});
+
 
     // 時間格式
     const formatDate = (timestamp) => {
@@ -41,12 +44,34 @@ const LineChartCom = ({ socket , boxId}) => {
         }
     };
 
+    // Database fetch outdata
+    const fetchoutData = async ( boxid, date ) => {
+        try {
+
+            const attributes = 'timestamp,airtemp,humidity,ph,ec,co2,waterlevel,watertemp,oxygen';
+            const encodedURL = `http://127.0.0.1:8000/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
+    
+            const response = await fetch(encodedURL);
+            if (response.ok) {
+                const jsonData = await response.json();
+                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
+                setChartoutdata(processedData);
+                console.log(processedData);
+            } else {
+                console.log(`HTTP error! Status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    };
+
+
     // 重新計算每個折線圖的高度
     const calculateChartHeight = () => {
         const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
-        const totalHeight = 449;
+        const totalHeight = 451;
         const minHeight = 50;
-        const padding = 15;
+        const padding = 0;
         const calculatedHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
         return calculatedHeight < minHeight ? minHeight : calculatedHeight;
     };
@@ -65,8 +90,18 @@ const LineChartCom = ({ socket , boxId}) => {
     
         if (chartVisibilityMap['daybtn']) {
             fetchData(boxId, `${year}-${month}-${day}`);
+            fetchoutData(boxId, `${year}-${month}-${day}`);
         } else {
-            fetchData(boxId, `${year}-${month}-${day} ${hours - 2}:${minutes}`);
+            if (hours>=chartVisibilityMap['selectedHour'])
+            {
+                fetchData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
+                fetchoutData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
+            }
+            else {
+                fetchData(boxId, `${year}-${month}-${day}`);
+                fetchoutData(boxId, `${year}-${month}-${day}`);
+            }
+            
         }
     };
 
@@ -78,8 +113,14 @@ const LineChartCom = ({ socket , boxId}) => {
         let currentDay = currentDate.getDate();
       
         fetchData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
-        socket.on("ngrowin_update", updateChart);
-        return () => socket.off("ngrowin_update");
+        fetchoutData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
+
+        socket.on("ngrowin_update", updateChart());
+        socket.on("ngrowout_update", updateChart());
+        return () => {
+            socket.off("ngrowin_update");
+            socket.off("ngrowout_update");
+        }
     }, [boxId]);
   
     // 折線圖數據有更新，最大最小值重新計算
@@ -97,8 +138,22 @@ const LineChartCom = ({ socket , boxId}) => {
                 }
             });
         });
-        setParameterExtremes(extremes);
-    }, [chartdata]);
+        const outextremes = {};
+        chartoutdata.forEach(entry => {
+            Object.keys(entry).forEach(key => {
+                if (key !== 'timestamp') {
+                    if (!outextremes[key]) {
+                        outextremes[key] = { min: entry[key], max: entry[key] };
+                        } else {
+                        outextremes[key].min = Math.floor(Math.min(outextremes[key].min, entry[key]));
+                        outextremes[key].max = Math.ceil(Math.max(outextremes[key].max, entry[key]));
+                    }
+                }
+            });
+        });
+        setParaExtremes(extremes);
+        setParaoutExtremes(outextremes);
+    }, [chartdata, chartoutdata]);
   
     useEffect(() => {
         updateChart();
@@ -106,6 +161,68 @@ const LineChartCom = ({ socket , boxId}) => {
 
     return (
         <div style={{ backgroundColor: '#E0E0E0', borderRadius: '10px', width:'100%', height:'100%'}}>
+            {chartVisibilityMap['outairtemp'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['airtemp']?.min || 'auto',
+                                paraoutExtremes['airtemp']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#9A91F2' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['outairtemp'] && 
+                    (<Line type="monotoneX" dataKey="airtemp" 
+                            stroke="#9A91F2" strokeWidth={2}
+                            name="Out-Airtemp" activeDot={{ r: 8 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['outhumidity'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['humidity']?.min || 'auto',
+                                paraoutExtremes['humidity']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#f98d47' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['outhumidity'] && 
+                    (<Line type="monotoneX" dataKey="humidity" 
+                            stroke="#f98d47" strokeWidth={2}
+                            name="Out-Humidity" activeDot={{ r: 8 }}/>) }
+                    <Tooltip />
+                    <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/>
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
             {chartVisibilityMap['inairtemp'] &&
                 <ResponsiveContainer height={chartHeight}>
                 <LineChart
@@ -120,8 +237,8 @@ const LineChartCom = ({ socket , boxId}) => {
                         hide/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
-                                parameterExtremes['airtemp']?.min || 'auto',
-                                parameterExtremes['airtemp']?.max || 'auto'
+                                paraExtremes['airtemp']?.min || 'auto',
+                                paraExtremes['airtemp']?.max || 'auto'
                             ]}
                             tick={{ fontSize: 14, fontWeight: 'bold', fill: '#8884d8' }}
                             axisLine={{ strokeWidth: 2 }}
@@ -142,7 +259,7 @@ const LineChartCom = ({ socket , boxId}) => {
                 <LineChart
                     syncId="mySyncId"
                     data={chartdata}
-                    margin={{ top: 15, right: 0, left: 0, bottom: 0 }}
+                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
                 >
                     <CartesianGrid strokeDasharray="1 1" />
                     <XAxis
@@ -151,8 +268,8 @@ const LineChartCom = ({ socket , boxId}) => {
                         hide/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
-                                parameterExtremes['inhumidity']?.min || 'auto',
-                                parameterExtremes['inhumidity']?.max || 'auto'
+                                paraExtremes['inhumidity']?.min || 'auto',
+                                paraExtremes['inhumidity']?.max || 'auto'
                             ]}
                             tick={{ fontSize: 14, fontWeight: 'bold', fill: '#82ca9d' }}
                             axisLine={{ strokeWidth: 2 }}
@@ -182,8 +299,8 @@ const LineChartCom = ({ socket , boxId}) => {
                             axisLine={{ strokeWidth: 2 }} />
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
-                                parameterExtremes['luminance']?.min || 'auto',
-                                parameterExtremes['luminance']?.max || 'auto'
+                                paraExtremes['luminance']?.min || 'auto',
+                                paraExtremes['luminance']?.max || 'auto'
                             ]}
                             tick={{ fontSize: 12, fontWeight: 'bold', fill: '#34495E' }}
                             axisLine={{ strokeWidth: 2 }}/>
