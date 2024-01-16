@@ -1,0 +1,29 @@
+.tips{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 6vw;
+    height: 5vh;
+}
+
+.tip_img{
+    flex: 1;
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+}
+
+.tip_text{
+    display: flex;
+    flex:2;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    /* border-style:solid; */
+}
+
+.tip_value{
+    flex: 1;
+    text-align: left;
+}

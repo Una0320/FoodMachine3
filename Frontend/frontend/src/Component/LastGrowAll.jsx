@@ -21,8 +21,7 @@ const LastGrowAll = ({ socket, boxId }) => {
     const [outdata, setoutdata] = useState([]);
 
     // 新增一個 state 來追蹤選擇的小時
-    const [selectedHour, setSelectedHour] = useState(2); // 初始值可為空字串或預設值
-
+    const [selectedHour, setSelectedHour] = useState(2); // 初始值為 2
     // 滑塊的範圍是2到23，步進值為1
     const minHour = 2;
     const maxHour = 23;
@@ -79,7 +78,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         fetchOUTdata(boxId);
         
         function ngrowout_update() {
-            console.log("N-growout update");
+            console.log("N-growout_LastGrow");
             fetchOUTdata(boxId);
         }
         
@@ -89,14 +88,15 @@ const LastGrowAll = ({ socket, boxId }) => {
         }
 
         // 移除之前的 ngrowout_update 事件監聽器
-        socket.off("ngrowout_update");
+        // socket.off("ngrowout_update");
         socket.on("ngrowout_update", ngrowout_update);
 
-        socket.off("ngrowin_update")
+        // socket.off("ngrowin_update")
         socket.on("ngrowin_update", ngrowin_update);
         return () => {
             // 在组件卸载时取消事件监听
-            socket.off("ngrowin_update")
+            socket.off("ngrowin_update");
+            socket.off("ngrowout_update");
         };
     }, [boxId]);
 

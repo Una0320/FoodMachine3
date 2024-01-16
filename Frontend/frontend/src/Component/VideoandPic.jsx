@@ -2,7 +2,7 @@
 import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import VideoStream from './VideoStream';
-import SwiperCom from './SwiperCom';
+// import SwiperCom from './SwiperCom';
 
 import '../CSS/Dashboard.css'
 import '../CSS/Streaming.css'
@@ -60,32 +60,6 @@ const VideoandPic = ({ socket , boxId}) =>{
     };
     // Swiper 輪播圖片參數
     useEffect(() => {
-        // const initSwiper = () => {
-        //     new Swiper('#mySwiper', {
-        //         effect: 'coverflow',
-        //         slidesPerView: 'auto',
-        //         grabCursor:true,
-        //         centeredSlides: true,
-        //         speed:200,
-        //         coverflowEffect: {
-        //             depth: 760,
-        //             rotate: 0,
-        //             stretch: 200,
-        //             modifier:1,
-        //             slideShadows: false,
-        //         },
-        //         navigation: {
-        //             nextEl: '.swiper-button-next',
-        //             prevEl: '.swiper-button-prev',
-        //             init:true,
-        //         },
-        //         pagination: {
-        //             el: '.swiper-pagination',
-        //             clickable: true,
-        //         },
-        //         modules:[Navigation, EffectCoverflow, Pagination, EffectCards]
-        //     });
-        // };
     
         initSwiper();
     
@@ -136,8 +110,12 @@ const VideoandPic = ({ socket , boxId}) =>{
         function ngrowin_updateVP() {
             console.log("N-growin_VideoPic");
             fetchGrowPic(boxId);
+            // 在事件發生時，更新 Swiper 實例
+            if (swiperRef.current) {
+                swiperRef.current.update();
+            }
         }
-        socket.off("ngrowin_update")
+        // socket.off("ngrowin_update")
         socket.on("ngrowin_update", ngrowin_updateVP);
 
         return () => {
@@ -146,17 +124,33 @@ const VideoandPic = ({ socket , boxId}) =>{
     }, [boxId]);
 
     const renderSwiperSlides = () => {
-        return historyIndex.map((item, index) => (
-            <div key={index} className="swiper-slide">
+        return(
+            <>
+            <div className="swiper-slide">
                 <div className="card">
-                    <img
-                    src={`http://127.0.0.1:8000/pic/${item}`}
-                    alt=""
-                    className="card__img"
+                    <iframe
+                        src={"http://192.168.1.201:8080/javascript_simple.html"}
+                        className="card__stream"
                     />
                 </div>
             </div>
-        ));
+            {/* 下面是動態生成的圖片 slides */}
+            {
+                historyIndex.map((item, index) => (
+                <div key={index} className="swiper-slide">
+                    <div className="card">
+                        <img
+                            src={`http://127.0.0.1:8000/pic/${item}`}
+                            alt=""
+                            className="card__img"
+                            title = {item}
+                        />
+                    </div>
+                </div>
+            ))
+            }
+            </>
+        )
     };
 
     return (
@@ -166,50 +160,22 @@ const VideoandPic = ({ socket , boxId}) =>{
             </div>
             <div id="mySwiper" className="swiper-container">
                 <div className="swiper-wrapper">
-                    <div className="swiper-slide">
+                    {/* <div className="swiper-slide">
                         <div className="card">
                             <iframe
                                 src={"http://192.168.1.201:8080/javascript_simple.html"}
                                 className="card__stream"
                             />
                         </div>
-                    </div>
-                    {historyIndex?renderSwiperSlides():renderSwiperSlides()}
+                    </div> */}
+                    <>
+                        {historyIndex?renderSwiperSlides():renderSwiperSlides()}
+                    </>
                 </div>
             </div>
             <div className="swiper-button-next">
                 <img src='/next.png'></img>
             </div>
-
-            {/* <button className='leftbtn' onClick={() => handleArrowClick('left')}>{'<'}</button>
-            {currentShow === 0 && (
-                <>
-                <VideoStream
-                    streamUrl={"http://192.168.1.201:8080/javascript_simple.html"}
-                    className={`streaming`}
-                />
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
-                className='behind-img '></img>
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
-                className='behind-img2'></img>
-                </>
-            )}
-
-            {currentShow > 0 && (
-                <>
-                <img
-                    src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow - 1]}`}
-                    className={`grow-img`}
-                />
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow]}`}
-                    className='behind-img '></img>
-                <img src={`http://127.0.0.1:8000/pic/${historyIndex[currentShow+1]}`}
-                    className='behind-img2'></img>
-                </>
-            )}
-
-            <button className='rightbtn' onClick={() => handleArrowClick('right')}>{'>'}</button> */}
-
             
         </div>
     );

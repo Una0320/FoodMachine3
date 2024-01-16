@@ -13,7 +13,8 @@ export function useContent() {
 export function ContentProvider({ children, socket, boxId })
 {
     const { chartVisibilityMap } = useCtrline();
-    const [data, setData] = useState([]); // 你的資料結構，根據實際需求調整
+    const [data, setdata] = useState([]); // 你的資料結構，根據實際需求調整
+    const [outdata, setoutdata] = useState([]); // 你的資料結構，根據實際需求調整
     const [chartoutdata, setChartoutdata] = useState([]);
     // const isConnected = useSocket();
 
@@ -24,6 +25,14 @@ export function ContentProvider({ children, socket, boxId })
     let hours = newDate.getHours();
     let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
     let fulldate = year + "-" + month + "-" + day;
+
+    // 時間格式
+    const formatDate = (timestamp) => {
+        const time = new Date(timestamp);
+        const hour = time.getHours();
+        const min = (time.getMinutes() === 0) ? '00' : time.getMinutes();
+        return `${hour}:${min}`;
+    };
 
     const fetchData = async (boxId) => {
         try {
@@ -36,8 +45,8 @@ export function ContentProvider({ children, socket, boxId })
             // const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=2023-11-05 & attributes=timestamp,airtemp`);
             if (response.ok) {
                 const jsonData = await response.json();
-                const processedData = jsonData;
-                setData(processedData);
+                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
+                setdata(processedData);
                 console.log(processedData);
             } else {
                 console.log(`HTTP error! Status: ${response.status}`);
@@ -59,7 +68,7 @@ export function ContentProvider({ children, socket, boxId })
             if (response.ok) {
                 const jsonData = await response.json();
                 const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
-                setChartoutdata(processedData);
+                setoutdata(processedData);
                 console.log(processedData);
             } else {
                 console.log(`HTTP error! Status: ${response.status}`);
@@ -76,13 +85,22 @@ export function ContentProvider({ children, socket, boxId })
             fetchData(boxId);
         }
 
+        function ngrowout_update()
+        {
+            fetchoutData(boxId);
+            console.log("ContentContext_out");
+        }
+
         socket.on("ngrowin_update", ngrowin_update);
+        socket.on("ngrowout_update", ngrowout_update);
         
         fetchData(boxId); // 在元件 mount 時即執行一次 fetch
+        fetchoutData(boxId);
 
         // 清理工作
         return () => {
-            socket.off("ngrowin_update")
+            socket.off("ngrowin_update");
+            socket.off("ngrowout_update");
         };
     }, [boxId]);
   

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+import '../CSS/LineChartCom.css'
 import { useCtrline } from './ChartCtlContext';
 
 const LineChartCom = ({ socket , boxId}) => {
@@ -115,8 +115,8 @@ const LineChartCom = ({ socket , boxId}) => {
         fetchData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
         fetchoutData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
 
-        socket.on("ngrowin_update", updateChart());
-        socket.on("ngrowout_update", updateChart());
+        socket.on("ngrowin_update", updateChart);
+        socket.on("ngrowout_update", updateChart);
         return () => {
             socket.off("ngrowin_update");
             socket.off("ngrowout_update");
@@ -158,6 +158,24 @@ const LineChartCom = ({ socket , boxId}) => {
     useEffect(() => {
         updateChart();
     }, [chartVisibilityMap]);
+
+    const CustomTooltip = ({ active, payload, label,  parameter}) => {
+        if (active && payload && payload.length) {
+            // console.log(payload[0]);
+            const imgSrc = `/${parameter.toLowerCase()}.png`;
+            return (
+                <div className='tips'>
+                    <img className='tip_img' src={imgSrc}></img>
+                    <div className='tip_text'>
+                        <div className='tis_value'>{parameter}</div>
+                        <div className='tis_value'>{`${payload[0].value}`}</div>
+                        {/* {`${label}`}:代表X軸的時間 */}
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    };
 
     return (
         <div style={{ backgroundColor: '#E0E0E0', borderRadius: '10px', width:'100%', height:'100%'}}>
@@ -247,7 +265,7 @@ const LineChartCom = ({ socket , boxId}) => {
                     (<Line type="monotoneX" dataKey="airtemp" 
                             stroke="#8884d8" strokeWidth={2}
                             name="Airtemp" activeDot={{ r: 8 }}/>) }
-                    <Tooltip />
+                    <Tooltip content={<CustomTooltip parameter={'Airtemp'}></CustomTooltip>}/>
                     <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/>
                 </LineChart>
@@ -278,7 +296,7 @@ const LineChartCom = ({ socket , boxId}) => {
                     (<Line type="monotoneX" dataKey="humidity" 
                             stroke="#82ca9d" strokeWidth={2}
                             name="Humidity" activeDot={{ r: 8 }}/>) }
-                    <Tooltip />
+                    <Tooltip content={<CustomTooltip parameter={'humidity'}></CustomTooltip>}/>
                     <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/>
                 </LineChart>
@@ -290,13 +308,14 @@ const LineChartCom = ({ socket , boxId}) => {
                 <LineChart
                     syncId="mySyncId"
                     data={chartdata}
-                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
                 >
                     <CartesianGrid strokeDasharray="1 1" />
                     <XAxis dataKey="timestamp"
                             interval={5}
                             tick={{ fontSize: 14, fontWeight: 'bold', fill: '#34495E' }}  // 設置刻度的樣式
-                            axisLine={{ strokeWidth: 2 }} />
+                            axisLine={{ strokeWidth: 2 }} 
+                            padding={{right:10}}/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
                                 paraExtremes['luminance']?.min || 'auto',
@@ -308,9 +327,8 @@ const LineChartCom = ({ socket , boxId}) => {
                     (<Line type="monotoneX" dataKey="luminance" 
                             stroke="#34495E" strokeWidth={2}
                             name="Luminance" activeDot={{ r: 8 }}/>) }
-                    <Tooltip />
-                    <Legend verticalAlign="middle" layout="vertical" align="right" 
-                        wrapperStyle={{ width: '120px' }}/>
+                    <Tooltip content={<CustomTooltip parameter={'luminance'}></CustomTooltip>}/>
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" wrapperStyle={{ width: '120px' }}/> */}
                 </LineChart>
                 </ResponsiveContainer>
             }
