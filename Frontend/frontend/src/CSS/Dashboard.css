@@ -1,117 +1,145 @@
 /* dashboard.css */
 
-.device-info {
-    flex-grow: 1;
-    max-width: 100%;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-  }
-
-  .grow-info-container {
-    height: 90%; /* 這裡的高度可以根據需要調整 */
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-    
-  }
-  .grow-info {
-    overflow-y: auto; /* 添加這一行 */
-    text-align: center;
-    max-height: 500px; /* 調整最大高度，請根據需要調整 */
-  }
-
-  body, html {
+body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
   
-  .dashboard {
+.dashboard {
     display: flex;
+    flex-direction: column;
     height: 100%;
-    background-color: #F5F5F5; /* 淡雅的米色背景 */
+    background-color: #161819;
+    /* #F5F5F5; 淡雅的米色背景 */
     margin: 0; /* 移除额外的 margin */
+    padding: 0px 32px 32px 32px;
     overflow: hidden;
 }
   
-  .sidebar {
-    flex: 1;
-    /* width: 7%; */
-    background-color: #34495E; /* 深蓝色导航栏底色 */
+.Banner{
+  flex: 1;
+  /* height: 200px; */
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: #161819;
+  text-align: left;
+}
+.BannerLogo{
+  width: 148px;
+  height: 85px;
+}
+
+.Panel{
+  /* flex: 6; */
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.sidebar {
+    flex: 2;
+    /* flex-shrink: 0; */
+    height: auto;
+    border-radius: 6px; 
+    background-color: #252728;
+    box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset; 
+    /* #34495E; 深蓝色导航栏底色 */
     color: #ECF0F1; /* 字体浅色 */
     align-items: center; /* 將內容置中 */
-    padding: 40px 20px 20px 20px;
+    padding: 16px 25px 16px 25px;
+    margin-right: 18.52px;
+}
+
+.sidebar h3{
+  text-align: left;
+  color: #fff;
+  /* font-family: Inter; */
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal; 
+}
+
+/* 共用樣式 */
+.image-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  img {
+      width: 29px;
+      height: 29px;
+      margin-right: 10px;/* 設定圖片和文字之間的間距 */
   }
 
-  .sidebar img {
-    max-width: 100%;
-    height: auto; /* 保持圖片比例 */
+  &:hover {
+      background-color: #2980b9;
   }
+}
 
-  .setting-button {
-    width: 80%;
-    padding: 20px; /* 調整 padding 以滿足你的需求 */
-    background: none; /* 移除底色 */
-    border: none; /* 移除邊框 */
-    cursor: pointer;
-    margin-top: auto; /* 讓 setting button 位於容器底部 */
+/* 未選取狀態 */
+.image-button {
+  background-color: transparent;
+  color: #A4A4A4;
+
+  &.active {
+      background-color: #3498db;
+      color: #fff;
   }
+}
 
 .content {
     flex: 14;
-    /* width: 100%; */
-    padding: 20px;
+    height: 100%;
     display: flex;
     /* flex-wrap: wrap; */
     flex-direction: column;
-    align-items: stretch; /*依主軸的 flex-direction 下，flex-item 被拉伸以填滿整個容器*/
+    /* align-items: stretch; 依主軸的 flex-direction 下，flex-item 被拉伸以填滿整個容器 */
 }
 
 .content_up{
-    flex: 1;
-    padding: 5px 20px 20px 20px;
+    flex: 0 0 auto; /* 不彈性，並且固定高度 */
+    height: 500px; /* 固定高度，你可以根據需求調整 */
+    padding: 0px 0px 10px 0px;
     display: flex;
     overflow: hidden;
 }
 
 .content_down{
     flex: 1;
-    padding: 0px 20px 0px 20px;
-    overflow: hidden;
-    /* background-color: #E0E0E0; 淡灰色辅助背景 */
+    padding: 10px 0;
+    overflow: auto;
+    background-color: #252728;
     border-radius: 10px;
 }
 
-.box {
-    flex: 0 0 calc(50% - 20px);
-    height: 50%;
-    padding: 15px;
-    background-color: #B9B4C7; /* 淡木色背景 */
-    border-radius: 10px;
-    box-sizing: border-box;
-    transition: transform 0.5s ease-in-out; /* 添加过渡效果，持续0.5秒，缓慢加速减速 */
-    transform-origin: left bottom; /* 设置变换原点为左下角 */
-}
-
+/*streaming*/
 .up_left {
     flex: 1.2;
     display: flex;
-    background-color: #E0E0E0; /* 淡灰色辅助背景 */
-    /* flex-direction: column; */
+    border-radius: 6px;
+    background: #252728;
+    box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset;
     justify-content: center;
     align-items: center;
     width: 100%;
     min-height: 50%;
-    border-radius: 10px;
 }
+/*button area*/
 .up_right {
-    flex: 1;
+    flex: 0.8;
     display: flex;
-    /* align-items: center; 垂直居中 */
-    flex-direction: column;
-    max-width: 50%; /* 添加这一行，限制最大宽度为50% */
+    flex-direction: row;
+    justify-content: center;
 }
 
 .up_right_title{
@@ -127,18 +155,13 @@
 }
 
 .up_right_btnArea{
-    flex: 2;
+    /* flex: 2; */
     display: flex;
+    padding-right: 0px;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
+    align-items: normal;
     flex-wrap: wrap;
-    gap: 20px;
     text-align: right;
-
-}
-
-.box.expanded {
-  transform: scale(1.9);
-  z-index: 1; /* 确保展开的盒子在最上层 */
+    gap: 5px;
 }

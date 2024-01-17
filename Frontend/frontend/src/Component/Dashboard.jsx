@@ -134,37 +134,55 @@ export function Dashboard() {
     return (
         <div className="dashboard">
             <ChartCtrlProvider>
-            <div className="sidebar">
-                {/* <div className="title">FoodMachine</div> */}
-                <img src={'/foodmachine.png'} alt="FoodMachine"></img>
-                <BoxBtnList onButtonClick={handleButtonClick}></BoxBtnList>
-                <button className="setting-button" onClick={handleSettingBtnClick}>
-                    <img src={'/setting.png'} alt="Settings"></img>
-                </button>
-                {/* <button className="nav-button" data-target="addBox">ADD Box</button> */}
+            <div id="Banner" className="Banner">
+                <img className="BannerLogo" src="/logo.png"></img>
             </div>
-            <div className="content">
-                {currentPage === "dashboard" && (
-                    <>
-                    <div className="content_up">
-                        <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
-                        <div className="up_right" id="box2">
-                            <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
+            <div id="Panel" className="Panel">
+                <div className="sidebar">
+                    <div id="Menu" style={{paddingBottom: 40 + 'px'}}>
+                        <h3>MENU</h3>
+                        <button className="image-button active">
+                            <img src="/dashboard.svg" alt="Dashboard"/>
+                            <span className="button-text">Dashboard</span>
+                        </button>
+                        <button className="image-button" onClick={handleSettingBtnClick}>
+                            <img src={'/un_setting.png'} alt="LightCtrl"></img>
+                            <span className="button-text">Light Control</span>
+                        </button>
+                        <button className="image-button">
+                            <img src={'/un_setting.png'} alt="Settings"></img>
+                            <span className="button-text">Setting</span>
+                        </button>
+                    </div>
+                    <div id="Userboxes">
+                        <h3>USER</h3>
+                        <BoxBtnList onButtonClick={handleButtonClick}></BoxBtnList>
+                    </div>
+                </div>
+                <div className="content">
+                    {currentPage === "dashboard" && (
+                        <>
+                        <div className="content_up">
+                            <div className="up_right" id="box2">
+                                <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
+                            </div>
+                            <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
                         </div>
-                    </div>
-                    <div className="content_down">
-                        <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
-                    </div>
-                    </>
-                )}
-                {currentPage == "ledctrl" && (
-                    <>
-                    <LedControl socket={socket} onBack={() => setCurrentPage("dashboard")}></LedControl>
-                    </>
-                )
+                        <div className="content_down">
+                            <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
+                        </div>
+                        </>
+                    )}
+                    {currentPage == "ledctrl" && (
+                        <>
+                        <LedControl socket={socket} onBack={() => setCurrentPage("dashboard")}></LedControl>
+                        </>
+                    )
 
-                }
+                    }
+                </div>
             </div>
+            <div>foot</div>
             </ChartCtrlProvider>
         </div>        
     );

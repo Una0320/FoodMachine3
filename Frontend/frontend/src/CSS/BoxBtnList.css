@@ -3,7 +3,7 @@
     display: flex;
     /* flex-wrap: wrap; */
     flex-direction: column;
-    padding-top: 20px;
+    /* padding-top: 10px; */
     padding-bottom: 20px;
     justify-content: space-between; /* 水平置中 */
     align-items: stretch;
@@ -40,23 +40,28 @@
   
   .nav-button {
     display: block;
-    width: 100%;
-    padding: 10px;
-    /* margin-bottom: 10px; */
-    text-align: center;
+    width: auto;
+    padding: 10px 10px 10px 20px;
+    text-align: left;
     background-color: transparent;
-    color: #E0E0E0;
+    color: #A4A4A4;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
   }
   .nav-button:hover {
-    background-color: #E0E0E0; /* 淡灰色辅助背景 */
+    background-color: #fff; /* 淡灰色辅助背景 */
     color: #30475e; /* 深蓝色按钮文本 */
     text-align: center;
   }
   .nav-button.active, .add-box-button {
-    background-color: #E0E0E0; /* 淡灰色辅助背景 */
-    color: #30475e; /* 深蓝色按钮文本 */
-    text-align: center;
+    background-color: transparent;
+    /* #E0E0E0; 淡灰色辅助背景 */
+    color: #fff; /* 深蓝色按钮文本 */
+    text-align: left;
+    font-weight:bold;
   }

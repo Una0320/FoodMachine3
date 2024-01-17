@@ -156,7 +156,7 @@ const VideoandPic = ({ socket , boxId}) =>{
     return (
         <div className="up_left" id="box1">
             <div className="swiper-button-prev">
-                <img src='/back.png'></img>
+                <img src='/leftarrow.png'></img>
             </div>
             <div id="mySwiper" className="swiper-container">
                 <div className="swiper-wrapper">
@@ -174,7 +174,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 </div>
             </div>
             <div className="swiper-button-next">
-                <img src='/next.png'></img>
+                <img src='/rightarrow.png'></img>
             </div>
             
         </div>
