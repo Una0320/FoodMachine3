@@ -136,6 +136,10 @@ export function Dashboard() {
             <ChartCtrlProvider>
             <div id="Banner" className="Banner">
                 <img className="BannerLogo" src="/logo.png"></img>
+                <img className="BannerBell" src="/bell.png"></img>
+                <span className="BannerUsername">Michael</span>
+                <img src="michael.png" alt="Michael" class="profile-image" />
+
             </div>
             <div id="Panel" className="Panel">
                 <div className="sidebar">
@@ -146,7 +150,7 @@ export function Dashboard() {
                             <span className="button-text">Dashboard</span>
                         </button>
                         <button className="image-button" onClick={handleSettingBtnClick}>
-                            <img src={'/un_setting.png'} alt="LightCtrl"></img>
+                            <img src={'/unlightctrl.png'} alt="LightCtrl"></img>
                             <span className="button-text">Light Control</span>
                         </button>
                         <button className="image-button">

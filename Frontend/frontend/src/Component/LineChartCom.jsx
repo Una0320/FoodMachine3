@@ -1,5 +1,5 @@
 // LineChartCom.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../CSS/LineChartCom.css'
@@ -9,13 +9,16 @@ const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
     const { chartVisibilityMap } = useCtrline();
-    const [chartHeight, setChartHeight] = useState(451);
+    const [chartHeight, setChartHeight] = useState(30);
     const [chartdata, setChartdata] = useState([]);
     const [chartoutdata, setChartoutdata] = useState([]);
     const [paraExtremes, setParaExtremes] = useState({});
     const [paraoutExtremes, setParaoutExtremes] = useState({});
 
+    // 創建一個 ref 來存放 content_down 元素
+    const contentDownRef = useRef(null);
 
+    
     // 時間格式
     const formatDate = (timestamp) => {
         const time = new Date(timestamp);
@@ -67,10 +70,11 @@ const LineChartCom = ({ socket , boxId}) => {
 
 
     // 重新計算每個折線圖的高度
-    const calculateChartHeight = () => {
+    const calculateChartHeight = (totalHeight) => {
         const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
-        const totalHeight = 275;
-        const minHeight = 50;
+        // const totalHeight = contentDownRef.current.clientHeight;
+        // const totalHeight = 312
+        const minHeight = 30;
         const padding = 0;
         const calculatedHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
         return calculatedHeight < minHeight ? minHeight : calculatedHeight;
@@ -78,8 +82,10 @@ const LineChartCom = ({ socket , boxId}) => {
   
     // 時間filter(Day, Hour)改變
     const updateChart = () => {
-        const height = calculateChartHeight();
-        setChartHeight(height);
+        const cheight = calculateChartHeight(400 - 20);
+        console.log(contentDownRef.current.clientHeight);
+        console.log(cheight);
+        setChartHeight(cheight);
     
         let newDate = new Date();
         let year = newDate.getFullYear();
@@ -159,7 +165,10 @@ const LineChartCom = ({ socket , boxId}) => {
         updateChart();
     }, [chartVisibilityMap]);
 
-    const CustomTooltip = ({ active, payload, label,  parameter}) => {
+    
+
+
+    const CustomTooltip = ({ active, payload, label,  parameter, dynamicColor}) => {
         if (active && payload && payload.length) {
             // console.log(payload[0]);
             const imgSrc = `/${parameter.toLowerCase()}.png`;
@@ -167,8 +176,8 @@ const LineChartCom = ({ socket , boxId}) => {
                 <div className='tips'>
                     <img className='tip_img' src={imgSrc}></img>
                     <div className='tip_text'>
-                        <div className='tis_value'>{parameter}</div>
-                        <div className='tis_value'>{`${payload[0].value}`}</div>
+                        <div className='tis_value' style={{ color: dynamicColor }}>{parameter}</div>
+                        <div className='tis_value' style={{ color: dynamicColor }}>{`${payload[0].value}`}</div>
                         {/* {`${label}`}:代表X軸的時間 */}
                     </div>
                 </div>
@@ -178,69 +187,7 @@ const LineChartCom = ({ socket , boxId}) => {
     };
 
     return (
-        <div style={{ borderRadius: '10px', width:'100%', height:'100%'}}>
-            {chartVisibilityMap['outairtemp'] &&
-                <ResponsiveContainer height={chartHeight}>
-                <LineChart
-                    syncId="mySyncId"
-                    data={chartoutdata}
-                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-                >
-                    <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis
-                        dataKey="timestamp"
-                        interval={5}
-                        hide/>
-                    <YAxis padding={{ bottom: 20 }} 
-                            domain={[
-                                paraoutExtremes['airtemp']?.min || 'auto',
-                                paraoutExtremes['airtemp']?.max || 'auto'
-                            ]}
-                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#9A91F2' }}
-                            axisLine={{ strokeWidth: 2 }}
-                    />
-                    {chartVisibilityMap['outairtemp'] && 
-                    (<Line type="monotoneX" dataKey="airtemp" 
-                            stroke="#9A91F2" strokeWidth={2}
-                            name="Out-Airtemp" activeDot={{ r: 8 }}/>) }
-                    <Tooltip />
-                    <Legend verticalAlign="middle" layout="vertical" align="right" 
-                        wrapperStyle={{ width: '120px' }}/>
-                </LineChart>
-                </ResponsiveContainer>
-            }
-
-            {chartVisibilityMap['outhumidity'] &&
-                <ResponsiveContainer height={chartHeight}>
-                <LineChart
-                    syncId="mySyncId"
-                    data={chartoutdata}
-                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-                >
-                    <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis
-                        dataKey="timestamp"
-                        interval={5}
-                        hide/>
-                    <YAxis padding={{ bottom: 20 }} 
-                            domain={[
-                                paraoutExtremes['humidity']?.min || 'auto',
-                                paraoutExtremes['humidity']?.max || 'auto'
-                            ]}
-                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#f98d47' }}
-                            axisLine={{ strokeWidth: 2 }}
-                    />
-                    {chartVisibilityMap['outhumidity'] && 
-                    (<Line type="monotoneX" dataKey="humidity" 
-                            stroke="#f98d47" strokeWidth={2}
-                            name="Out-Humidity" activeDot={{ r: 8 }}/>) }
-                    <Tooltip />
-                    <Legend verticalAlign="middle" layout="vertical" align="right" 
-                        wrapperStyle={{ width: '120px' }}/>
-                </LineChart>
-                </ResponsiveContainer>
-            }
-
+        <div style={{height:'100%'}} ref={contentDownRef}>
             {chartVisibilityMap['inairtemp'] &&
                 <ResponsiveContainer height={chartHeight}>
                 <LineChart
@@ -248,7 +195,7 @@ const LineChartCom = ({ socket , boxId}) => {
                     data={chartdata}
                     margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
                 >
-                    <CartesianGrid strokeDasharray="1 1" />
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
                     <XAxis
                         dataKey="timestamp"
                         interval={5}
@@ -264,8 +211,9 @@ const LineChartCom = ({ socket , boxId}) => {
                     {chartVisibilityMap['inairtemp'] && 
                     (<Line type="monotoneX" dataKey="airtemp" 
                             stroke="#BCAF19" strokeWidth={2}
-                            name="Airtemp" activeDot={{ r: 8 }}/>) }
-                    <Tooltip content={<CustomTooltip parameter={'Airtemp'}></CustomTooltip>}/>
+                            name="Airtemp" 
+                            dot={null} activeDot={{ fill: '#BCAF19', r: 6 }}/>) }
+                    <Tooltip content={<CustomTooltip parameter={'inAirtemp'} dynamicColor={'#BCAF19'}></CustomTooltip>}/>
                     {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/> */}
                 </LineChart>
@@ -279,7 +227,7 @@ const LineChartCom = ({ socket , boxId}) => {
                     data={chartdata}
                     margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
                 >
-                    <CartesianGrid strokeDasharray="1 1" />
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis
                         dataKey="timestamp"
                         interval={5}
@@ -295,8 +243,10 @@ const LineChartCom = ({ socket , boxId}) => {
                     {chartVisibilityMap['inhumidity'] && 
                     (<Line type="monotoneX" dataKey="humidity" 
                             stroke="#F8961E" strokeWidth={2}
-                            name="Humidity" activeDot={{ r: 8 }}/>) }
-                    <Tooltip content={<CustomTooltip parameter={'humidity'}></CustomTooltip>}/>
+                            name="Humidity" 
+                            dot={null} activeDot={{ fill: '#F8961E', r: 6 }}/>
+                    ) }
+                    <Tooltip content={<CustomTooltip parameter={'inhumidity'} dynamicColor={'#F8961E'}></CustomTooltip>}/>
                     {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/> */}
                 </LineChart>
@@ -310,12 +260,13 @@ const LineChartCom = ({ socket , boxId}) => {
                     data={chartdata}
                     margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
                 >
-                    <CartesianGrid strokeDasharray="1 1" />
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
                     <XAxis dataKey="timestamp"
                             interval={5}
                             tick={{ fontSize: 14, fontWeight: 'bold', fill: '#fff' }}  // 設置刻度的樣式
                             axisLine={{ strokeWidth: 2 }} 
-                            padding={{right:10}}/>
+                            padding={{right:10}}
+                            hide/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
                                 paraExtremes['luminance']?.min || 'auto',
@@ -326,12 +277,267 @@ const LineChartCom = ({ socket , boxId}) => {
                     {chartVisibilityMap['luminance'] && 
                     (<Line type="monotoneX" dataKey="luminance" 
                             stroke="#F94144" strokeWidth={2}
-                            name="Luminance" activeDot={{ r: 8 }}/>) }
-                    <Tooltip content={<CustomTooltip parameter={'luminance'}></CustomTooltip>}/>
+                            name="Luminance"
+                            dot={null} activeDot={{ fill: '#F94144', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'luminance'} dynamicColor={'#F94144'}></CustomTooltip>}/>
                     {/* <Legend verticalAlign="middle" layout="vertical" align="right" wrapperStyle={{ width: '120px' }}/> */}
                 </LineChart>
                 </ResponsiveContainer>
             }
+
+            {chartVisibilityMap['watertemp'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['watertemp']?.min || 'auto',
+                                paraoutExtremes['watertemp']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#90BE6D' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['watertemp'] && 
+                    (<Line type="monotoneX" dataKey="watertemp" 
+                            stroke="#90BE6D" strokeWidth={2}
+                            name="Water Temp" 
+                            dot={null} activeDot={{ fill: '#90BE6D', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'watertemp'} dynamicColor={'#90BE6D'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['outhumidity'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['humidity']?.min || 'auto',
+                                paraoutExtremes['humidity']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#87CEEB' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['outhumidity'] && 
+                    (<Line type="monotoneX" dataKey="humidity" 
+                            stroke="#87CEEB" strokeWidth={2}
+                            name="Out-Humidity"
+                            dot={null} activeDot={{ fill: '#87CEEB', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'outhumidity'} dynamicColor={'#87CEEB'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['outairtemp'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['airtemp']?.min || 'auto',
+                                paraoutExtremes['airtemp']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#7B68EE' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['outairtemp'] && 
+                    (<Line type="monotoneX" dataKey="airtemp" 
+                            stroke="#7B68EE" strokeWidth={2}
+                            name="Out-Airtemp"
+                            dot={null} activeDot={{ fill: '#7B68EE', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'outairtemp'} dynamicColor={'#7B68EE'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['ph'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['ph']?.min || 'auto',
+                                paraoutExtremes['ph']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#488BDA' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['ph'] && 
+                    (<Line type="monotoneX" dataKey="ph" 
+                            stroke="#488BDA" strokeWidth={2}
+                            name="pH"
+                            dot={null} activeDot={{ fill: '#488BDA', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'ph'} dynamicColor={'#488BDA'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['ec'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['ec']?.min || 'auto',
+                                paraoutExtremes['ec']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#F9C74F' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['ec'] && 
+                    (<Line type="monotoneX" dataKey="ec" 
+                            stroke="#F9C74F" strokeWidth={2}
+                            name="ec" 
+                            dot={null} activeDot={{ fill: '#F9C74F', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'ec'} dynamicColor={'#F9C74F'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+            
+            {chartVisibilityMap['co2'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['co2']?.min || 'auto',
+                                paraoutExtremes['co2']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#FFA07A' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['co2'] && 
+                    (<Line type="monotoneX" dataKey="co2" 
+                            stroke="#FFA07A" strokeWidth={2}
+                            name="co2"
+                            dot={null} activeDot={{ fill: '#FFA07A', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'co2'} dynamicColor={'#FFA07A'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['waterlevel'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['waterlevel']?.min || 'auto',
+                                paraoutExtremes['waterlevel']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#20B2AA' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['waterlevel'] && 
+                    (<Line type="monotoneX" dataKey="waterlevel" 
+                            stroke="#20B2AA" strokeWidth={2}
+                            name="waterlevel" 
+                            dot={null} activeDot={{ fill: '#20B2AA', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'waterlevel'} dynamicColor={'#20B2AA'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+            <ResponsiveContainer height={25}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis dataKey="timestamp"
+                            interval={5}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#fff' }}  // 設置刻度的樣式
+                            axisLine={{ strokeWidth: 2 }} 
+                            padding={{right:10}}/>
+                    <YAxis display="none" />
+                </LineChart>
+            </ResponsiveContainer>
         </div>
     );
 };
