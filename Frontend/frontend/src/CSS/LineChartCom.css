@@ -29,3 +29,37 @@
     flex: 1;
     text-align: left;
 }
+
+/*if trueCount>=8*/
+.tips8{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 10vw;
+    height: 3vh;
+    background: #252728; 
+    /* #252728; */
+    /* box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset; */
+}
+
+.tip_img8{
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+}
+
+.tip_text8{
+    display: flex;
+    flex:2;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    /* border-style:solid; */
+}
+
+.tip_value{
+    flex: 1;
+    text-align: left;
+}

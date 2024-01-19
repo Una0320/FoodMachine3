@@ -124,7 +124,7 @@
   border-radius: 8px;
   overflow: hidden;
   transform: scale(1);
-  /* object-fit: contain; */
+  background-color: transparent;
 }
 
 .swiper-button-next, .swiper-button-prev{

@@ -45,7 +45,7 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
 
         // 假設 API endpoint 是 http://127.0.0.1:8000/newbox
         console.log(JSON.stringify(boxData));
-        const response = await fetch("http://127.0.0.1:8000/newbox/", {
+        const response = await fetch("http://1192.168.1.213:8000/newbox/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

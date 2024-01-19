@@ -85,7 +85,7 @@ const VideoandPic = ({ socket , boxId}) =>{
     
     const fetchGrowPic = async (boxId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
+            const response = await fetch(`http://192.168.1.213:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
 
             if (response.ok) {
                 const jsonData = await response.json();
@@ -140,7 +140,7 @@ const VideoandPic = ({ socket , boxId}) =>{
                 <div key={index} className="swiper-slide">
                     <div className="card">
                         <img
-                            src={`http://127.0.0.1:8000/pic/${item}`}
+                            src={`http://192.168.1.213:8000/pic/${item}`}
                             alt=""
                             className="card__img"
                             title = {item}

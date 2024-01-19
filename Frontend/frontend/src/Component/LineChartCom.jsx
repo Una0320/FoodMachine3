@@ -31,7 +31,7 @@ const LineChartCom = ({ socket , boxId}) => {
     const fetchData = async (boxid, date) => {
         try {
             const attributes = 'timestamp,luminance,airtemp,humidity';
-            const encodedURL = `http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=${date}&attributes=${attributes}`;
+            const encodedURL = `http://192.168.1.213:8000/boxgrowin/${boxid}/?start_date=${date}&attributes=${attributes}`;
     
             const response = await fetch(encodedURL);
             if (response.ok) {
@@ -52,7 +52,7 @@ const LineChartCom = ({ socket , boxId}) => {
         try {
 
             const attributes = 'timestamp,airtemp,humidity,ph,ec,co2,waterlevel,watertemp,oxygen';
-            const encodedURL = `http://127.0.0.1:8000/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
+            const encodedURL = `http://192.168.1.213:8000/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
     
             const response = await fetch(encodedURL);
             if (response.ok) {
@@ -71,10 +71,10 @@ const LineChartCom = ({ socket , boxId}) => {
 
     // 重新計算每個折線圖的高度
     const calculateChartHeight = (totalHeight) => {
-        const trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
+        let trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
         // const totalHeight = contentDownRef.current.clientHeight;
         // const totalHeight = 312
-        const minHeight = 30;
+        const minHeight = 33;
         const padding = 0;
         const calculatedHeight = Math.floor((totalHeight - padding * (trueCount - 1)) / trueCount);
         return calculatedHeight < minHeight ? minHeight : calculatedHeight;
@@ -82,8 +82,7 @@ const LineChartCom = ({ socket , boxId}) => {
   
     // 時間filter(Day, Hour)改變
     const updateChart = () => {
-        const cheight = calculateChartHeight(400 - 20);
-        console.log(contentDownRef.current.clientHeight);
+        const cheight = calculateChartHeight(360 - 20);
         console.log(cheight);
         setChartHeight(cheight);
     
@@ -169,19 +168,38 @@ const LineChartCom = ({ socket , boxId}) => {
 
 
     const CustomTooltip = ({ active, payload, label,  parameter, dynamicColor}) => {
+        let trueCount = Object.values(chartVisibilityMap).filter(value => value === true).length - 1;
+        // console.log(trueCount);
         if (active && payload && payload.length) {
             // console.log(payload[0]);
             const imgSrc = `/${parameter.toLowerCase()}.png`;
-            return (
-                <div className='tips'>
-                    <img className='tip_img' src={imgSrc}></img>
-                    <div className='tip_text'>
-                        <div className='tis_value' style={{ color: dynamicColor }}>{parameter}</div>
-                        <div className='tis_value' style={{ color: dynamicColor }}>{`${payload[0].value}`}</div>
-                        {/* {`${label}`}:代表X軸的時間 */}
+            if (trueCount<=8){
+                return (
+                    <div className='tips'>
+                        <img className='tip_img' src={imgSrc}></img>
+                        <div className='tip_text'>
+                            <div className='tis_value' style={{ color: dynamicColor }}>{parameter}</div>
+                            <div className='tis_value' style={{ color: dynamicColor }}>{`${label}`}-{`${parseFloat(payload[0].value).toFixed(2)}`}</div>
+                            {/* {`${label}`}:代表X軸的時間 */}
+                        </div>
                     </div>
-                </div>
-            );
+                )
+            }
+            else{
+                return (
+                    <div className='tips8'>
+                        <img className='tip_img8' src={imgSrc}></img>
+                        <div className='tip_text8'>
+                            <div className='tis_value8' style={{ color: dynamicColor }}>
+                                {parameter}{"    "}{`${parseFloat(payload[0].value).toFixed(3)}`}
+                            </div>
+                            {/* <div className='tis_value' style={{ color: dynamicColor }}>{`${payload[0].value}`}</div> */}
+                            {/* {`${label}`}:代表X軸的時間 */}
+                        </div>
+                    </div>                    
+                )
+            }
+            
         }
         return null;
     };
@@ -232,7 +250,7 @@ const LineChartCom = ({ socket , boxId}) => {
                         dataKey="timestamp"
                         interval={5}
                         hide/>
-                    <YAxis padding={{ bottom: 20 }} 
+                    <YAxis padding={{ bottom: 0 }} 
                             domain={[
                                 paraExtremes['inhumidity']?.min || 'auto',
                                 paraExtremes['inhumidity']?.max || 'auto'
@@ -264,15 +282,13 @@ const LineChartCom = ({ socket , boxId}) => {
                     <XAxis dataKey="timestamp"
                             interval={5}
                             tick={{ fontSize: 14, fontWeight: 'bold', fill: '#fff' }}  // 設置刻度的樣式
-                            axisLine={{ strokeWidth: 2 }} 
-                            padding={{right:10}}
                             hide/>
                     <YAxis padding={{ bottom: 20 }} 
                             domain={[
                                 paraExtremes['luminance']?.min || 'auto',
                                 paraExtremes['luminance']?.max || 'auto'
                             ]}
-                            tick={{ fontSize: 12, fontWeight: 'bold', fill: '#F94144' }}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#F94144' }}
                             axisLine={{ strokeWidth: 2 }}/>
                     {chartVisibilityMap['luminance'] && 
                     (<Line type="monotoneX" dataKey="luminance" 
@@ -526,7 +542,7 @@ const LineChartCom = ({ socket , boxId}) => {
             <ResponsiveContainer height={25}>
                 <LineChart
                     syncId="mySyncId"
-                    data={chartdata}
+                    data={chartdata?chartdata:chartoutdata}
                     margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
                 >
                     <CartesianGrid strokeDasharray="1 1" />

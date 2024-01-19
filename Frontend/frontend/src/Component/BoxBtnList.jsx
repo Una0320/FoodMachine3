@@ -15,22 +15,7 @@ const BoxBtnList = ({ onButtonClick }) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://127.0.0.1:8000/boxlist/1");
-            if (response.ok) {
-                const jsonData = await response.json();
-                setBoxList(jsonData);
-                console.log(jsonData)
-            } else {
-                console.log(`HTTP error! Status: ${response.status}`);
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
-        }
-    };
-
-    const latestData = async () => {
-        try {
-            const response = await fetch("http://127.0.0.1:8000/boxlist/1");
+            const response = await fetch("http://192.168.1.213:8000/boxlist/1");
             if (response.ok) {
                 const jsonData = await response.json();
                 setBoxList(jsonData);
@@ -84,7 +69,7 @@ const BoxBtnList = ({ onButtonClick }) => {
                 
             </div>
             <button onClick={addnewBox} className="add-box-button">
-                ➕
+                <img style={{width:'30px'}}src="/plus.png"></img>
             </button>
             {showAddBoxModal && (
                 <AddBoxForm onClose={() => setShowAddBoxModal(false)} onBoxAdded={handleBoxAdded} />

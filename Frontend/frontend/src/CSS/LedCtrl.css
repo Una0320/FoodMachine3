@@ -4,29 +4,24 @@
   display: flex;
   max-width: 100%;
   height: 100%;
+  color: #fff;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.left-column,
-.right-column {
-  flex: 1;
-  margin: 0 5px; /* 調整左右邊距，根據你的需求調整 */
+  border-radius: 6px;
+  background: #252728;
+  box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset;
 }
 
 .right-column {
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* 將 .right-column 元素內容靠右 */
-  margin: 0 5px; /* 調整左右邊距，根據你的需求調整 */
+  /* margin: 10px 5px; 調整左右邊距，根據你的需求調整 */
 }
 
 .info {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* Add any additional styling for the information section */
 }
 
@@ -37,7 +32,7 @@
 }
 
 .input-container {
-  margin-bottom: 0px;
+  /* margin-bottom: 0px; */
   width: 100%;
   display: flex;
   justify-content: flex-end; /* 內容靠右 */
@@ -46,24 +41,24 @@
 
 .label,
 .input {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: flex-end; /* 內容靠右 */
   align-items: center; /* 垂直居中對齊 */
 }
 
 .label {
-  margin-right: 10px; /* 調整 label 與 input 之間的間距 */
-  color: #333;
+  margin-right: 1px; /* 調整 label 與 input 之間的間距 */
+  color: #fff;
   font-size: 16px;
   min-width: 100px; /* 設定最小寬度 */
 }
 
 .input {
   width: 200px; /* 或者你想要的固定寬度 */
-  padding: 8px;
+  padding: 6px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 14px;
   box-sizing: border-box;
 }
@@ -76,7 +71,7 @@ input[type="time"] {
 
 .submit-button {
   padding: 10px 20px;
-  background-color: #0078d4;
+  background-color: #3498db;
   color: #fff;
   border: none;
   cursor: pointer;

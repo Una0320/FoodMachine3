@@ -65,6 +65,7 @@ MIDDLEWARE = [
 # for React
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3000',
+    'http://192.168.1.213:3000',
     'http://127.0.0.1:3001',
     'http://192.168.1.182:4040',
 )

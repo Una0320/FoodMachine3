@@ -36,7 +36,6 @@ export function Dashboard() {
     //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
     // 初始顯示 Dashboard 頁面
     const [currentPage, setCurrentPage] = useState("dashboard");
-    const [isBox3Expanded, setIsBox3Expanded] = useState(false);
     const navigate = useNavigate();
 
     let objectDate = new Date();
@@ -105,29 +104,8 @@ export function Dashboard() {
         console.log(cur_box);
     };
 
-    const handleBox3Click = () => {
-        setIsBox3Expanded(!isBox3Expanded);
-    };
-    
-    const handleOutsideClick = () => {
-        setIsBox3Expanded(false);
-    };
-
-    const boxContent = isBox3Expanded ? (
-        <div>
-          {/* 新的内容 */}
-          <p>This is the expanded content of Box 3.</p>
-          <GrowInfo socket={socket} boxId={cur_box}></GrowInfo>
-        </div>
-      ) : (
-        <div>
-            <img src={'/sunlong.png'} alt="Sunlong"></img>
-            <LastGrowIN socket={socket} boxId={cur_box}></LastGrowIN>
-        </div>
-    );
-
-    const handleSettingBtnClick = () => {
-        setCurrentPage("ledctrl");
+    const handlePageBtnClick = (pagename) => {
+        setCurrentPage(pagename);
         // navigate('/ledctrl')
     }
 
@@ -145,15 +123,18 @@ export function Dashboard() {
                 <div className="sidebar">
                     <div id="Menu" style={{paddingBottom: 40 + 'px'}}>
                         <h3>MENU</h3>
-                        <button className="image-button active">
+                        <button className={`image-button ${currentPage === 'dashboard' ? 'active' : ''}`}
+                                onClick={() => handlePageBtnClick('dashboard')}>
                             <img src="/dashboard.svg" alt="Dashboard"/>
                             <span className="button-text">Dashboard</span>
                         </button>
-                        <button className="image-button" onClick={handleSettingBtnClick}>
+                        <button  className={`image-button ${currentPage === 'ledctrl' ? 'active' : ''}`}
+                                 onClick={() => handlePageBtnClick('ledctrl')}>
                             <img src={'/unlightctrl.png'} alt="LightCtrl"></img>
                             <span className="button-text">Light Control</span>
                         </button>
-                        <button className="image-button">
+                        <button className={`image-button ${currentPage === 'setting' ? 'active' : ''}`}
+                                onClick={() => handlePageBtnClick('setting')}>
                             <img src={'/un_setting.png'} alt="Settings"></img>
                             <span className="button-text">Setting</span>
                         </button>
@@ -173,6 +154,14 @@ export function Dashboard() {
                             <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
                         </div>
                         <div className="content_down">
+                            <div className="timefilter">
+                                <span>SENSOR VALUE</span>
+                                <button className="timebtn active">Hour</button>
+                                <button className="timebtn">Day</button>
+                                <button className="timebtn">Week</button>
+                                <button className="timebtn">Month</button>
+                            </div>
+                            
                             <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
                         </div>
                         </>
@@ -186,7 +175,7 @@ export function Dashboard() {
                     }
                 </div>
             </div>
-            <div>foot</div>
+            <div className="foot">  </div>
             </ChartCtrlProvider>
         </div>        
     );

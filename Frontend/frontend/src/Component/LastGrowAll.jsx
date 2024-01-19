@@ -38,7 +38,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}`
+                `http://192.168.1.213:8000/boxgrowin/${boxId}/?start_date=${fulldate}`
             );
 
             if (response.ok) {
@@ -58,7 +58,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/boxgrowout/?box_id=${boxId}&start_date=${fulldate}`
+                `http://192.168.1.213:8000/boxgrowout/?box_id=${boxId}&start_date=${fulldate}`
             );
 
             if (response.ok) {
@@ -148,21 +148,21 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <button className={`${chartVisibilityMap['sunlong'] ? 'btn-true' : 'btn-false'}`}
                                 onClick={() => toggleChartVisibility('sunlong')}>Sunshine Duration {''}</button> */}
                         <CustomBtn  imagePath={chartVisibilityMap['luminance']? '/luminance.png':'unluminance.png'} 
-                                    text1={data.luminance+' LUX'} 
+                                    text1={''} 
                                     text2={'Luminance'} 
                                     isActive={chartVisibilityMap['luminance']} 
                                     onClick={() => toggleChartVisibility('luminance')}
                                     activeColor={'#F94144'}></CustomBtn>
                         
                         <CustomBtn  imagePath={chartVisibilityMap['inhumidity']? '/inhumidity.png':'unhumidity.png'} 
-                                    text1={data.humidity+' %'} 
+                                    text1={''} 
                                     text2={'Humidity'} 
                                     isActive={chartVisibilityMap['inhumidity']} 
                                     onClick={() => toggleChartVisibility('inhumidity')}
                                     activeColor={'#F8961E'}></CustomBtn>
                         
                         <CustomBtn  imagePath={chartVisibilityMap['inairtemp']? '/inairtemp.png':'untemp.png'} 
-                                    text1={data.airtemp+" °C"} 
+                                    text1={""} 
                                     text2={'Airtemp'} 
                                     isActive={chartVisibilityMap['inairtemp']} 
                                     onClick={() => toggleChartVisibility('inairtemp')}
@@ -245,54 +245,54 @@ const LastGrowAll = ({ socket, boxId }) => {
                     (
                         <>
                         <CustomBtn  imagePath={chartVisibilityMap['watertemp']? '/watertemp.png':'untemp.png'} 
-                                    text1={Math.round(outdata.watertemp*100)/100 + " °C"} 
+                                    text1={""} 
                                     text2={'Wirtemp'} 
                                     isActive={chartVisibilityMap['watertemp']} 
                                     onClick={() => toggleChartVisibility('watertemp')}
                                     activeColor={'#90BE6D'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['outhumidity']? '/outhumidity.png':'unhumidity.png'} 
-                                    text1={Math.round(outdata.humidity*100)/100 +' %'} 
+                                    text1={''} 
                                     text2={'Out Humidity'} 
                                     isActive={chartVisibilityMap['outhumidity']} 
                                     onClick={() => toggleChartVisibility('outhumidity')}
                                     activeColor={'#87CEEB'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['outairtemp']? '/outairtemp.png':'untemp.png'} 
-                                    text1={Math.round(outdata.airtemp*100)/100+" °C"} 
+                                    text1={""} 
                                     text2={'Out Airtemp'} 
                                     isActive={chartVisibilityMap['outairtemp']} 
                                     onClick={() => toggleChartVisibility('outairtemp')}
                                     activeColor={'#7B68EE'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['ph']? '/ph.png':'unph.png'} 
-                                    text1={Math.round(outdata.ph*100)/100} 
+                                    text1={''} 
                                     text2={'pH'} 
                                     isActive={chartVisibilityMap['ph']} 
                                     onClick={() => toggleChartVisibility('ph')}
                                     activeColor={'#488BDA'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['ec']? '/ec.png':'unec.png'} 
-                                    text1={Math.round(outdata.ec*100)/100} 
+                                    text1={''} 
                                     text2={'EC'} 
                                     isActive={chartVisibilityMap['ec']} 
                                     onClick={() => toggleChartVisibility('ec')}
                                     activeColor={'#F9C74F'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['co2']? '/co2.png':'unco2.png'} 
-                                    text1={Math.round(outdata.co2*100)/100} 
+                                    text1={''} 
                                     text2={'co2'} 
                                     isActive={chartVisibilityMap['co2']} 
                                     onClick={() => toggleChartVisibility('co2')}
                                     activeColor={'#FFA07A'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['oxygen']? '/oxygen.png':'unoxygen.png'} 
-                                    text1={Math.round(outdata.oxygen*100)/100} 
+                                    text1={''} 
                                     text2={'oxygen'} 
                                     isActive={chartVisibilityMap['oxygen']} 
                                     onClick={() => toggleChartVisibility('oxygen')}
                                     activeColor={'#FFA07A'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['waterlevel']? '/waterlevel.png':'unwaterlevel.png'} 
-                                    text1={Math.round(outdata.waterlevel*100)/100} 
+                                    text1={''} 
                                     text2={'Water depth'} 
                                     isActive={chartVisibilityMap['waterlevel']} 
                                     onClick={() => toggleChartVisibility('waterlevel')}

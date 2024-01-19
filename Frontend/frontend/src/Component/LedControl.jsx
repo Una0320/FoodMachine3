@@ -22,7 +22,7 @@ const LedControl = ( {socket, onBack} ) =>
 
     const fetchData = async (boxId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/deviceinfo/${boxId}`);
+            const response = await fetch(`http://192.168.1.213:8000/deviceinfo/${boxId}`);
             
             if (response.ok) {
                 const jsonData = await response.json();
@@ -95,8 +95,7 @@ const LedControl = ( {socket, onBack} ) =>
             <h2>LED Control</h2>
             <button onClick={onBack}>Go Back</button>
             
-            {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>}
-            {/* <h3 className="heading">Brightness : {Ledstatus ? Ledstatus[0].devicemode : null}</h3> */}
+            {/* {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>} */}
             <div className="right-column">
             <form onSubmit={onSubmit} className="form">
                 <div className="input-container">
@@ -108,11 +107,33 @@ const LedControl = ( {socket, onBack} ) =>
                     <label htmlFor="red" className="label">Red:
                     <input type="number" id="red" name="red" min="0" max="255" defaultValue= {Ledstatus ? Ledstatus[0].parameter['RGB'][0]:null} className="input"/>
                     </label>
-                </div>
+                    <input
+                        type="range"
+                        min={1}
+                        max={255}
+                        value={255}
+                        onChange={(e) => {
+                            const hourValue = parseInt(e.target.value, 10);
+                            setSelectedHour(hourValue);
+                            // updateSelectedHour(hourValue); // 更新相應的狀態
+                        }}
+                    />
+                    </div>
 
                 <div className="input-container">
                     <label htmlFor="green" className="label">Green:
                     <input type="number" id="green" name="green" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][1]:null} className="input"/>
+                    <input
+                        type="range"
+                        min={1}
+                        max={255}
+                        value={255}
+                        onChange={(e) => {
+                            const hourValue = parseInt(e.target.value, 10);
+                            setSelectedHour(hourValue);
+                            // updateSelectedHour(hourValue); // 更新相應的狀態
+                        }}
+                    />
                     </label>
                 </div>
 
@@ -120,6 +141,17 @@ const LedControl = ( {socket, onBack} ) =>
                     <label htmlFor="blue" className="label">Blue:
                     <input type="number" id="blue" name="blue" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][2]:null} className="input"/>
                     </label>
+                    <input
+                        type="range"
+                        min={1}
+                        max={255}
+                        value={255}
+                        onChange={(e) => {
+                            const hourValue = parseInt(e.target.value, 10);
+                            setSelectedHour(hourValue);
+                            // updateSelectedHour(hourValue); // 更新相應的狀態
+                        }}
+                    />
                 </div>
 
                 <div className="time-container">
