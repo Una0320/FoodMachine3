@@ -1,6 +1,6 @@
 .custom-button {
-    width: 130px; /* 固定寬度 */
-    height: 130px; /* 固定高度 */
+    width: 150px; /* 固定寬度 */
+    height: 160px; /* 固定高度 */
     border-radius: 10px; /* 圓角 */
     /* white-space: pre-wrap; 按鈕文字自動換行 */
     background-color: #292929;
@@ -15,6 +15,7 @@
     align-items: start;
     justify-content: space-between;
     transition: background-color 0.3s ease;
+    position: relative;
   }
   
   .custom-button.active {
@@ -33,4 +34,12 @@
     color: inherit; /* 使用父元素的文字顏色 */
     padding-left: 10px;
   }
-  
+
+  .custom-button .text3{
+    color: #7c7a7a;
+    font-size: 10px;
+    line-height: normal;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }

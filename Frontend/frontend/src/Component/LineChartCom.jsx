@@ -82,7 +82,7 @@ const LineChartCom = ({ socket , boxId}) => {
   
     // 時間filter(Day, Hour)改變
     const updateChart = () => {
-        const cheight = calculateChartHeight(360 - 20);
+        let cheight = calculateChartHeight(340);
         console.log(cheight);
         setChartHeight(cheight);
     
@@ -130,6 +130,8 @@ const LineChartCom = ({ socket , boxId}) => {
   
     // 折線圖數據有更新，最大最小值重新計算
     useEffect(() => {
+        let cheight = calculateChartHeight(340);
+        setChartHeight(cheight);
         const extremes = {};
         chartdata.forEach(entry => {
             Object.keys(entry).forEach(key => {
@@ -499,6 +501,40 @@ const LineChartCom = ({ socket , boxId}) => {
                             dot={null} activeDot={{ fill: '#FFA07A', r: 6 }}/>
                             ) }
                     <Tooltip content={<CustomTooltip parameter={'co2'} dynamicColor={'#FFA07A'}></CustomTooltip>}/>
+                    
+                    {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
+                        wrapperStyle={{ width: '120px' }}/> */}
+                </LineChart>
+                </ResponsiveContainer>
+            }
+
+            {chartVisibilityMap['oxygen'] &&
+                <ResponsiveContainer height={chartHeight}>
+                <LineChart
+                    syncId="mySyncId"
+                    data={chartoutdata}
+                    margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
+                >
+                    {/* <CartesianGrid strokeDasharray="1 1" /> */}
+                    <XAxis
+                        dataKey="timestamp"
+                        interval={5}
+                        hide/>
+                    <YAxis padding={{ bottom: 20 }} 
+                            domain={[
+                                paraoutExtremes['oxygen']?.min || 'auto',
+                                paraoutExtremes['oxygen']?.max || 'auto'
+                            ]}
+                            tick={{ fontSize: 14, fontWeight: 'bold', fill: '#7BB249' }}
+                            axisLine={{ strokeWidth: 2 }}
+                    />
+                    {chartVisibilityMap['oxygen'] && 
+                    (<Line type="monotoneX" dataKey="oxygen" 
+                            stroke="#7BB249" strokeWidth={2}
+                            name="oxygen"
+                            dot={null} activeDot={{ fill: '#7BB249', r: 6 }}/>
+                            ) }
+                    <Tooltip content={<CustomTooltip parameter={'oxygen'} dynamicColor={'#7BB249'}></CustomTooltip>}/>
                     
                     {/* <Legend verticalAlign="middle" layout="vertical" align="right" 
                         wrapperStyle={{ width: '120px' }}/> */}

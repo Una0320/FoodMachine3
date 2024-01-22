@@ -60,7 +60,6 @@ def UpdateDevice(request, box_id, device_id):
             else:
                 setattr(current_device, key, value)
             current_device.save()
-
         return JsonResponse({'message': True}, status=200)
 
     except box.DoesNotExist:

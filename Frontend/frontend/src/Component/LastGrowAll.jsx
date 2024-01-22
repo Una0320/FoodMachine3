@@ -118,6 +118,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['luminance']? '/luminance.png':'unluminance.png'} 
                                     text1={data.luminance+' LUX'} 
                                     text2={'Luminance'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['luminance']} 
                                     onClick={() => toggleChartVisibility('luminance')}
                                     activeColor={'#F94144'}></CustomBtn>
@@ -125,6 +126,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['inhumidity']? '/inhumidity.png':'unhumidity.png'} 
                                     text1={data.humidity+' %'} 
                                     text2={'Humidity'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['inhumidity']} 
                                     onClick={() => toggleChartVisibility('inhumidity')}
                                     activeColor={'#F8961E'}></CustomBtn>
@@ -132,6 +134,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['inairtemp']? '/inairtemp.png':'untemp.png'} 
                                     text1={data.airtemp+" °C"} 
                                     text2={'Airtemp'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['inairtemp']} 
                                     onClick={() => toggleChartVisibility('inairtemp')}
                                     activeColor={'#BCAF19'}></CustomBtn>
@@ -150,6 +153,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['luminance']? '/luminance.png':'unluminance.png'} 
                                     text1={''} 
                                     text2={'Luminance'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['luminance']} 
                                     onClick={() => toggleChartVisibility('luminance')}
                                     activeColor={'#F94144'}></CustomBtn>
@@ -157,6 +161,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['inhumidity']? '/inhumidity.png':'unhumidity.png'} 
                                     text1={''} 
                                     text2={'Humidity'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['inhumidity']} 
                                     onClick={() => toggleChartVisibility('inhumidity')}
                                     activeColor={'#F8961E'}></CustomBtn>
@@ -164,6 +169,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['inairtemp']? '/inairtemp.png':'untemp.png'} 
                                     text1={""} 
                                     text2={'Airtemp'} 
+                                    text3={'Inner Box'} 
                                     isActive={chartVisibilityMap['inairtemp']} 
                                     onClick={() => toggleChartVisibility('inairtemp')}
                                     activeColor={'#BCAF19'}></CustomBtn>
@@ -180,6 +186,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['watertemp']? '/watertemp.png':'untemp.png'} 
                                     text1={Math.round(outdata.watertemp*100)/100 + " °C"} 
                                     text2={'Wirtemp'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['watertemp']} 
                                     onClick={() => toggleChartVisibility('watertemp')}
                                     activeColor={'#90BE6D'}></CustomBtn>
@@ -189,6 +196,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['outhumidity']? '/outhumidity.png':'unhumidity.png'} 
                                     text1={Math.round(outdata.humidity*100)/100 +' %'} 
                                     text2={'Out Humidity'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['outhumidity']} 
                                     onClick={() => toggleChartVisibility('outhumidity')}
                                     activeColor={'#87CEEB'}></CustomBtn>
@@ -198,6 +206,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['outairtemp']? '/outairtemp.png':'untemp.png'} 
                                     text1={Math.round(outdata.airtemp*100)/100+" °C"} 
                                     text2={'Out Airtemp'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['outairtemp']} 
                                     onClick={() => toggleChartVisibility('outairtemp')}
                                     activeColor={'#7B68EE'}></CustomBtn>
@@ -207,6 +216,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['ph']? '/ph.png':'unph.png'} 
                                     text1={Math.round(outdata.ph*100)/100} 
                                     text2={'pH'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['ph']} 
                                     onClick={() => toggleChartVisibility('ph')}
                                     activeColor={'#488BDA'}></CustomBtn>
@@ -216,6 +226,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['ec']? '/ec.png':'unec.png'} 
                                     text1={Math.round(outdata.ec*100)/100} 
                                     text2={'EC'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['ec']} 
                                     onClick={() => toggleChartVisibility('ec')}
                                     activeColor={'#F9C74F'}></CustomBtn>
@@ -224,12 +235,14 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['co2']? '/co2.png':'unco2.png'} 
                                     text1={Math.round(outdata.co2*100)/100} 
                                     text2={'co2'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['co2']} 
                                     onClick={() => toggleChartVisibility('co2')}
                                     activeColor={'#FFA07A'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['oxygen']? '/oxygen.png':'unoxygen.png'} 
                                     text1={Math.round(outdata.oxygen*100)/100} 
                                     text2={'oxygen'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['oxygen']} 
                                     onClick={() => toggleChartVisibility('oxygen')}
                                     activeColor={'#7BB249'}></CustomBtn>
@@ -237,6 +250,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['waterlevel']? '/waterlevel.png':'unwaterlevel.png'} 
                                     text1={Math.round(outdata.waterlevel*100)/100} 
                                     text2={'Water depth'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['waterlevel']} 
                                     onClick={() => toggleChartVisibility('waterlevel')}
                                     activeColor={'#20B2AA'}></CustomBtn>
@@ -247,6 +261,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['watertemp']? '/watertemp.png':'untemp.png'} 
                                     text1={""} 
                                     text2={'Wirtemp'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['watertemp']} 
                                     onClick={() => toggleChartVisibility('watertemp')}
                                     activeColor={'#90BE6D'}></CustomBtn>
@@ -254,6 +269,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['outhumidity']? '/outhumidity.png':'unhumidity.png'} 
                                     text1={''} 
                                     text2={'Out Humidity'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['outhumidity']} 
                                     onClick={() => toggleChartVisibility('outhumidity')}
                                     activeColor={'#87CEEB'}></CustomBtn>
@@ -261,6 +277,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['outairtemp']? '/outairtemp.png':'untemp.png'} 
                                     text1={""} 
                                     text2={'Out Airtemp'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['outairtemp']} 
                                     onClick={() => toggleChartVisibility('outairtemp')}
                                     activeColor={'#7B68EE'}></CustomBtn>
@@ -268,6 +285,7 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['ph']? '/ph.png':'unph.png'} 
                                     text1={''} 
                                     text2={'pH'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['ph']} 
                                     onClick={() => toggleChartVisibility('ph')}
                                     activeColor={'#488BDA'}></CustomBtn>
@@ -275,25 +293,29 @@ const LastGrowAll = ({ socket, boxId }) => {
                         <CustomBtn  imagePath={chartVisibilityMap['ec']? '/ec.png':'unec.png'} 
                                     text1={''} 
                                     text2={'EC'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['ec']} 
                                     onClick={() => toggleChartVisibility('ec')}
                                     activeColor={'#F9C74F'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['co2']? '/co2.png':'unco2.png'} 
                                     text1={''} 
                                     text2={'co2'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['co2']} 
                                     onClick={() => toggleChartVisibility('co2')}
                                     activeColor={'#FFA07A'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['oxygen']? '/oxygen.png':'unoxygen.png'} 
                                     text1={''} 
                                     text2={'oxygen'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['oxygen']} 
                                     onClick={() => toggleChartVisibility('oxygen')}
-                                    activeColor={'#FFA07A'}></CustomBtn>
+                                    activeColor={'#7BB249'}></CustomBtn>
 
                         <CustomBtn  imagePath={chartVisibilityMap['waterlevel']? '/waterlevel.png':'unwaterlevel.png'} 
                                     text1={''} 
                                     text2={'Water depth'} 
+                                    text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['waterlevel']} 
                                     onClick={() => toggleChartVisibility('waterlevel')}
                                     activeColor={'#20B2AA'}></CustomBtn>

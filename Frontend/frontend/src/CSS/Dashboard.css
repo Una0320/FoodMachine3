@@ -135,7 +135,7 @@ body, html {
 }
 
 .content_up{
-    flex: 0 0 auto; /* 不彈性，並且固定高度 */
+    flex: auto; /* 不彈性，並且固定高度 */
     /* height: 500px; 固定高度，你可以根據需求調整 */
     padding: 0px 0px 10px 0px;
     display: flex;

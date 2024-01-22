@@ -140,7 +140,7 @@ export function Dashboard() {
                         </button>
                     </div>
                     <div id="Userboxes">
-                        <h3>USER</h3>
+                        <h3>BOXES</h3>
                         <BoxBtnList onButtonClick={handleButtonClick}></BoxBtnList>
                     </div>
                 </div>

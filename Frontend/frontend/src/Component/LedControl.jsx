@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from "react";
 import '../CSS/LedCtrl.css'
+import Slider from '@mui/material/Slider'; 
+import Input from '@mui/material/Input';
+import { SliderThumb } from '@mui/material/Slider';
+import { styled } from '@mui/material/styles';
 
 const DeviceInfo = ({ data }) => (
     <div>
@@ -16,9 +20,90 @@ const DeviceInfo = ({ data }) => (
     </div>
 );
 
+const PrettoSlider  = styled(Slider)(({ editcolor }) => ({
+    color: editcolor,
+    height: 8,
+    '& .MuiSlider-track': {
+      border: 'none',
+    },
+    '& .MuiSlider-thumb': {
+      height: 24,
+      width: 24,
+      backgroundColor: '#fff',
+      border: '2px solid currentColor',
+      '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+        boxShadow: 'inherit',
+      },
+      '&::before': {
+        display: 'none',
+      },
+    },
+    '& .MuiSlider-valueLabel': {
+      lineHeight: 1.2,
+      fontSize: 12,
+      background: 'unset',
+      padding: 0,
+      width: 32,
+      height: 32,
+      borderRadius: '50% 50% 50% 0',
+      backgroundColor: editcolor,
+      transformOrigin: 'bottom left',
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+      '&::before': { display: 'none' },
+      '&.MuiSlider-valueLabelOpen': {
+        transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+      },
+      '& > *': {
+        transform: 'rotate(45deg)',
+      },
+    },
+  }));
+
 const LedControl = ( {socket, onBack} ) =>
 {
     const [Ledstatus, setLedstatus] = useState();
+    const [brightness, setbrightness] = useState(1);
+    const [red, setRed] = useState(255);
+    const [green, setGreen] = useState(255);
+    const [blue, setBlue] = useState(255);
+
+    const handleBlur = (color) => {
+        let value;
+        switch (color) {
+            case 'red':
+                value = red;
+                break;
+            case 'green':
+                value = green;
+                break;
+            case 'blue':
+                value = blue;
+                break;
+            default:
+                break;
+        }
+      
+        if (value < 0) {
+            value = 0;
+        } else if (value > 255) {
+            value = 255;
+        }
+      
+        switch (color) {
+            case 'red':
+                setRed(value);
+                break;
+            case 'green':
+                setGreen(value);
+                break;
+            case 'blue':
+                setBlue(value);
+                break;
+            default:
+                break;
+        }
+    };
+      
 
     const fetchData = async (boxId) => {
         try {
@@ -66,9 +151,11 @@ const LedControl = ( {socket, onBack} ) =>
         formJson['boxid'] = 1;
         formJson['opentime'] = time2array(formJson['opentime'])
         formJson['closetime'] = time2array(formJson['closetime'])
-        formJson['brightness'] = parseFloat(formJson['brightness'])
-        formJson['RGB'] = [parseInt(formJson['red']), parseInt(formJson['green']), parseInt(formJson['blue'])];
-
+        // formJson['brightness'] = parseFloat(formJson['brightness'])
+        // formJson['RGB'] = [parseInt(formJson['red']), parseInt(formJson['green']), parseInt(formJson['blue'])];
+        formJson['brightness'] = parseFloat(brightness);
+        formJson['RGB'] = [parseInt(red), parseInt(green), parseInt(blue)];
+        console.log(formJson['RGB']);
         // 要刪除的 keys
         const keysToDelete = ['red', 'green', 'blue'];
 
@@ -99,58 +186,79 @@ const LedControl = ( {socket, onBack} ) =>
             <div className="right-column">
             <form onSubmit={onSubmit} className="form">
                 <div className="input-container">
-                    <label htmlFor="brightness" className="label">Brightness:
-                    <input type="number" id="brightness" name="brightness" min="0" max="1" step="0.01" defaultValue= {Ledstatus ? Ledstatus[0].devicemode:null} className="input"/>
+                    <label htmlFor="brightness" className="label">
+                    Brightness:
                     </label>
-                </div>
-                <div className="input-container">
-                    <label htmlFor="red" className="label">Red:
-                    <input type="number" id="red" name="red" min="0" max="255" defaultValue= {Ledstatus ? Ledstatus[0].parameter['RGB'][0]:null} className="input"/>
-                    </label>
-                    <input
-                        type="range"
-                        min={1}
-                        max={255}
-                        value={255}
+                    <PrettoSlider
+                        valueLabelDisplay="auto"
+                        aria-label="pretto slider"
+                        defaultValue={brightness}
                         onChange={(e) => {
-                            const hourValue = parseInt(e.target.value, 10);
-                            setSelectedHour(hourValue);
-                            // updateSelectedHour(hourValue); // 更新相應的狀態
+                            setbrightness(e.target.value);
                         }}
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        editcolor={`55, 55, 55)`}
                     />
-                    </div>
-
-                <div className="input-container">
-                    <label htmlFor="green" className="label">Green:
-                    <input type="number" id="green" name="green" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][1]:null} className="input"/>
-                    <input
-                        type="range"
-                        min={1}
-                        max={255}
-                        value={255}
-                        onChange={(e) => {
-                            const hourValue = parseInt(e.target.value, 10);
-                            setSelectedHour(hourValue);
-                            // updateSelectedHour(hourValue); // 更新相應的狀態
-                        }}
-                    />
-                    </label>
                 </div>
 
                 <div className="input-container">
-                    <label htmlFor="blue" className="label">Blue:
-                    <input type="number" id="blue" name="blue" min="0" max="255" defaultValue={Ledstatus ? Ledstatus[0].parameter['RGB'][2]:null} className="input"/>
+                    <label htmlFor="red" className="label">
+                    Red:
                     </label>
-                    <input
-                        type="range"
-                        min={1}
+                    <PrettoSlider
+                        valueLabelDisplay="auto"
+                        aria-label="pretto slider"
+                        defaultValue={255}
+                        min={0}
                         max={255}
-                        value={255}
+                        step={1}
                         onChange={(e) => {
-                            const hourValue = parseInt(e.target.value, 10);
-                            setSelectedHour(hourValue);
-                            // updateSelectedHour(hourValue); // 更新相應的狀態
+                            setRed(e.target.value);
                         }}
+                        onBlur={() => handleBlur('red')}
+                        aria-labelledby="red-slider"
+                        editcolor={`rgb(${red}, 0, 0)`}
+                    />
+                </div>
+                
+                <div className="input-container">
+                    <label htmlFor="green" className="label">
+                    Green:
+                    </label>
+                    <PrettoSlider
+                        valueLabelDisplay="auto"
+                        aria-label="pretto slider"
+                        defaultValue={255}
+                        min={0}
+                        max={255}
+                        step={1}
+                        onBlur={() => handleBlur('green')}
+                        onChange={(e) => {
+                            setGreen(e.target.value);
+                        }}
+                        aria-labelledby="green-slider"
+                        editcolor={`rgb(0, ${green}, 0)`}
+                    />
+                </div>
+                <div className="input-container">
+                    <label htmlFor="blue" className="label">
+                    Blue:
+                    </label>
+                    <PrettoSlider
+                        valueLabelDisplay="auto"
+                        aria-label="pretto slider"
+                        defaultValue={255}
+                        min={0}
+                        max={255}
+                        step={1}
+                        onBlur={() => handleBlur('blue')}
+                        onChange={(e) => {
+                            setBlue(e.target.value);
+                        }}
+                        aria-labelledby="BsetBlue-slider"
+                        editcolor={`rgb(0, 0, ${blue})`}
                     />
                 </div>
 
