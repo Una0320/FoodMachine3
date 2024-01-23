@@ -145,7 +145,7 @@ const LedControl = ( {socket, onBack} ) =>
     };
 
     useEffect(() => {    
-        fetchData(1);
+        // fetchData(1);
         console.log(socket.connected);
         
     }, []);
@@ -185,7 +185,7 @@ const LedControl = ( {socket, onBack} ) =>
         socket.emit("LED_ctrl", JSON.stringify(formJson));
 
         // alert('submit');
-        fetchData(1);
+        // fetchData(1);
     }
 
     return(

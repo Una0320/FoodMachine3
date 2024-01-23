@@ -181,7 +181,7 @@ const LineChartCom = ({ socket , boxId}) => {
         if (active && payload && payload.length) {
             // console.log(payload[0]);
             const imgSrc = `/${parameter.toLowerCase()}.png`;
-            if (trueCount<=8){
+            if (trueCount<=7){
                 return (
                     <div className='tips'>
                         <img className='tip_img' src={imgSrc}></img>
