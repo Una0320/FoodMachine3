@@ -29,8 +29,14 @@
     height: 50px; /* 設定圖片高度 */
   }
   
-  .custom-button .text1,
+  .custom-button .text1{
+    font-size: 16pt;
+    color: inherit; /* 使用父元素的文字顏色 */
+    padding-left: 10px;
+  }
+  
   .custom-button .text2 {
+    font-size: 11pt;
     color: inherit; /* 使用父元素的文字顏色 */
     padding-left: 10px;
   }

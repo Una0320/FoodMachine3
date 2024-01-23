@@ -27,47 +27,6 @@
   100%{transform:translateX(-200px);opacity:0;}
 }
 
-.grow-img {
-  flex:7;
-  max-width: 100%;
-  /* width: 400px; */
-  height: 88%;
-  /* aspect-ratio: 16 / 9; */
-  display: block;
-  border: 0;
-  /* flex-basis: 100px; */
-  z-index: 2;
-  right: 10px;
-  transition: max-width 0.5s, height 0.5s, opacity 0.5s, right 0.5s;
-}
-
-.behind-img {
-  width: 65%;
-  height: auto;
-  aspect-ratio: 16 / 9; /* 设置宽高比例，这里使用 16:9 作为示例 */
-  opacity: 0.1;
-  position: absolute;
-  top: 0;
-  /* vertical-align: middle; */
-  left: 20%;
-  top:15%;
-  z-index: 1;
-  display: block;
-}
-
-.behind-img2 {
-  width: 50%;
-  height: auto;
-  aspect-ratio: 16 / 9; /* 设置宽高比例，这里使用 16:9 作为示例 */
-  opacity: 0.1;
-  position: absolute;
-  top: 0;
-  vertical-align: middle;
-  left: 40%;
-  top:25%;
-  z-index: 0;
-}
-
 
 .swiper-container {
   flex:6;
@@ -79,7 +38,8 @@
 
 .swiper-wrapper {
   /* display: flex; */
-  margin: auto;
+  /* margin: auto; */
+  height: 100%;
   /* justify-content: center; */
   /* align-items: center; */
 }
@@ -93,19 +53,23 @@
 .card {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
   padding: 0;
   overflow: hidden;
   display:flex;
   flex-direction: column;
-  /* background: #eee; */
   justify-content:center;
   align-items: center;
+}
+.cardstream{
+  position: relative;
+  background-color: transparent;
+  width: 100%;
+  padding-bottom: 70%;
 }
 
 .card__img {
   display: block;
-  width: auto;
+  width: 640px;
   max-width: 100%;
   height: 100%;
   /* aspect-ratio: 16 / 9; */
@@ -114,17 +78,21 @@
 }
 
 .card__stream{
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* aspect-ratio: 16 / 9; */
+  /* width: 640px;
+  height: 480px;
   max-height: 100%;
-  /* object-fit: none; */
   border: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  transform: scale(1);
+  overflow: hidden; */
+  position: absolute;
   background-color: transparent;
+  border: 0;
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 100%;
 }
 
 .swiper-button-next, .swiper-button-prev{

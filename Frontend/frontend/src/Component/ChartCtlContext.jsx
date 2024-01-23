@@ -28,6 +28,8 @@ export function ChartCtrlProvider({ children }) {
         selectedHour: 2, // 新增選擇的小時
         daybtn:true,
         hourbtn:false,
+        weekbtn:false,
+        monthbtn:false,
     });
 
     const toggleChartVisibility = (chartId) => {
@@ -36,14 +38,26 @@ export function ChartCtrlProvider({ children }) {
                 ...prevMap,
                 daybtn: true,
                 hourbtn: false,
+                weekbtn:false,
+                monthbtn:false,
             }));
         } else if (chartId === 'hourbtn') {
             setChartVisibilityMap((prevMap) => ({
                 ...prevMap,
                 daybtn: false,
+                weekbtn:false,
+                monthbtn:false,
                 hourbtn: true,
             }));
-        } else {
+        } else if (chartId === 'weekbtn') {
+            setChartVisibilityMap((prevMap) => ({
+                ...prevMap,
+                daybtn: false,
+                weekbtn:true,
+                monthbtn:false,
+                hourbtn: false,
+            }));
+        }else {
             setChartVisibilityMap((prevMap) => ({
                 ...prevMap,
                 [chartId]: !prevMap[chartId],

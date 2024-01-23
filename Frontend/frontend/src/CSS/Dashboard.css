@@ -102,13 +102,13 @@ body, html {
   line-height: normal;
 
   img {
-      width: 29px;
-      height: 29px;
-      margin-right: 10px;/* 設定圖片和文字之間的間距 */
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;/* 設定圖片和文字之間的間距 */
   }
 
   &:hover {
-      background-color: #2980b9;
+        background-color: #2980b9;
   }
 }
 

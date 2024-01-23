@@ -1,9 +1,14 @@
 import React, {useState, useEffect} from "react";
 import '../CSS/LedCtrl.css'
-import Slider from '@mui/material/Slider'; 
-import Input from '@mui/material/Input';
-import { SliderThumb } from '@mui/material/Slider';
+import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
+
+import dayjs from 'dayjs'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 
 const DeviceInfo = ({ data }) => (
     <div>
@@ -57,7 +62,7 @@ const PrettoSlider  = styled(Slider)(({ editcolor }) => ({
         transform: 'rotate(45deg)',
       },
     },
-  }));
+}));
 
 const LedControl = ( {socket, onBack} ) =>
 {
@@ -66,42 +71,59 @@ const LedControl = ( {socket, onBack} ) =>
     const [red, setRed] = useState(255);
     const [green, setGreen] = useState(255);
     const [blue, setBlue] = useState(255);
+    const [opentime, setopentime] = useState({ hours: 9, minutes: 0 });
+    const [closetime, setclosetime] = useState({ hours: 21, minutes: 0 });
 
-    const handleBlur = (color) => {
-        let value;
-        switch (color) {
-            case 'red':
-                value = red;
-                break;
-            case 'green':
-                value = green;
-                break;
-            case 'blue':
-                value = blue;
-                break;
-            default:
-                break;
-        }
+    // const handleBlur = (color) => {
+    //     let value;
+    //     switch (color) {
+    //         case 'red':
+    //             value = red;
+    //             break;
+    //         case 'green':
+    //             value = green;
+    //             break;
+    //         case 'blue':
+    //             value = blue;
+    //             break;
+    //         default:
+    //             break;
+    //     }
       
-        if (value < 0) {
-            value = 0;
-        } else if (value > 255) {
-            value = 255;
-        }
+    //     if (value < 0) {
+    //         value = 0;
+    //     } else if (value > 255) {
+    //         value = 255;
+    //     }
       
-        switch (color) {
-            case 'red':
-                setRed(value);
-                break;
-            case 'green':
-                setGreen(value);
-                break;
-            case 'blue':
-                setBlue(value);
-                break;
-            default:
-                break;
-        }
+    //     switch (color) {
+    //         case 'red':
+    //             setRed(value);
+    //             break;
+    //         case 'green':
+    //             setGreen(value);
+    //             break;
+    //         case 'blue':
+    //             setBlue(value);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // };
+
+    const handleOpenTimeChange = (newValue) => {
+        const newHours = dayjs(newValue).hour();
+        const newMinutes = dayjs(newValue).minute();
+
+        // 更新狀態
+        setopentime({ hours: newHours, minutes: newMinutes });
+        console.log(opentime)
+    };
+
+    const handleCloseTimeChange = (newValue) => {
+        const newHours = dayjs(newValue).hour();
+        const newMinutes = dayjs(newValue).minute();
+        setclosetime({ hours: newHours, minutes: newMinutes });
     };
       
 
@@ -143,44 +165,33 @@ const LedControl = ( {socket, onBack} ) =>
         //使用 FormData(form) 來建立這個對象時，它會收集表單中的所有輸入元素的數據，然後將這些數據按照表單中輸入元素的 name 屬性打包成一個對象。
         const form = event.target;
         const formData = new FormData(form);
-        console.log(formData);
-        // formData.get(name),  表單中輸入元素的 name 屬性來指定
-        // console.log(formData.get('brightness'));
+        // console.log(formData);
 
-        const formJson = Object.fromEntries(formData.entries());
-        formJson['boxid'] = 1;
-        formJson['opentime'] = time2array(formJson['opentime'])
-        formJson['closetime'] = time2array(formJson['closetime'])
+        // const formJson = Object.fromEntries(formData.entries());
+        // formJson['opentime'] = time2array(formJson['opentime'])
+        // formJson['closetime'] = time2array(formJson['closetime'])
         // formJson['brightness'] = parseFloat(formJson['brightness'])
         // formJson['RGB'] = [parseInt(formJson['red']), parseInt(formJson['green']), parseInt(formJson['blue'])];
+        const formJson = {};
+        formJson['boxid'] = 1;
+        formJson['opentime'] = [opentime.hours, opentime.minutes]
+        formJson['closetime'] = [closetime.hours, closetime.minutes]
         formJson['brightness'] = parseFloat(brightness);
         formJson['RGB'] = [parseInt(red), parseInt(green), parseInt(blue)];
-        console.log(formJson['RGB']);
-        // 要刪除的 keys
-        const keysToDelete = ['red', 'green', 'blue'];
-
-        // 創建一個新的 JavaScript 物件，只包含想要保留的 key-value
-        const newFormJson = {};
-        for (const key in formJson) {
-            if (!keysToDelete.includes(key)) {
-                newFormJson[key] = formJson[key];
-            }
-        }
-
-        //const newFormJsonString = JSON.stringify(newFormJson);
+    
         //將 JavaScript 物件轉換為 JSON 字串
-        console.log(JSON.stringify(newFormJson));
+        console.log(JSON.stringify(formJson));
         console.log(socket.connected)
-        socket.emit('LED_ctrl', JSON.stringify(newFormJson));
+        socket.emit("LED_ctrl", JSON.stringify(formJson));
 
-        alert('submit');
+        // alert('submit');
         fetchData(1);
     }
 
     return(
         <div className="container">
             <h2>LED Control</h2>
-            <button onClick={onBack}>Go Back</button>
+            {/* <button onClick={onBack}>Go Back</button> */}
             
             {/* {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>} */}
             <div className="right-column">
@@ -199,7 +210,7 @@ const LedControl = ( {socket, onBack} ) =>
                         min={0}
                         max={1}
                         step={0.1}
-                        editcolor={`55, 55, 55)`}
+                        editcolor={`rgb(240, 230, 140)`}
                     />
                 </div>
 
@@ -217,7 +228,7 @@ const LedControl = ( {socket, onBack} ) =>
                         onChange={(e) => {
                             setRed(e.target.value);
                         }}
-                        onBlur={() => handleBlur('red')}
+                        // onBlur={() => handleBlur('red')}
                         aria-labelledby="red-slider"
                         editcolor={`rgb(${red}, 0, 0)`}
                     />
@@ -234,7 +245,7 @@ const LedControl = ( {socket, onBack} ) =>
                         min={0}
                         max={255}
                         step={1}
-                        onBlur={() => handleBlur('green')}
+                        // onBlur={() => handleBlur('green')}
                         onChange={(e) => {
                             setGreen(e.target.value);
                         }}
@@ -242,6 +253,7 @@ const LedControl = ( {socket, onBack} ) =>
                         editcolor={`rgb(0, ${green}, 0)`}
                     />
                 </div>
+                
                 <div className="input-container">
                     <label htmlFor="blue" className="label">
                     Blue:
@@ -253,7 +265,7 @@ const LedControl = ( {socket, onBack} ) =>
                         min={0}
                         max={255}
                         step={1}
-                        onBlur={() => handleBlur('blue')}
+                        // onBlur={() => handleBlur('blue')}
                         onChange={(e) => {
                             setBlue(e.target.value);
                         }}
@@ -264,17 +276,49 @@ const LedControl = ( {socket, onBack} ) =>
 
                 <div className="time-container">
                     <div className="input-container">
-                        <label htmlFor="opentime" className="label">
+                        {/* <label htmlFor="opentime" className="label">
                             Open Time:
                         </label>
-                        <input type="time" id="opentime" name="opentime" min="1" max="24" defaultValue="12" className="input" />
+                        <input type="time" id="opentime" name="opentime" min="1" max="24" defaultValue="12" className="input" /> */}
+                        <div className="timeclock">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']}>
+                                <TimePicker
+                                        label="Open Time"
+                                        ampm={false}
+                                        defaultValue={dayjs().set('hour', `${opentime.hours}`).set('minute', `${opentime.minutes}`)} 
+                                        onChange={handleOpenTimeChange}
+                                        viewRenderers={{
+                                            hours: renderTimeViewClock,
+                                            minutes: renderTimeViewClock,
+                                        }}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
                     </div>
 
                     <div className="input-container">
-                        <label htmlFor="closetime" className="label">
+                        {/* <label htmlFor="closetime" className="label">
                             Close Time:
                         </label>
-                        <input type="time" id="closetime" name="closetime" min="1" max="24" defaultValue="12" className="input" />
+                        <input type="time" id="closetime" name="closetime" min="1" max="24" defaultValue="12" className="input" /> */}
+                        <div className="timeclock">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']}>
+                                    <TimePicker
+                                        label="Close Time"
+                                        ampm={false} // 设置为24小时制
+                                        defaultValue={dayjs().set('hour', `${closetime.hours}`).set('minute', `${closetime.minutes}`)} 
+                                        onChange={handleCloseTimeChange}
+                                        viewRenderers={{
+                                            hours: renderTimeViewClock,
+                                            minutes: renderTimeViewClock,
+                                        }}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" value="Submit" className="submit-button">Submit</button>

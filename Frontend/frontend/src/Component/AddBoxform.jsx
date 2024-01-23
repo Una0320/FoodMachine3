@@ -91,11 +91,11 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
     <div className='add-box-form-container'>
         <form onSubmit={handleSubmit}>
             <label className='add-box-form label'>
-                New Boxname:
+                New Boxname
                 <input className='add-box-form input' type="text" name="boxname" value={boxData.boxname} onChange={handleInputChange} />
             </label>
             <label className='add-box-form label'>
-                Box User: 
+                Box User
                 {/* <input type="text" name="name" value={boxData.users} onChange={handleInputChange} /> */}
                 <select
                     className='add-box-form-select'

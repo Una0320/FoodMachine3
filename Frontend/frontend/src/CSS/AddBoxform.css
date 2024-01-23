@@ -16,37 +16,39 @@
   
   .add-box-form label {
     display: block;
-    /* margin-bottom: 10px; */
   }
   
   .add-box-form input[type="text"],
   .add-box-form select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin: 15px 0px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-sizing: border-box;
   }
   
-  .add-box-form button {
-    padding: 10px 20px;
-    background-color: #0078d4;
-    color: #fff;
+  .add-box-form-button {
+    /* padding: 10px 20px; */
+    margin-bottom: 10px;
+    color: black;
+    background-color: #ddd;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 16pt;
   }
   
-  .add-box-form button,
-  .add-box-form .close-button {
-    margin-right: 10px;
-  }
-  
-  .add-box-form .close-button {
+  .add-box-form-close-button {
+    /* padding: 10px 20px; */
+    margin-bottom: 10px;
+    color: black;
     background-color: #ddd;
-    color: #333;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16pt;
+
   }
   
   /* Optional: Style for multiple select */

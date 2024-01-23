@@ -154,13 +154,7 @@ export function Dashboard() {
                             <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
                         </div>
                         <div className="content_down">
-                            <div className="timefilter">
-                                <span>SENSOR VALUE</span>
-                                <button className="timebtn active">Hour</button>
-                                <button className="timebtn">Day</button>
-                                <button className="timebtn">Week</button>
-                                <button className="timebtn">Month</button>
-                            </div>
+                            
                             
                             <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
                         </div>
@@ -170,9 +164,7 @@ export function Dashboard() {
                         <>
                         <LedControl socket={socket} onBack={() => setCurrentPage("dashboard")}></LedControl>
                         </>
-                    )
-
-                    }
+                    )}
                 </div>
             </div>
             <div className="foot">  </div>

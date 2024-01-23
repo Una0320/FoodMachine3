@@ -8,7 +8,8 @@ import { useCtrline } from './ChartCtlContext';
 const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
-    const { chartVisibilityMap } = useCtrline();
+    // const { chartVisibilityMap } = useCtrline();
+    const {chartVisibilityMap, toggleChartVisibility, updateSelectedHour} = useCtrline()
     const [chartHeight, setChartHeight] = useState(30);
     const [chartdata, setChartdata] = useState([]);
     const [chartoutdata, setChartoutdata] = useState([]);
@@ -96,7 +97,12 @@ const LineChartCom = ({ socket , boxId}) => {
         if (chartVisibilityMap['daybtn']) {
             fetchData(boxId, `${year}-${month}-${day}`);
             fetchoutData(boxId, `${year}-${month}-${day}`);
-        } else {
+        }
+        else if(chartVisibilityMap['weekbtn']){
+            fetchData(boxId, `${year}-${month}-${day-7}`);
+            fetchoutData(boxId, `${year}-${month}-${day-7}`);
+        } 
+        else {
             if (hours>=chartVisibilityMap['selectedHour'])
             {
                 fetchData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
@@ -181,7 +187,7 @@ const LineChartCom = ({ socket , boxId}) => {
                         <img className='tip_img' src={imgSrc}></img>
                         <div className='tip_text'>
                             <div className='tis_value' style={{ color: dynamicColor }}>{parameter}</div>
-                            <div className='tis_value' style={{ color: dynamicColor }}>{`${label}`}-{`${parseFloat(payload[0].value).toFixed(2)}`}</div>
+                            <div className='tis_value' style={{ color: dynamicColor }}>{`${parseFloat(payload[0].value).toFixed(2)}`}</div>
                             {/* {`${label}`}:代表X軸的時間 */}
                         </div>
                     </div>
@@ -207,6 +213,17 @@ const LineChartCom = ({ socket , boxId}) => {
     };
 
     return (
+        <>
+        <div className="timefilter">
+            <span>SENSOR VALUE</span>
+            <button className={`timebtn ${chartVisibilityMap['hourbtn'] ? 'active' : ''}`}
+                    onClick={() => toggleChartVisibility('hourbtn')}>Hour</button>
+            <button className={`timebtn ${chartVisibilityMap['daybtn'] ? 'active' : ''}`}
+                    onClick={() => toggleChartVisibility('daybtn')}>Day</button>
+            <button className={`timebtn ${chartVisibilityMap['weekbtn'] ? 'active' : ''}`}
+                    onClick={() => toggleChartVisibility('weekbtn')}>Week</button>
+            <button className="timebtn">Month</button>
+        </div>
         <div style={{height:'100%'}} ref={contentDownRef}>
             {chartVisibilityMap['inairtemp'] &&
                 <ResponsiveContainer height={chartHeight}>
@@ -591,6 +608,7 @@ const LineChartCom = ({ socket , boxId}) => {
                 </LineChart>
             </ResponsiveContainer>
         </div>
+        </>
     );
 };
 

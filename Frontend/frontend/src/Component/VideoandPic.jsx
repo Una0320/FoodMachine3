@@ -127,7 +127,7 @@ const VideoandPic = ({ socket , boxId}) =>{
         return(
             <>
             <div className="swiper-slide">
-                <div className="card">
+                <div className="cardstream">
                     <iframe
                         src={"http://192.168.1.201:8080/javascript_simple.html"}
                         className="card__stream"
