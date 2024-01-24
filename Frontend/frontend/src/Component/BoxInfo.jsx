@@ -8,7 +8,7 @@ const BoxInfo = ({ socket, boxId }) => {
     const fetchBoxInfo = async (boxId) => {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/boxinfo/${boxId}`
+                `http://192.168.1.213:8000/boxinfo/${boxId}`
             );
 
             if (response.ok) {

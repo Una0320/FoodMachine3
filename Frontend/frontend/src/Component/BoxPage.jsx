@@ -1,15 +1,14 @@
 import { useParams } from 'react-router-dom';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useSocket } from './SocketContext';
 import BoxInfo from './BoxInfo';
 import GrowInfo from './GrowInfo';
 import GrowOut from './GrowOut';
 import '../CSS/BoxPage.css'
 
-function BoxPage() {
-    const { boxId } = useParams();
-    const socket = useSocket();
+const BoxPage = ({ socket, boxId }) => {
+    // const { boxId } = useParams();
+    // const socket = useSocket();
     // 使用 boxId 做你的事情
 
     return (
@@ -19,17 +18,16 @@ function BoxPage() {
             <div className='box-info-container'>
                 <BoxInfo boxId={ boxId }></BoxInfo> 
             </div>
-            <div className='grow-info-container'>
-                <div className='grow-info-column'>
-                    <h3>GrowIN Data</h3>
-                    <GrowInfo socket={ socket } boxId={ boxId }></GrowInfo>
-                </div>
-                <div className='grow-info-column'>
-                    <h3>GrowOUT Data</h3>
-                    <GrowOut socket={ socket } boxId={ boxId }></GrowOut>
-                </div>
-                {/* 其他內容... */}
-            </div>
+                {/* <div className='grow-info-container'>
+                    <div className='grow-info-column'>
+                        <h3>GrowIN Data</h3>
+                        <GrowInfo socket={ socket } boxId={ boxId }></GrowInfo>
+                    </div>
+                    <div className='grow-info-column'>
+                        <h3>GrowOUT Data</h3>
+                        <GrowOut socket={ socket } boxId={ boxId }></GrowOut>
+                    </div>
+                </div> */}
         </div>
     );
 }

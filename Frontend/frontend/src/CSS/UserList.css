@@ -1,0 +1,30 @@
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #252728; /* 背景透明 */
+    /* border: 1px solid #fff; */
+    color: #fff; /* 字體顏色白色 */
+    padding: 8px; /* 設定內間距，可依需求調整 */
+    border-radius: 10px;
+    font-size: 16pt;
+    margin-right: 10px;
+  }
+  
+  /* 隱藏 IE11 下拉箭頭 */
+  select::-ms-expand {
+    display: none;
+  }
+  
+  /* 打開選單時的樣式 */
+  select:focus {
+    outline: none; /* 移除預設的 focus 樣式 */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* 添加選中效果，可以根據需求調整陰影顏色和大小 */
+    background-color: transparent;
+  }
+  
+  /* 選項樣式 */
+  select option {
+    background: transparent; /* 背景透明 */
+    color: #fff; /* 字體顏色白色 */
+  }

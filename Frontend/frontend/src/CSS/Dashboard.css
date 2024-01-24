@@ -45,6 +45,10 @@ body, html {
     margin-left: 10px;
     margin-right: 10px;
 }
+.Banner select option{
+    color: #FFF;
+    background-color: transparent;
+}
 
 .profile-image {
     width: 30px;

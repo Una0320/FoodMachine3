@@ -2,20 +2,16 @@
 import React, {useState, useEffect} from "react";
 import AddBoxForm from "./AddBoxform";
 
-import '../CSS/BoxBtnList.css'
-import sunlong from '../icon/sunlong.png'
-import luminan from '../icon/luminance.png'
-import airtemp from '../icon/temperature.png'
-import humidit from '../icon/humidity.png'
+import '../CSS/BoxBtnList.css';
 
-const BoxBtnList = ({ onButtonClick }) => {
+const BoxBtnList = ({ userId, onButtonClick }) => {
     const [boxList, setBoxList] = useState([]);
     const [showAddBoxModal, setShowAddBoxModal] = useState(false);
     const [selectedBox, setSelectedBox] = useState(1);
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://192.168.1.213:8000/boxlist/1");
+            const response = await fetch(`http://192.168.1.213:8000/boxlist/${userId}`);
             if (response.ok) {
                 const jsonData = await response.json();
                 setBoxList(jsonData);
@@ -33,9 +29,16 @@ const BoxBtnList = ({ onButtonClick }) => {
         setShowAddBoxModal(true);
     }
     useEffect(() => {
-
         fetchData();
-    }, []);
+    }, [userId]);
+
+    useEffect(() => {
+        // 確保 boxList 不為空且 selectedBox 存在
+        if (boxList.length > 0 && selectedBox) {
+            setSelectedBox(boxList[0].id);
+            onButtonClick(boxList[0].id);
+        }
+    }, [boxList]);
 
     const handleBoxAdded = () => {
         setShowAddBoxModal(false);
@@ -59,10 +62,6 @@ const BoxBtnList = ({ onButtonClick }) => {
                         <div>
                             {box.name}
                         </div>
-                        {/* <div className="box-info-item"> */}
-                            {/* <img src={airtemp} alt="airtemp icon" /> */}
-                            {/* 22.3{box.airtemp} */}
-                        {/* </div> */}
                     </div>
                     </button>
                 ))}

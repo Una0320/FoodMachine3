@@ -10,7 +10,7 @@ import { ChartCtrlProvider } from "./ChartCtlContext";
 import { ContentProvider } from "./ContentContext";
 
 import BoxBtnList from "./BoxBtnList";
-import BoxInfo from "./BoxInfo";
+import UserList from "./UserList";
 import GrowInfo from "./GrowInfo";
 import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
@@ -19,13 +19,12 @@ import LastGrowOUT from "./LastGrowOUT";
 import LastGrowAll from "./LastGrowAll";
 import VideoandPic from "./VideoandPic";
 import LineChartCom from "./LineChartCom";
+import BoxPage from "./BoxPage";
 
 
 export function Dashboard() {
-    // 使用 useState Hook 定義了一個 data 狀態變數和一個 setData 函數。
-    // 當收到伺服器回應後，使用 setData 函數更新狀態，以便在元件中顯示資料。
-    const [error, setError] = useState(null);
     const [cur_box, setCurBox] = useState(1);
+    const [cur_user, setCurUser] = useState(1);
 
     const [message, setMessage] = useState([]);
 
@@ -96,11 +95,17 @@ export function Dashboard() {
         };
     }, []);
 
+    const handleUserSelect = (user) => {
+        // 選擇使用者後的處理邏輯，例如更新狀態或執行其他操作
+        setCurUser(user);
+        console.log(cur_user);
+        // 這裡可以加入更新 sidebar 的邏輯，根據所選的使用者
+        // updateSidebar(user);
+    };
+
     const handleButtonClick = (boxId) => {
         // Call fetchData with the selected boxId
         setCurBox(boxId);
-        // fetchData(boxId);
-        // navigate(`/box/${boxId}`);
         console.log(cur_box);
     };
 
@@ -115,9 +120,9 @@ export function Dashboard() {
             <div id="Banner" className="Banner">
                 <img className="BannerLogo" src="/logo.png"></img>
                 <img className="BannerBell" src="/bell.png"></img>
-                <span className="BannerUsername">Michael</span>
-                <img src="michael.png" alt="Michael" class="profile-image" />
-
+                {/* <span className="BannerUsername">root1</span> */}
+                <UserList onSelectClick={handleUserSelect}></UserList>
+                <img src="user.png" alt="" className="profile-image" />
             </div>
             <div id="Panel" className="Panel">
                 <div className="sidebar">
@@ -141,7 +146,7 @@ export function Dashboard() {
                     </div>
                     <div id="Userboxes">
                         <h3>BOXES</h3>
-                        <BoxBtnList onButtonClick={handleButtonClick}></BoxBtnList>
+                        <BoxBtnList userId={cur_user} onButtonClick={handleButtonClick}></BoxBtnList>
                     </div>
                 </div>
                 <div className="content">
@@ -163,6 +168,11 @@ export function Dashboard() {
                     {currentPage == "ledctrl" && (
                         <>
                         <LedControl socket={socket} onBack={() => setCurrentPage("dashboard")}></LedControl>
+                        </>
+                    )}
+                    {currentPage == "setting" && (
+                        <>
+                        <BoxPage socket={socket} boxId={cur_box}></BoxPage>
                         </>
                     )}
                 </div>

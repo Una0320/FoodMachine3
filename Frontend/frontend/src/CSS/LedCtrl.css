@@ -16,20 +16,20 @@
 
 .right-column {
   display: flex;
-  flex-direction: column;
-  align-items: center; /* 將 .right-column 元素內容靠右 */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: 60%;
+  width: 70%;
   /* margin: 10px 5px; 調整左右邊距，根據你的需求調整 */
-}
-
-.info {
-  margin-bottom: 10px;
-  /* Add any additional styling for the information section */
 }
 
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 70%;
   gap: 10px;
 }
 
@@ -42,34 +42,15 @@
   gap: 10px;
 }
 
-.label,
-.input {
+.label {
   /* margin-bottom: 10px; */
   display: flex;
   justify-content: flex-start; /* 內容靠右 */
   align-items: center; /* 垂直居中對齊 */
-}
-
-.label {
   /* margin-right: 1px; 調整 label 與 input 之間的間距 */
   color: #fff;
   font-size: 20px;
   min-width: 100px; /* 設定最小寬度 */
-}
-
-.input {
-  width: 200px; /* 或者你想要的固定寬度 */
-  padding: 6px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-input[type="number"],
-input[type="time"] {
-  line-height: 1.5;
-  vertical-align: middle;
 }
 
 .submit-button {
@@ -95,4 +76,16 @@ input[type="time"] {
 .timeclock input,
 .timeclock svg{
   color: #fff;
+}
+
+.vbox{
+  height: 100%;
+  width: 100%;
+}
+
+.ledstream{
+  height: 600px;
+  width: 650px;
+  border: 0;
+  margin-top: 20px;
 }
