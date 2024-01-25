@@ -4,12 +4,16 @@ import { useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../CSS/LineChartCom.css'
 import { useCtrline } from './ChartCtlContext';
+import { useContent } from './ContentContext';
 
 const LineChartCom = ({ socket , boxId}) => {
 
     //Today's date
     // const { chartVisibilityMap } = useCtrline();
     const {chartVisibilityMap, toggleChartVisibility, updateSelectedHour} = useCtrline()
+    // const { data, outdata } = useContent();
+
+    const [lasttime, setlasttime] = useState(' ');
     const [chartHeight, setChartHeight] = useState(30);
     const [chartdata, setChartdata] = useState([]);
     const [chartoutdata, setChartoutdata] = useState([]);
@@ -37,6 +41,12 @@ const LineChartCom = ({ socket , boxId}) => {
             const response = await fetch(encodedURL);
             if (response.ok) {
                 const jsonData = await response.json();
+                if(jsonData.length > 0){
+                    setlasttime(jsonData[0].timestamp.replace("T", " "));
+                }
+                else{
+                    setlasttime(' ')
+                }
                 const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
                 setChartdata(processedData);
                 console.log(processedData);
@@ -82,6 +92,38 @@ const LineChartCom = ({ socket , boxId}) => {
     };
   
     // 時間filter(Day, Hour)改變
+    const updateOutChart = () => {
+        let cheight = calculateChartHeight(340);
+        console.log(cheight);
+        setChartHeight(cheight);
+    
+        let newDate = new Date();
+        let year = newDate.getFullYear();
+        let month = newDate.getMonth() + 1;
+        let day = newDate.getDate();
+        let hours = newDate.getHours();
+        let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
+    
+        if (chartVisibilityMap['daybtn']) {
+            fetchoutData(boxId, `${year}-${month}-${day}`);
+        }
+        else if(chartVisibilityMap['weekbtn']){
+            fetchoutData(boxId, `${year}-${month}-${day-7}`);
+        } 
+        else {
+            if (hours>=chartVisibilityMap['selectedHour'])
+            {
+
+                fetchoutData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
+            }
+            else {
+
+                fetchoutData(boxId, `${year}-${month}-${day}`);
+            }
+            
+        }
+    };
+
     const updateChart = () => {
         let cheight = calculateChartHeight(340);
         console.log(cheight);
@@ -96,21 +138,19 @@ const LineChartCom = ({ socket , boxId}) => {
     
         if (chartVisibilityMap['daybtn']) {
             fetchData(boxId, `${year}-${month}-${day}`);
-            fetchoutData(boxId, `${year}-${month}-${day}`);
         }
         else if(chartVisibilityMap['weekbtn']){
             fetchData(boxId, `${year}-${month}-${day-7}`);
-            fetchoutData(boxId, `${year}-${month}-${day-7}`);
         } 
         else {
             if (hours>=chartVisibilityMap['selectedHour'])
             {
                 fetchData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
-                fetchoutData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
+
             }
             else {
                 fetchData(boxId, `${year}-${month}-${day}`);
-                fetchoutData(boxId, `${year}-${month}-${day}`);
+
             }
             
         }
@@ -127,7 +167,7 @@ const LineChartCom = ({ socket , boxId}) => {
         fetchoutData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
 
         socket.on("ngrowin_update", updateChart);
-        socket.on("ngrowout_update", updateChart);
+        socket.on("ngrowout_update", updateOutChart);
         return () => {
             socket.off("ngrowin_update");
             socket.off("ngrowout_update");
@@ -170,9 +210,22 @@ const LineChartCom = ({ socket , boxId}) => {
   
     useEffect(() => {
         updateChart();
-    }, [chartVisibilityMap]);
+        updateOutChart();
+        let cheight = calculateChartHeight(340);
+        console.log(cheight);
+        setChartHeight(cheight);
+    }, [boxId, chartVisibilityMap]);
 
-    
+    // useEffect(()=>{
+    //     const redata = data;
+    //     setChartdata(redata.reverse());
+    //     console.log(data);
+    //     console.log(chartdata[0]);
+    // },[data])
+    // useEffect(()=>{
+    //     const reoutdata = outdata;
+    //     setChartoutdata(reoutdata.reverse());
+    // },[outdata])
 
 
     const CustomTooltip = ({ active, payload, label,  parameter, dynamicColor}) => {
@@ -223,6 +276,7 @@ const LineChartCom = ({ socket , boxId}) => {
             <button className={`timebtn ${chartVisibilityMap['weekbtn'] ? 'active' : ''}`}
                     onClick={() => toggleChartVisibility('weekbtn')}>Week</button>
             <button className="timebtn">Month</button>
+            <span style={{marginLeft:'30px'}}>Latest update time : {lasttime}</span>
         </div>
         <div style={{height:'100%'}} ref={contentDownRef}>
             {chartVisibilityMap['inairtemp'] &&

@@ -96,7 +96,6 @@ export function Dashboard() {
     }, []);
 
     const handleUserSelect = (user) => {
-        // 選擇使用者後的處理邏輯，例如更新狀態或執行其他操作
         setCurUser(user);
         console.log(cur_user);
         // 這裡可以加入更新 sidebar 的邏輯，根據所選的使用者
@@ -150,6 +149,7 @@ export function Dashboard() {
                     </div>
                 </div>
                 <div className="content">
+                    {/* <ContentProvider socket={socket} boxId={cur_box}> */}
                     {currentPage === "dashboard" && (
                         <>
                         <div className="content_up">
@@ -175,6 +175,7 @@ export function Dashboard() {
                         <BoxPage socket={socket} boxId={cur_box}></BoxPage>
                         </>
                     )}
+                    {/* </ContentProvider> */}
                 </div>
             </div>
             <div className="foot">  </div>

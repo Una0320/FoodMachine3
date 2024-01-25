@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useCtrline } from './ChartCtlContext';
-import { useSocket } from './SocketContext';
+// import { useSocket } from './SocketContext';
 
 const ContentContext = createContext();
 
@@ -12,10 +12,11 @@ export function useContent() {
   
 export function ContentProvider({ children, socket, boxId })
 {
-    const { chartVisibilityMap } = useCtrline();
+    // const { chartVisibilityMap } = useCtrline();
     const [data, setdata] = useState([]); // 你的資料結構，根據實際需求調整
     const [outdata, setoutdata] = useState([]); // 你的資料結構，根據實際需求調整
-    const [chartoutdata, setChartoutdata] = useState([]);
+    const [lasttime, setlasttime] = useState(' ');
+    // const [chartoutdata, setChartoutdata] = useState([]);
     // const isConnected = useSocket();
 
     let newDate = new Date();
@@ -36,16 +37,19 @@ export function ContentProvider({ children, socket, boxId })
 
     const fetchData = async (boxId) => {
         try {
-            // const startDate = ('2023-12-29');
             const attributes = 'timestamp,luminance,airtemp,humidity';
-
-            const growURL = `http://127.0.0.1:8000/boxgrowin/${boxId}/?start_date=${fulldate}`;
-
-            const response = await fetch(growURL);
-            // const response = await fetch(`http://127.0.0.1:8000/boxgrowin/${boxid}/?start_date=2023-11-05 & attributes=timestamp,airtemp`);
+            const encodedURL = `http://192.168.1.213:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=${attributes}`;
+    
+            const response = await fetch(encodedURL);
             if (response.ok) {
                 const jsonData = await response.json();
-                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
+                if(jsonData.length > 0){
+                    setlasttime(jsonData[0].timestamp.replace("T", " "));
+                }
+                else{
+                    setlasttime(' ')
+                }
+                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) }));
                 setdata(processedData);
                 console.log(processedData);
             } else {
@@ -58,16 +62,16 @@ export function ContentProvider({ children, socket, boxId })
     };
 
     // Database fetch outdata
-    const fetchoutData = async ( boxid, date ) => {
+    const fetchoutData = async ( boxId ) => {
         try {
 
             const attributes = 'timestamp,airtemp,humidity,ph,ec,co2,waterlevel,watertemp,oxygen';
-            const encodedURL = `http://127.0.0.1:8000/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
+            const encodedURL = `http://192.168.1.213:8000/boxgrowout/?box_id=${boxId}&start_date=${fulldate}&attributes=${attributes}`;
     
             const response = await fetch(encodedURL);
             if (response.ok) {
                 const jsonData = await response.json();
-                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) })).reverse();
+                const processedData = jsonData.map(entry => ({ ...entry, timestamp: formatDate(entry.timestamp) }));
                 setoutdata(processedData);
                 console.log(processedData);
             } else {
@@ -104,10 +108,10 @@ export function ContentProvider({ children, socket, boxId })
         };
     }, [boxId]);
   
-    // const value = { data };
+    const value = { data, outdata };
   
     return (
-        <ContentContext.Provider value={data}>
+        <ContentContext.Provider value={{ data, outdata }}>
             {children}
         </ContentContext.Provider>
     );

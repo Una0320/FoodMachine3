@@ -20,11 +20,15 @@ body, html {
 }
   
 .Banner{
-  flex: 1;
-  padding-top: 25px;
-  padding-bottom: 25px;
-  background-color: #161819;
-  text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: #161819;
+    text-align: left;
 }
 .BannerLogo{
   width: 148px;
@@ -34,7 +38,7 @@ body, html {
     width: 30px;
     height: 30px;
     margin-left: 1440px;
-    margin-right: 30px;
+    /* margin-right: 30px; */
 }
 .BannerUsername{
     color: #FFF;
@@ -120,6 +124,11 @@ body, html {
 .image-button {
   background-color: transparent;
   color: #A4A4A4;
+  img {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;/* 設定圖片和文字之間的間距 */
+}
 
   &.active {
       background-color: #3498db;
