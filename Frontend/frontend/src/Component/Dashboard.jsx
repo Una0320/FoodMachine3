@@ -86,7 +86,8 @@ export function Dashboard() {
         function box_log(value) {
             console.log(new Date() + ":" + value);
         }
-
+        console.log("D-socket", socket.connected);
+        console.log("D-socket:", socket.id);
         socket.on("getMessage", getMessage);
         socket.on("box_log", box_log);
         // 在元件卸載時斷開 Socket.IO 連線
@@ -97,6 +98,7 @@ export function Dashboard() {
 
     const handleUserSelect = (user) => {
         setCurUser(user);
+        console.log("D-socket", socket.connected);
         console.log(cur_user);
         // 這裡可以加入更新 sidebar 的邏輯，根據所選的使用者
         // updateSidebar(user);

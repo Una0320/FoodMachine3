@@ -182,6 +182,7 @@ const LedControl = ( {socket, onBack} ) =>
         //將 JavaScript 物件轉換為 JSON 字串
         console.log(JSON.stringify(formJson));
         console.log(socket.connected)
+        console.log(socket.id)
         socket.emit("box_log", "ReactLetCtrl")
         socket.emit("LED_ctrl", JSON.stringify(formJson));
     }
@@ -327,12 +328,12 @@ const LedControl = ( {socket, onBack} ) =>
                 </div>
                 <button type="submit" value="Submit" className="submit-button">Submit</button>
             </form>
-            <div className="vbox">
+            {/* <div className="vbox">
                 <iframe
                     src={"http://192.168.1.201:8080/javascript_simple.html"}
                     className="ledstream"
                 />
-            </div>
+            </div> */}
             </div>
             {/* <button onClick={handleboxlog}>send</button> */}
         </div>

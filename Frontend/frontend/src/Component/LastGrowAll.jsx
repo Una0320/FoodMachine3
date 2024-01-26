@@ -92,12 +92,13 @@ const LastGrowAll = ({ socket, boxId }) => {
         }
         
         function ngrowin_update() {
+            console.log(socket.connected);
             console.log("N-growin_LastGrow");
             fetchINdata(boxId);
         }
 
         // 移除之前的 ngrowout_update 事件監聽器
-        socket.off("ngrowout_update");
+        // socket.off("ngrowout_update");
         socket.on("ngrowout_update", ngrowout_update);
 
         // socket.off("ngrowin_update")
