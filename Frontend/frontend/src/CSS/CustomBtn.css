@@ -1,0 +1,51 @@
+.custom-button {
+    width: 150px; /* 固定寬度 */
+    height: 160px; /* 固定高度 */
+    border-radius: 10px; /* 圓角 */
+    /* white-space: pre-wrap; 按鈕文字自動換行 */
+    background-color: #292929;
+    color: #FFF; 
+    font-size: 16px;
+    text-align: center;
+    line-height: 30px;
+    flex-shrink: 0; 
+    box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    transition: background-color 0.3s ease;
+    position: relative;
+  }
+  
+  .custom-button.active {
+    background-color: #292929; /* 按下去的狀態，紅色背景 */
+  }
+  
+  .custom-button img {
+    padding-top: 10px;
+    padding-left: 10px;
+    width: 50px; /* 設定圖片寬度 */
+    height: 50px; /* 設定圖片高度 */
+  }
+  
+  .custom-button .text1{
+    font-size: 16pt;
+    color: inherit; /* 使用父元素的文字顏色 */
+    padding-left: 10px;
+  }
+  
+  .custom-button .text2 {
+    font-size: 11pt;
+    color: inherit; /* 使用父元素的文字顏色 */
+    padding-left: 10px;
+  }
+
+  .custom-button .text3{
+    color: #7c7a7a;
+    font-size: 10px;
+    line-height: normal;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
