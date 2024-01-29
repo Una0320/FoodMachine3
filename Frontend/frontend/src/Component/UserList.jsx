@@ -33,14 +33,6 @@ const UserList = ({ onSelectClick }) => {
 
     return (
         <>
-            {/* <select className="selectclass" onChange={(e) => onSelectClick(e.target.value)}>
-                <option value={null}>Select User</option>
-                {userList.map((user) => (
-                <option key={user.id} value={user.id}>
-                    {user.username}
-                </option>
-                ))}
-            </select> */}
             <ul className="userlistnav">
                 <li key={null}>
                     {selectedUser || "Select User"}
