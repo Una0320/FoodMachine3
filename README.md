@@ -1,6 +1,6 @@
 # Food Machine
 
-# Developed in 2023 Fall UROP, City Science Lab@Tapei Tech
+## Developed in 2023 Fall UROP, City Science Lab@Tapei Tech
 
 # Project Goals
 
@@ -18,6 +18,7 @@
 
 # Mechanism
 
+- CAD請切換至Branch: SensorBoxCad
 - 箱體
     
     參考 ~/0129 food machine skeleton element/
@@ -81,11 +82,19 @@
 
 # Firmware
 
-1. 使用ArduinoIDE，STM32F303K8開發版
-2. 設定Preferences URL: [https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json](https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json)
-3. 下載或安裝所需的Library
-4. 設定Board為Nucleo-32
-5. Build並Upload
+- 硬體
+    - Board: STM32F303K8
+    - SCD30 sensor: [https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library](https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library)
+    - EC sensor: [https://wiki.dfrobot.com/Gravity__Analog_Electrical_Conductivity_Sensor___Meter_V2__K=1__SKU_DFR0300](https://wiki.dfrobot.com/Gravity__Analog_Electrical_Conductivity_Sensor___Meter_V2__K=1__SKU_DFR0300)
+    - Water level sensor : [https://wiki.seeedstudio.com/Grove-Water-Level-Sensor/](https://wiki.seeedstudio.com/Grove-Water-Level-Sensor/)
+    - O2 sensor: [https://wiki.dfrobot.com/Gravity_I2C_Oxygen_Sensor_SKU_SEN0322](https://wiki.dfrobot.com/Gravity_I2C_Oxygen_Sensor_SKU_SEN0322)
+    - PH sensor: [https://wiki.dfrobot.com/Gravity__Analog_pH_Sensor_Meter_Kit_V2_SKU_SEN0161-V2](https://wiki.dfrobot.com/Gravity__Analog_pH_Sensor_Meter_Kit_V2_SKU_SEN0161-V2)
+- 使用方法
+    - 使用ArduinoIDE
+    - 設定Preferences URL: [https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json](https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json)
+    - 下載或安裝所需的Library
+    - 設定Board為Nucleo-32
+    - Build並Upload
 
 # Back-end
 
