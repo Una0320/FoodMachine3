@@ -19,7 +19,7 @@ from django.conf import settings
 from django.urls import include, path
 from django.conf.urls.static import static
 
-from users.views import UserList
+from users.views import UserList, newUser, loginout
 from boxes.views import BoxInfo, BoxListInfo, BoxGrowthsIN, BoxGrowthsOUT, NewBox, UpdateBox
 from growthsOUT.views import NGrowthOUT
 from growthsIN.views import NGrowthIN
@@ -29,6 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path("userlist/", UserList),
+    path("newuser/", newUser),
+    path('login/', loginout),
     path('boxinfo/<box_id>', BoxInfo),
     path('boxlist/<user_id>', BoxListInfo),
     path('updatebox/<updateBox_id>/', UpdateBox),

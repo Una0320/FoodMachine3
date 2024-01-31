@@ -25,8 +25,8 @@
   .custom-button img {
     padding-top: 10px;
     padding-left: 10px;
-    width: 50px; /* 設定圖片寬度 */
-    height: 50px; /* 設定圖片高度 */
+    width: 45px; /* 設定圖片寬度 */
+    height: 45px; /* 設定圖片高度 */
   }
   
   .custom-button .text1{

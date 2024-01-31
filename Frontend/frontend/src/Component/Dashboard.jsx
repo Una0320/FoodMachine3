@@ -11,6 +11,7 @@ import { ContentProvider } from "./ContentContext";
 
 import BoxBtnList from "./BoxBtnList";
 import UserList from "./UserList";
+import Loginout from "./Loginout";
 import GrowInfo from "./GrowInfo";
 import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
@@ -23,6 +24,7 @@ import BoxPage from "./BoxPage";
 
 
 export function Dashboard() {
+    const [isLogin, setisLogin] = useState(false);
     const [cur_box, setCurBox] = useState(1);
     const [cur_user, setCurUser] = useState(1);
 
@@ -121,7 +123,7 @@ export function Dashboard() {
             <div id="Banner" className="Banner">
                 <img className="BannerLogo" src="/logo.png"></img>
                 <img className="BannerBell" src="/bell.png"></img>
-                {/* <span className="BannerUsername">root1</span> */}
+                <Loginout isLoggedIn={isLogin} setLoginstatue={setisLogin}></Loginout>
                 <UserList onSelectClick={handleUserSelect}></UserList>
                 <img src="user.png" alt="" className="profile-image" />
             </div>

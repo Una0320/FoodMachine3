@@ -2,7 +2,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 from .models import user
 
 @require_http_methods(["GET"])
@@ -23,3 +24,47 @@ def UserList(request):
     # Test
     # return HttpResponse(f"this is {boxname}")
 # Create your views here.
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def newUser(request):
+    if request.method == 'POST':
+        # 從請求中獲取使用者提供的帳號和密碼
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # 使用 make_password 將密碼加密
+        hashed_password = make_password(password)
+
+        # 創建新使用者
+        new_user = user.objects.create(username=username, password=hashed_password)
+
+        # 儲存使用者
+        new_user.save()
+
+        return JsonResponse({'message': 'Registration successful'})
+
+    # 如果不是 POST 請求，可能需要返回一些錯誤訊息
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def loginout(request):
+    if request.method == 'POST':
+        # 從請求中獲取使用者提供的帳號和密碼
+        data = json.loads(request.body)
+        username = data.get('username', '')
+        password = data.get('password', '')
+        # 在資料庫中找到相應的使用者
+        targetUser = user.objects.get(username=username)
+        print(targetUser)
+        # 驗證密碼是否正確
+        if check_password(password, targetUser.password):
+            # 密碼正確，執行登入操作，可能需要返回一個 token 等資訊
+            return JsonResponse(True, safe=False)
+        else:
+            # 密碼錯誤
+            return JsonResponse({'error': 'Invalid password'}, status=401)
+
+    # 如果不是 POST 請求，可能需要返回一些錯誤訊息
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
