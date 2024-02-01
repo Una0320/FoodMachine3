@@ -1,10 +1,14 @@
 //Loginout.jsx
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Loginout = ({ isLoggedIn, setLoginstatue }) => {
+import '../CSS/Loginout.css';
+
+const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const onLogin = async (username, password) => {
         try {
@@ -25,8 +29,10 @@ const Loginout = ({ isLoggedIn, setLoginstatue }) => {
             // 根據後端的回應執行相應的操作
             if (response.ok) {
                 setLoginstatue(true);
+                setCurUser({id:data.id, userName:data.name})
                 console.log(data);
-                // 登入成功，可能需要儲存 token 或其他資訊
+                // 登入成功，導航到 Dashboard 頁面
+                navigate('/dashboard');
             } else {
                 // 登入失敗，顯示錯誤訊息
                 console.error(data.error);
@@ -50,24 +56,23 @@ const Loginout = ({ isLoggedIn, setLoginstatue }) => {
     };
 
     return (
-    <div>
+    <div className='backdrop'>
         {isLoggedIn ? (
             <div>
-                <p>Hello, {username}!</p>
+                <p>{username}!</p>
                 <button onClick={handleLogout}>Logout</button>
             </div>
         ) : (
-            <div>
+            <div className='center_panel'>
+                <h3>Login FoodMachine</h3>
                 <label>
                     Username:
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                 </label>
-                <br />
                 <label>
                     Password:
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </label>
-                <br />
+                </label>
                 <button onClick={handleLogin}>Login</button>
             </div>
         )}

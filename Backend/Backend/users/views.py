@@ -51,20 +51,28 @@ def newUser(request):
 @csrf_exempt
 def loginout(request):
     if request.method == 'POST':
-        # 從請求中獲取使用者提供的帳號和密碼
-        data = json.loads(request.body)
-        username = data.get('username', '')
-        password = data.get('password', '')
-        # 在資料庫中找到相應的使用者
-        targetUser = user.objects.get(username=username)
-        print(targetUser)
-        # 驗證密碼是否正確
-        if check_password(password, targetUser.password):
-            # 密碼正確，執行登入操作，可能需要返回一個 token 等資訊
-            return JsonResponse(True, safe=False)
-        else:
-            # 密碼錯誤
-            return JsonResponse({'error': 'Invalid password'}, status=401)
+        try:
+            # 從請求中獲取使用者提供的帳號和密碼
+            data = json.loads(request.body)
+            username = data.get('username', '')
+            password = data.get('password', '')
+
+            if not username or not password:
+                return JsonResponse({'error': 'Invalid request data'}, status=400)
+
+            # 在資料庫中找到相應的使用者
+            targetUser = user.objects.get(username=username)
+            print(targetUser)
+            
+            # 驗證密碼是否正確
+            if check_password(password, targetUser.password):
+                # 密碼正確，執行登入操作，可能需要返回一個 token 等資訊
+                return JsonResponse({'id': targetUser.id, 'name': targetUser.username}, safe=False)
+            else:
+                # 密碼錯誤
+                return JsonResponse({'error': 'Invalid password'}, status=401)
+        except json.decoder.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
     # 如果不是 POST 請求，可能需要返回一些錯誤訊息
     return JsonResponse({'error': 'Invalid request method'}, status=400)

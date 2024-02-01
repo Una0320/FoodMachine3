@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import '../CSS/LedCtrl.css'
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
@@ -9,6 +9,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+
+import Wheel from '@uiw/react-color-wheel';
+import { hsvaToHex } from '@uiw/color-convert';
+import { hsvaToRgba, rgbaToRgb } from '@uiw/color-convert';
 
 const DeviceInfo = ({ data }) => (
     <div>
@@ -27,9 +31,11 @@ const DeviceInfo = ({ data }) => (
 
 const PrettoSlider  = styled(Slider)(({ editcolor }) => ({
     color: editcolor,
-    height: 8,
+    height: 5,
     '& .MuiSlider-track': {
-      border: 'none',
+        border: 'none',
+        backgroundImage: 'linear-gradient(to right, black, white)', // 使用渐变背景
+        borderRadius: 4, // 设置边框半径
     },
     '& .MuiSlider-thumb': {
       height: 24,
@@ -44,6 +50,7 @@ const PrettoSlider  = styled(Slider)(({ editcolor }) => ({
       },
     },
     '& .MuiSlider-valueLabel': {
+        color:'#000',
       lineHeight: 1.2,
       fontSize: 12,
       background: 'unset',
@@ -73,43 +80,7 @@ const LedControl = ( {socket, onBack} ) =>
     const [blue, setBlue] = useState(255);
     const [opentime, setopentime] = useState({ hours: 9, minutes: 0 });
     const [closetime, setclosetime] = useState({ hours: 21, minutes: 0 });
-
-    // const handleBlur = (color) => {
-    //     let value;
-    //     switch (color) {
-    //         case 'red':
-    //             value = red;
-    //             break;
-    //         case 'green':
-    //             value = green;
-    //             break;
-    //         case 'blue':
-    //             value = blue;
-    //             break;
-    //         default:
-    //             break;
-    //     }
-      
-    //     if (value < 0) {
-    //         value = 0;
-    //     } else if (value > 255) {
-    //         value = 255;
-    //     }
-      
-    //     switch (color) {
-    //         case 'red':
-    //             setRed(value);
-    //             break;
-    //         case 'green':
-    //             setGreen(value);
-    //             break;
-    //         case 'blue':
-    //             setBlue(value);
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // };
+    const [hsva, setHsva] = useState({ h: 0, s: 0, v: 100, a: 1 });
 
     const handleOpenTimeChange = (newValue) => {
         const newHours = dayjs(newValue).hour();
@@ -177,7 +148,9 @@ const LedControl = ( {socket, onBack} ) =>
         formJson['opentime'] = [opentime.hours, opentime.minutes]
         formJson['closetime'] = [closetime.hours, closetime.minutes]
         formJson['brightness'] = parseFloat(brightness);
-        formJson['RGB'] = [parseInt(red), parseInt(green), parseInt(blue)];
+        formJson['RGB'] = [parseInt(rgbaToRgb(hsvaToRgba(hsva))['r']), 
+                            parseInt(rgbaToRgb(hsvaToRgba(hsva))['g']), 
+                            parseInt(rgbaToRgb(hsvaToRgba(hsva))['b'])];
     
         //將 JavaScript 物件轉換為 JSON 字串
         console.log(JSON.stringify(formJson));
@@ -195,13 +168,13 @@ const LedControl = ( {socket, onBack} ) =>
     }
     return(
         <div className="container">
-            <h2>LED Control</h2>
+            {/* <h2>LED Control</h2> */}
             {/* <button onClick={onBack}>Go Back</button> */}
             
             {/* {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>} */}
             <div className="right-column">
             <form onSubmit={onSubmit} className="form">
-                <div className="input-container">
+                {/* <div className="input-container">
                     <label htmlFor="brightness" className="label">
                     Brightness:
                     </label>
@@ -233,7 +206,6 @@ const LedControl = ( {socket, onBack} ) =>
                         onChange={(e) => {
                             setRed(e.target.value);
                         }}
-                        // onBlur={() => handleBlur('red')}
                         aria-labelledby="red-slider"
                         editcolor={`rgb(${red}, 0, 0)`}
                     />
@@ -250,7 +222,6 @@ const LedControl = ( {socket, onBack} ) =>
                         min={0}
                         max={255}
                         step={1}
-                        // onBlur={() => handleBlur('green')}
                         onChange={(e) => {
                             setGreen(e.target.value);
                         }}
@@ -270,15 +241,66 @@ const LedControl = ( {socket, onBack} ) =>
                         min={0}
                         max={255}
                         step={1}
-                        // onBlur={() => handleBlur('blue')}
                         onChange={(e) => {
                             setBlue(e.target.value);
                         }}
                         aria-labelledby="BsetBlue-slider"
                         editcolor={`rgb(0, 0, ${blue})`}
                     />
+                </div> */}
+                <div>
+                <div className="wheel-wrapper">
+                    <div style={{ position: 'relative' }}>
+                        <img style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 25,
+                                height: 25,
+                                borderRadius: '50%',
+                                zIndex: 3,
+                                cursor: 'pointer',  // 鼠标样式设为手型
+                            }}
+                            src="/unpower.png"></img>
+                        <button
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 200,
+                                height: 200,
+                                borderRadius: '50%',
+                                backgroundColor: '#252728',
+                                zIndex: 1,
+                                border: '1px solid rgba(255, 255, 255, 0.5)',  // 白色边框
+                                boxShadow: '0 0 5px rgba(255, 255, 255, 0.5)',  // 白色阴影
+                                cursor: 'pointer',  // 鼠标样式设为手型
+                            }}
+                            onClick={() => {setHsva({ h: 0, s: 0, v: 100, a: 1 });}}>
+                        </button>
+                        <Wheel 
+                        color={hsva} onChange={(color) => {setHsva({ ...hsva, ...color.hsva })}}
+                        width={300} height={300} />
+                    </div>
+                    {/* <p>{console.log(rgbaToRgb(hsvaToRgba(hsva)))}</p> */}
                 </div>
-
+                <div className="input-container">
+                        <PrettoSlider
+                            valueLabelDisplay="auto"
+                            aria-label="pretto slider"
+                            defaultValue={brightness}
+                            onChange={(e) => {
+                                setbrightness(e.target.value);
+                            }}
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            editcolor={`rgb(255, 255, 255)`}
+                        />
+                    </div>
+                </div>
                 <div className="time-container">
                     <div className="input-container">
                         {/* <label htmlFor="opentime" className="label">
@@ -304,10 +326,6 @@ const LedControl = ( {socket, onBack} ) =>
                     </div>
 
                     <div className="input-container">
-                        {/* <label htmlFor="closetime" className="label">
-                            Close Time:
-                        </label>
-                        <input type="time" id="closetime" name="closetime" min="1" max="24" defaultValue="12" className="input" /> */}
                         <div className="timeclock">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['TimePicker']}>
@@ -325,9 +343,11 @@ const LedControl = ( {socket, onBack} ) =>
                             </LocalizationProvider>
                         </div>
                     </div>
+                    <button type="submit" value="Submit" className="submit-button">Submit</button>
                 </div>
-                <button type="submit" value="Submit" className="submit-button">Submit</button>
+                
             </form>
+            
             {/* <div className="vbox">
                 <iframe
                     src={"http://192.168.1.201:8080/javascript_simple.html"}

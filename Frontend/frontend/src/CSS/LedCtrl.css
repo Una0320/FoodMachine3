@@ -14,6 +14,14 @@
   box-shadow: 0px 2px 2px 0px rgba(255, 255, 255, 0.25) inset;
 }
 
+.time-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
 .right-column {
   display: flex;
   flex-direction: row;
@@ -27,10 +35,11 @@
 
 .form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
   width: 70%;
-  gap: 10px;
+  gap: 100px;
 }
 
 .input-container {
@@ -55,11 +64,11 @@
 
 .submit-button {
   padding: 10px 20px;
-  background-color: #3498db;
+  background-color: #A4A4A4;
   color: #fff;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 50px;
   font-size: 16px;
 }
 
@@ -70,7 +79,7 @@
   padding: 5px;
 }
 .timeclock fieldset{
-  border-color: #fff;
+  border-color: #727272;
 }
 .timeclock label,
 .timeclock input,
@@ -88,4 +97,23 @@
   width: 650px;
   border: 0;
   margin-top: 20px;
+}
+
+.openclosebtn{
+  position: 'absolute';
+  top: 50;
+  left: 50;
+  width: 50;
+  height: 50;
+  border-radius: '50%';
+  background-color: 'blue';
+  z-Index: 1;
+  border: 'none';  
+  cursor: 'pointer';
+}
+
+.wheel-wrapper{
+  height: 300px;
+  width: 300px;
+  margin-bottom: 20px;
 }

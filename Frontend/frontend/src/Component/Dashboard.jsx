@@ -11,7 +11,6 @@ import { ContentProvider } from "./ContentContext";
 
 import BoxBtnList from "./BoxBtnList";
 import UserList from "./UserList";
-import Loginout from "./Loginout";
 import GrowInfo from "./GrowInfo";
 import LedControl from "./LedControl";
 import VideoStream from "./VideoStream";
@@ -23,18 +22,19 @@ import LineChartCom from "./LineChartCom";
 import BoxPage from "./BoxPage";
 
 
-export function Dashboard() {
-    const [isLogin, setisLogin] = useState(false);
+export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
+    // const [isLogin, setisLogin] = useState(false);
     const [cur_box, setCurBox] = useState(1);
-    const [cur_user, setCurUser] = useState(1);
+    const [cur_user, setCurUser] = useState(curUser.id);
 
     const [message, setMessage] = useState([]);
 
     // const [isConnected, setIsConnected] = useState(socket.connect());
     const socket = useSocket();
 
-    const [test, settest] = useState("");
     //socket.connected => 描述當前socket連接狀態，true：已連接；false：尚未連接
+    const [test, settest] = useState("");
+    
     // 初始顯示 Dashboard 頁面
     const [currentPage, setCurrentPage] = useState("dashboard");
     const navigate = useNavigate();
@@ -61,30 +61,6 @@ export function Dashboard() {
             });
         }
 
-        function ngrowin_update() {
-            console.log("N-growin update");
-            fetch(
-                "http://127.0.0.1:8000/boxgrowin/1/?start_date=2023-12-07"
-            ).then((response) => {
-                response.json().then((text) => {
-                    console.log(text); // 拿到 response.body 轉成的物件
-                    setMessage(text);
-                    ngrowindata(text);
-                });
-            });
-        }
-
-        function ngrowout_update() {
-            console.log("Ngrowout_update");
-            fetch(
-              `http://127.0.0.1:8000/boxgrowout/?box_id=1&start_date=${fulldate}`)
-              .then((response) => {
-                response.json().then((text) => {
-                  console.log(text);
-              });
-            });
-        }
-
         function box_log(value) {
             console.log(new Date() + ":" + value);
         }
@@ -102,8 +78,6 @@ export function Dashboard() {
         setCurUser(user);
         console.log("D-socket", socket.connected);
         console.log(cur_user);
-        // 這裡可以加入更新 sidebar 的邏輯，根據所選的使用者
-        // updateSidebar(user);
     };
 
     const handleButtonClick = (boxId) => {
@@ -123,8 +97,9 @@ export function Dashboard() {
             <div id="Banner" className="Banner">
                 <img className="BannerLogo" src="/logo.png"></img>
                 <img className="BannerBell" src="/bell.png"></img>
-                <Loginout isLoggedIn={isLogin} setLoginstatue={setisLogin}></Loginout>
-                <UserList onSelectClick={handleUserSelect}></UserList>
+                {/* <Loginout isLoggedIn={isLogin} setLoginstatue={setisLogin} setCurUser={handleUserSelect}></Loginout>) */}
+                <UserList isLoggedIn={isLoggedIn} setLoginstatue={setLoginstatue}
+                            CurUser={curUser} onSelectClick={handleUserSelect}></UserList>
                 <img src="user.png" alt="" className="profile-image" />
             </div>
             <div id="Panel" className="Panel">
@@ -149,7 +124,7 @@ export function Dashboard() {
                     </div>
                     <div id="Userboxes">
                         <h3>BOXES</h3>
-                        <BoxBtnList userId={cur_user} onButtonClick={handleButtonClick}></BoxBtnList>
+                        <BoxBtnList userId={curUser.id} onButtonClick={handleButtonClick}></BoxBtnList>
                     </div>
                 </div>
                 <div className="content">
@@ -180,7 +155,7 @@ export function Dashboard() {
                         </>
                     )}
                     {/* </ContentProvider> */}
-                </div>
+                </div>                
             </div>
             <div className="foot">  </div>
             </ChartCtrlProvider>
