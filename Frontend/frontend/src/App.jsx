@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react';
 import './App.css'
 import {SocketProvider} from './Component/SocketContext'
 import { Dashboard } from './Component/Dashboard'
@@ -14,7 +12,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
     const [isLoggedIn, setLoginStatus] = useState(false);
     const [curUser, setCurUser] = useState({ id: null, userName: null });
-
 
     return (
         <>

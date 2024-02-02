@@ -44,12 +44,12 @@ const UserList = ({ isLoggedIn, setLoginstatue, CurUser, onSelectClick }) => {
 
     const handleLogout = () => {
         // 執行登出操作
-    if (isLoggedIn && setLoginstatue) {
-        setLoginstatue(false);
-        navigate('/');
-        setUsername('');
-        setPassword('');
-    }
+        if (isLoggedIn && setLoginstatue) {
+            setLoginstatue(false);
+            window.location.replace('/');
+            setUsername('');
+            setPassword('');
+        }
     };
 
     const fetchUserData = async () => {

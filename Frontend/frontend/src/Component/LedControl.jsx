@@ -173,7 +173,7 @@ const LedControl = ( {socket, onBack} ) =>
             
             {/* {Ledstatus && <DeviceInfo className="left-column" data={Ledstatus}></DeviceInfo>} */}
             <div className="right-column">
-            <form onSubmit={onSubmit} className="form">
+            <form onSubmit={onSubmit} className="ledform">
                 {/* <div className="input-container">
                     <label htmlFor="brightness" className="label">
                     Brightness:
@@ -248,45 +248,46 @@ const LedControl = ( {socket, onBack} ) =>
                         editcolor={`rgb(0, 0, ${blue})`}
                     />
                 </div> */}
-                <div>
-                <div className="wheel-wrapper">
-                    <div style={{ position: 'relative' }}>
-                        <img style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: 25,
-                                height: 25,
-                                borderRadius: '50%',
-                                zIndex: 3,
-                                cursor: 'pointer',  // 鼠标样式设为手型
-                            }}
-                            src="/unpower.png"></img>
-                        <button
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: 200,
-                                height: 200,
-                                borderRadius: '50%',
-                                backgroundColor: '#252728',
-                                zIndex: 1,
-                                border: '1px solid rgba(255, 255, 255, 0.5)',  // 白色边框
-                                boxShadow: '0 0 5px rgba(255, 255, 255, 0.5)',  // 白色阴影
-                                cursor: 'pointer',  // 鼠标样式设为手型
-                            }}
-                            onClick={() => {setHsva({ h: 0, s: 0, v: 100, a: 1 });}}>
-                        </button>
-                        <Wheel 
-                        color={hsva} onChange={(color) => {setHsva({ ...hsva, ...color.hsva })}}
-                        width={300} height={300} />
+                <div className="wheelandbrigh">
+                    <div className="wheel-wrapper">
+                        <div style={{ position: 'relative' }}>
+                            <img style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: 25,
+                                    height: 25,
+                                    borderRadius: '50%',
+                                    zIndex: 3,
+                                    cursor: 'pointer',  // 鼠标样式设为手型
+                                }}
+                                src="/unpower.png"></img>
+                            <button
+                                style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: 200,
+                                    height: 200,
+                                    borderRadius: '50%',
+                                    backgroundColor: '#252728',
+                                    zIndex: 1,
+                                    border: '1px solid rgba(255, 255, 255, 0.5)',  // 白色边框
+                                    boxShadow: '0 0 5px rgba(255, 255, 255, 0.5)',  // 白色阴影
+                                    cursor: 'pointer',  // 鼠标样式设为手型
+                                }}
+                                onClick={() => {setHsva({ h: 0, s: 0, v: 100, a: 1 });}}>
+                            </button>
+                            <Wheel 
+                            color={hsva} onChange={(color) => {setHsva({ ...hsva, ...color.hsva })}}
+                            width={300} height={300} />
+                        </div>
+                        {/* <p>{console.log(rgbaToRgb(hsvaToRgba(hsva)))}</p> */}
                     </div>
-                    {/* <p>{console.log(rgbaToRgb(hsvaToRgba(hsva)))}</p> */}
-                </div>
-                <div className="input-container">
+                    <div className="bright-container">
+                        <img src="/unbrightness.png"></img>
                         <PrettoSlider
                             valueLabelDisplay="auto"
                             aria-label="pretto slider"
@@ -299,6 +300,7 @@ const LedControl = ( {socket, onBack} ) =>
                             step={0.1}
                             editcolor={`rgb(255, 255, 255)`}
                         />
+                        <img src="/brightness.png"></img>
                     </div>
                 </div>
                 <div className="time-container">

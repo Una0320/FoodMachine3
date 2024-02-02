@@ -53,6 +53,8 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
         setLoginstatue(false);
         setUsername('');
         setPassword('');
+        // 登出後導航到登入頁面
+        navigate('/');
     };
 
     return (
