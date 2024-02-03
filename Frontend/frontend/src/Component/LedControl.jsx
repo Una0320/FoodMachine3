@@ -278,7 +278,8 @@ const LedControl = ( {socket, onBack} ) =>
                                     boxShadow: '0 0 5px rgba(255, 255, 255, 0.5)',  // 白色阴影
                                     cursor: 'pointer',  // 鼠标样式设为手型
                                 }}
-                                onClick={() => {setHsva({ h: 0, s: 0, v: 100, a: 1 });}}>
+                                onClick={() => {setHsva({ h: 0, s: 0, v: 100, a: 1 });
+                                                setbrightness(1);}}>
                             </button>
                             <Wheel 
                             color={hsva} onChange={(color) => {setHsva({ ...hsva, ...color.hsva })}}
@@ -289,6 +290,7 @@ const LedControl = ( {socket, onBack} ) =>
                     <div className="bright-container">
                         <img src="/unbrightness.png"></img>
                         <PrettoSlider
+                            value={brightness}
                             valueLabelDisplay="auto"
                             aria-label="pretto slider"
                             defaultValue={brightness}
