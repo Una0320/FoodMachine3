@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import '../CSS/Loginout.css';
 
@@ -67,15 +70,50 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
         ) : (
             <div className='center_panel'>
                 <h3>Login FoodMachine</h3>
-                <label>
+                {/* <label>
                     Username:
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                 </label>
                 <label>
                     Password:
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </label>
-                <button onClick={handleLogin}>Login</button>
+                </label> */}
+                <TextField 
+                    id="standard-basic" label="Username" variant="standard"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <AccountCircle style={{ color: 'white' }} />
+                            </InputAdornment>
+                        ),
+                        style: { color: 'white', borderBottom: '1px solid white' },
+                    }}
+                    InputLabelProps= {{
+                        style: { color: 'white' },
+                    }}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    id="standard-password-input" label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <img style={{width:'20px', height:'20px'}} src='/key.png'></img>
+                                {/* <AccountCircle style={{ color: 'white' }} src='/key.png'/> */}
+                            </InputAdornment>
+                        ),
+                        style: { color: 'white', borderBottom: '1px solid white' },
+                    }}
+                    variant="standard"
+                    InputLabelProps= {{
+                        style: { color: 'white' },
+                    }}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button className='submitbtn' onClick={handleLogin}>Login</button>
+                <button className='submitbtn'>Register</button>
             </div>
         )}
     </div>

@@ -100,7 +100,7 @@ const LineChartCom = ({ socket , boxId}) => {
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
-        let day = newDate.getDate();
+        let day = newDate.getDate() -1;
         let hours = newDate.getHours();
         let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
     
@@ -132,7 +132,7 @@ const LineChartCom = ({ socket , boxId}) => {
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
-        let day = newDate.getDate();
+        let day = newDate.getDate() -1;
         let hours = newDate.getHours();
         let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
     

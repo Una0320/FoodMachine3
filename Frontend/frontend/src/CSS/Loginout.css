@@ -4,7 +4,8 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #2f6783;
+    /* background-color: #2f6783; */
+    background: radial-gradient(circle, #A4A4A4 1%, #000);
     overflow: hidden;
 }
 
@@ -22,4 +23,10 @@
     color: #ECF0F1;
     padding: 25px;
     /* margin-right: 20px; */
+}
+
+.submitbtn{
+    width:100px;
+    height: 30px;
+    font-size: 16px;
 }
