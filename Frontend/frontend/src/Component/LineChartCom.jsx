@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import '../CSS/LineChartCom.css'
 import { useCtrline } from './ChartCtlContext';
 import { useContent } from './ContentContext';
+import moment from 'moment';
 
 const LineChartCom = ({ socket , boxId}) => {
 
@@ -97,30 +98,21 @@ const LineChartCom = ({ socket , boxId}) => {
         console.log(cheight);
         setChartHeight(cheight);
     
-        let newDate = new Date();
-        let year = newDate.getFullYear();
-        let month = newDate.getMonth() + 1;
-        let day = newDate.getDate() -1;
-        let hours = newDate.getHours();
-        let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
-    
         if (chartVisibilityMap['daybtn']) {
-            fetchoutData(boxId, `${year}-${month}-${day}`);
-        }
-        else if(chartVisibilityMap['weekbtn']){
-            fetchoutData(boxId, `${year}-${month}-${day-7}`);
-        } 
-        else {
-            if (hours>=chartVisibilityMap['selectedHour'])
-            {
-
-                fetchoutData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
-            }
-            else {
-
-                fetchoutData(boxId, `${year}-${month}-${day}`);
-            }
-            
+            // 取得當前時間前情況
+            fetchoutData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
+        } else if (chartVisibilityMap['weekbtn']) {
+            // 取得一週前的情況
+            let weekago = moment().subtract(7, 'days').format('YYYY-MM-DD');
+            fetchoutData(boxId, weekago);
+        } else if (chartVisibilityMap['monthbtn']) {
+            // 取得一個月前的情況
+            let monthago = moment().subtract(1, 'months').format('YYYY-MM-DD');
+            fetchoutData(boxId, monthago);
+        } else {
+            //hours
+            let hourago = moment().subtract(chartVisibilityMap['selectedHour'], 'hours').format('YYYY-MM-DD HH:mm:ss');
+            fetchoutData(boxId, hourago);
         }
     };
 
@@ -129,42 +121,40 @@ const LineChartCom = ({ socket , boxId}) => {
         console.log(cheight);
         setChartHeight(cheight);
     
-        let newDate = new Date();
-        let year = newDate.getFullYear();
-        let month = newDate.getMonth() + 1;
-        let day = newDate.getDate() -1;
-        let hours = newDate.getHours();
-        let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
-    
+        let newDate = moment().format('YYYY-MM-DD HH:mm:ss')
+        console.log(newDate);
+        // let year = moment().year();
+        // let month = moment().month();
+        // let day = moment().date();
+        // let hours = moment().hours();
+        // let minute = moment().minutes();
+        // let second = moment().seconds();
+        // let minutes = (newDate.getMinutes() === 0) ? '00' : newDate.getMinutes();
+
         if (chartVisibilityMap['daybtn']) {
-            fetchData(boxId, `${year}-${month}-${day}`);
+            // 取得當前時間前情況
+            fetchData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
+        } else if (chartVisibilityMap['weekbtn']) {
+            // 取得一週前的情況
+            let weekago = moment().subtract(7, 'days').format('YYYY-MM-DD');
+            fetchData(boxId, weekago);
+        } else if (chartVisibilityMap['monthbtn']) {
+            // 取得一個月前的情況
+            let monthago = moment().subtract(1, 'months').format('YYYY-MM-DD');
+            fetchData(boxId, monthago);
+        } else {
+            //hours
+            let hourago = moment().subtract(chartVisibilityMap['selectedHour'], 'hours').format('YYYY-MM-DD HH:mm:ss');
+            fetchData(boxId, hourago);
         }
-        else if(chartVisibilityMap['weekbtn']){
-            fetchData(boxId, `${year}-${month}-${day-7}`);
-        } 
-        else {
-            if (hours>=chartVisibilityMap['selectedHour'])
-            {
-                fetchData(boxId, `${year}-${month}-${day} ${hours - chartVisibilityMap['selectedHour']}:${minutes}`);
-
-            }
-            else {
-                fetchData(boxId, `${year}-${month}-${day}`);
-
-            }
-            
-        }
+        
     };
 
     // 隨時監聽socket - ngrowin_update事件
     useEffect(() => {
-        let currentDate = new Date();
-        let currentYear = currentDate.getFullYear();
-        let currentMonth = currentDate.getMonth() + 1; // 注意月份從0開始，需要加1
-        let currentDay = currentDate.getDate();
       
-        fetchData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
-        fetchoutData(boxId, `${currentYear}-${currentMonth}-${currentDay}`);
+        fetchData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
+        fetchoutData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
 
         socket.on("ngrowin_update", updateChart);
         socket.on("ngrowout_update", updateOutChart);
@@ -216,6 +206,13 @@ const LineChartCom = ({ socket , boxId}) => {
         setChartHeight(cheight);
     }, [boxId, chartVisibilityMap]);
 
+    useEffect(() => {
+        updateChart();
+        updateOutChart();
+        let cheight = calculateChartHeight(340);
+        console.log(cheight);
+        setChartHeight(cheight);
+    }, []);
     // useEffect(()=>{
     //     const redata = data;
     //     setChartdata(redata.reverse());

@@ -11,6 +11,7 @@ import '../CSS/Loginout.css';
 const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
     const navigate = useNavigate();
 
     const onLogin = async (username, password) => {
@@ -60,6 +61,10 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
         navigate('/');
     };
 
+    const handleRegisterClick = () => {
+        setIsRegistering(!isRegistering); // 點擊註冊按鈕時設置狀態為註冊中
+    };
+
     return (
     <div className='backdrop'>
         {isLoggedIn ? (
@@ -68,7 +73,9 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                 <button onClick={handleLogout}>Logout</button>
             </div>
         ) : (
-            <div className='center_panel'>
+            <div className='container'>
+               
+            <div className={`center_panel ${isRegistering ? 'registering' : ''}`}>
                 <h3>Login FoodMachine</h3>
                 {/* <label>
                     Username:
@@ -112,8 +119,51 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                     }}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className='submitbtn' onClick={handleLogin}>Login</button>
-                <button className='submitbtn'>Register</button>
+                <div className='btnarea'>
+                    <button className='submitbtn' onClick={handleLogin}>Login</button>
+                    <button className='submitbtn' onClick={handleRegisterClick}>Register</button>
+                </div>
+            </div>
+            {isRegistering && (
+                <div className='register_panel'>
+                    <h3>Register</h3>
+                    <TextField 
+                        id="register-username" label="Username" variant="standard"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <AccountCircle style={{ color: 'white' }} />
+                                </InputAdornment>
+                            ),
+                            style: { color: 'white', borderBottom: '1px solid white' },
+                        }}
+                        InputLabelProps= {{
+                            style: { color: 'white' },
+                        }}
+                    />
+                    <TextField
+                        id="register-password-input" label="Password"
+                        type="password"
+                        autoComplete="current-password"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <img style={{width:'20px', height:'20px'}} src='/key.png'></img>
+                                </InputAdornment>
+                            ),
+                            style: { color: 'white', borderBottom: '1px solid white' },
+                        }}
+                        variant="standard"
+                        InputLabelProps= {{
+                            style: { color: 'white' },
+                        }}
+                    />
+                    {/* 註冊按鈕 */}
+                    <div className='btnarea'>
+                        <button className='submitbtn'>Register</button>
+                    </div>
+                </div>
+            )}
             </div>
         )}
     </div>
