@@ -14,6 +14,6 @@ class user(models.Model):
 		super().save(*args, **kwargs)
 		
 	def __str__(self):
-		return self.username  # 返回模型的一個可讀的名稱
+		return str(self.username)  # 返回模型的一個可讀的名稱
 
 # Create your models here.

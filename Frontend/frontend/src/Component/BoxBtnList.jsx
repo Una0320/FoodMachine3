@@ -17,6 +17,7 @@ const BoxBtnList = ({ userId, onButtonClick }) => {
                 setBoxList(jsonData);
                 console.log(jsonData)
             } else {
+                setBoxList([]);
                 console.log(`HTTP error! Status: ${response.status}`);
             }
         } catch (error) {

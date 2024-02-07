@@ -47,7 +47,8 @@ def BoxListInfo(request, user_id):
         return JsonResponse(data, safe=False)
     else:
         timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        return JsonResponse({'message': timestamp + ', Box with UserID_' + user_id + ' not found.'})
+        return JsonResponse([])
+        # return JsonResponse({'message': timestamp + ', Box with UserID_' + user_id + ' not found.'})
 
 @require_http_methods(["GET"])
 @csrf_exempt

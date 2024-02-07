@@ -11,6 +11,8 @@ import '../CSS/Loginout.css';
 const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [regname, setRegname] = useState('');
+    const [regpwd, setRegpwd] = useState('');
     const [isRegistering, setIsRegistering] = useState(false);
     const navigate = useNavigate();
 
@@ -64,6 +66,38 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
     const handleRegisterClick = () => {
         setIsRegistering(!isRegistering); // 點擊註冊按鈕時設置狀態為註冊中
     };
+
+    const handleRegisterING = async () => {
+        await registerNew(regname, regpwd);
+        setIsRegistering(false);
+    };
+
+    const registerNew = async (regusername, regpassword) => {
+        try {
+            const response = await fetch(`http://192.168.1.213:8000/newuser/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: regusername,
+                    password: regpassword,
+                }),
+            });
+        
+            const data = await response.json();
+            // console.log('API Response:', response);
+
+            // 根據後端的回應執行相應的操作
+            if (response.ok) {
+                console.log(data);
+            } else {
+                console.error(data.error);
+            }
+        } catch (error) {
+            console.error('An error occurred during login:', error);
+        }
+    }
 
     return (
     <div className='backdrop'>
@@ -128,7 +162,8 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                 <div className='register_panel'>
                     <h3>Register</h3>
                     <TextField 
-                        id="register-username" label="Username" variant="standard"
+                        id="register-username" label="Username"
+                        variant="standard"
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -140,9 +175,10 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                         InputLabelProps= {{
                             style: { color: 'white' },
                         }}
+                        onChange={(e) => setRegname(e.target.value)}
                     />
                     <TextField
-                        id="register-password-input" label="Password"
+                        id="register-password" label="Password"
                         type="password"
                         autoComplete="current-password"
                         InputProps={{
@@ -157,10 +193,11 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                         InputLabelProps= {{
                             style: { color: 'white' },
                         }}
+                        onChange={(e) => setRegpwd(e.target.value)}
                     />
                     {/* 註冊按鈕 */}
                     <div className='btnarea'>
-                        <button className='submitbtn'>Register</button>
+                        <button className='submitbtn' onClick={handleRegisterING}>Register</button>
                     </div>
                 </div>
             )}

@@ -11,13 +11,12 @@ const LastGrowAll = ({ socket, boxId }) => {
     //{ socket, boxId }
     //Today's date
     let objectDate = new Date();
-    let day = objectDate.getDate()-2;
+    let day = objectDate.getDate();
     let month = objectDate.getMonth() + 1;
     let year = objectDate.getFullYear();
     let fulldate = year + "-" + month + "-" + day;
 
     //Fetch data
-    // const { data, outdata } = useContent();
     const [ gdata, setdata] = useState([]);
     const [ goutdata, setoutdata] = useState([]);
 

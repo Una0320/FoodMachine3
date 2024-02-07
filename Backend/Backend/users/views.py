@@ -36,18 +36,19 @@ def UserList(request):
 def newUser(request):
     if request.method == 'POST':
         # 從請求中獲取使用者提供的帳號和密碼
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        regname = data.get('username', '')
+        regpwd = data.get('password', '')
 
         # 使用 make_password 將密碼加密
-        hashed_password = make_password(password)
+        # hashed_password = make_password(regpwd)
 
         # 創建新使用者
-        new_user = user.objects.create(username=username, password=hashed_password)
+        new_user = user.objects.create(username=regname, password=regpwd)
 
         # 儲存使用者
         new_user.save()
-
+        print(new_user.password)
         return JsonResponse({'message': 'Registration successful'})
 
     # 如果不是 POST 請求，可能需要返回一些錯誤訊息
@@ -62,17 +63,19 @@ def loginout(request):
             data = json.loads(request.body)
             username = data.get('username', '')
             password = data.get('password', '')
-
+            print(username, password)
             if not username or not password:
                 return JsonResponse({'error': 'Invalid request data'}, status=400)
 
             # 在資料庫中找到相應的使用者
-            targetUser = user.objects.get(username=username)
-            print(targetUser)
-            
+            try:
+                targetUser = user.objects.get(username=username)
+            except user.DoesNotExist:
+                return JsonResponse({'error': 'User does not exist'}, status=404)
+
             # 驗證密碼是否正確
+            print((targetUser.id))
             if check_password(password, targetUser.password):
-                # 密碼正確，執行登入操作，可能需要返回一個 token 等資訊
                 return JsonResponse({'id': targetUser.id, 'name': targetUser.username}, safe=False)
             else:
                 # 密碼錯誤

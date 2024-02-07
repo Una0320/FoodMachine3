@@ -14,6 +14,7 @@
     flex-direction: row;
     justify-content: center; /* 兩個面板之間的空間均分 */
     width: 100%; /* 設置寬度以填滿父級元素 */
+    gap: 20px;
     position: relative;
 }
 
@@ -33,7 +34,7 @@
 }
 
 .registering {
-    transform: translateX(-10%);
+    transform: translateX(0);
 } 
 
 /* .register_panel {
@@ -56,6 +57,7 @@
     position: relative;
     left: calc(20% + 5px);
     transform: translateX(-90%);
+    transition: transform 10s ease-in-out;
 }
 
 .submitbtn{
