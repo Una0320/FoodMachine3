@@ -44,7 +44,7 @@ def newUser(request):
         # hashed_password = make_password(regpwd)
 
         # 創建新使用者
-        new_user = user.objects.create(username=regname, password=regpwd)
+        new_user = user.objects.create(username=regname, password=make_password(regpwd))
 
         # 儲存使用者
         new_user.save()
@@ -82,6 +82,22 @@ def loginout(request):
                 return JsonResponse({'error': 'Invalid password'}, status=401)
         except json.decoder.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+    # 如果不是 POST 請求，可能需要返回一些錯誤訊息
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@require_http_methods(["GET"])
+@csrf_exempt
+def checkUsername(request, judgeName):
+    if request.method == 'GET':        
+        try:
+            existing_user = user.objects.get(username=judgeName)
+            # 如果存在相同用戶名，返回用戶名已存在的訊息
+            if existing_user:
+                return JsonResponse({'message': True})
+        except user.DoesNotExist:
+            # 如果不存在相同用戶名，返回用戶名不存在的訊息
+            return JsonResponse({'message': False})
 
     # 如果不是 POST 請求，可能需要返回一些錯誤訊息
     return JsonResponse({'error': 'Invalid request method'}, status=400)
