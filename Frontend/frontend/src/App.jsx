@@ -26,7 +26,7 @@ function App() {
                         path="/dashboard"
                         element={<Dashboard isLoggedIn={isLoggedIn} setLoginstatue={setLoginStatus} curUser={curUser} />}
                     />
-                        <Route path='/' element={<Dashboard />}/>
+                        {/* <Route path='/' element={<Dashboard />}/> */}
                         <Route path='/box/:boxId' element={<BoxPage />} />
                         <Route path="historypic" element={<HistoryPic />} />
                         <Route path="ledctrl" element={<LedCtrlPage />}/>

@@ -121,7 +121,7 @@ const LineChartCom = ({ socket , boxId}) => {
         console.log(cheight);
         setChartHeight(cheight);
     
-        let newDate = moment().format('YYYY-MM-DD HH:mm:ss')
+        let newDate = moment().format('YYYY-MM-DD')
         console.log(newDate);
         // let year = moment().year();
         // let month = moment().month();
@@ -133,7 +133,7 @@ const LineChartCom = ({ socket , boxId}) => {
 
         if (chartVisibilityMap['daybtn']) {
             // 取得當前時間前情況
-            fetchData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
+            fetchData(boxId, moment().format('YYYY-MM-DD'));
         } else if (chartVisibilityMap['weekbtn']) {
             // 取得一週前的情況
             let weekago = moment().subtract(7, 'days').format('YYYY-MM-DD');
@@ -153,8 +153,8 @@ const LineChartCom = ({ socket , boxId}) => {
     // 隨時監聽socket - ngrowin_update事件
     useEffect(() => {
       
-        fetchData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
-        fetchoutData(boxId, moment().format('YYYY-MM-DD HH:mm:ss'));
+        fetchData(boxId, moment().format('YYYY-MM-DD'));
+        fetchoutData(boxId, moment().format('YYYY-MM-DD'));
 
         socket.on("ngrowin_update", updateChart);
         socket.on("ngrowout_update", updateOutChart);
