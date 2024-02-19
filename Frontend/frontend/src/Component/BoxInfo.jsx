@@ -32,7 +32,11 @@ const BoxInfo = ({ socket, boxId }) => {
             <h1>Box Info</h1>
             <p>Box id: {data.id}</p>
             <p>Box name: {data.name}</p>
-            <p>Users: {data.users}</p>
+            {/* <p>Users: {data.users}</p> */}
+            <p>Users:</p>
+            {data.users.map((user, index) => (
+                <li key={index}>{user}</li>
+            ))}
             <p>Plant: {data.plant}</p>
         </div>
     );

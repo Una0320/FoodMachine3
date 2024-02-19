@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from .models import user
+from boxes.models import box
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -40,6 +41,7 @@ def newUser(request):
         regname = data.get('username', '')
         regpwd = data.get('password', '')
 
+        defaultBox = box.objects.get(pk=1)
         # 使用 make_password 將密碼加密
         # hashed_password = make_password(regpwd)
 
@@ -48,7 +50,8 @@ def newUser(request):
 
         # 儲存使用者
         new_user.save()
-        print(new_user.password)
+        print(new_user.id)
+        defaultBox.users.add(new_user.id)
         return JsonResponse({'message': 'Registration successful'})
 
     # 如果不是 POST 請求，可能需要返回一些錯誤訊息

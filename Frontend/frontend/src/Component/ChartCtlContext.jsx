@@ -25,7 +25,7 @@ export function ChartCtrlProvider({ children }) {
         co2: false,
         oxygen: false,
 
-        selectedHour: 2, // 新增選擇的小時
+        selectedHour: 8, // 新增選擇的小時
         daybtn:true,
         hourbtn:false,
         weekbtn:false,
