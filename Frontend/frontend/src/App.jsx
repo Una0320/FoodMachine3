@@ -6,7 +6,7 @@ import Loginout from './Component/Loginout'
 import HistoryPic from './Component/HistoryPic'
 import LedCtrlPage from './Component/LedCtrlPage'
 import BoxPage from './Component/BoxPage'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 
 function App() {
@@ -22,11 +22,18 @@ function App() {
                         path="/"
                         element={<Loginout isLoggedIn={isLoggedIn} setLoginstatue={setLoginStatus} setCurUser={setCurUser} />}
                     />
-                    <Route
+                    {/* <Route
                         path="/dashboard"
                         element={<Dashboard isLoggedIn={isLoggedIn} setLoginstatue={setLoginStatus} curUser={curUser} />}
-                    />
-                        {/* <Route path='/' element={<Dashboard />}/> */}
+                    /> */}
+                    {isLoggedIn ? (
+                            <Route
+                                path="/dashboard"
+                                element={<Dashboard isLoggedIn={isLoggedIn} setLoginstatue={setLoginStatus} curUser={curUser} />}
+                            />
+                        ) : (
+                            <Route path="/dashboard" element={<Navigate to="/" />} />
+                    )}
                         <Route path='/box/:boxId' element={<BoxPage />} />
                         <Route path="historypic" element={<HistoryPic />} />
                         <Route path="ledctrl" element={<LedCtrlPage />}/>

@@ -11,11 +11,7 @@ import { ContentProvider } from "./ContentContext";
 
 import BoxBtnList from "./BoxBtnList";
 import UserList from "./UserList";
-import GrowInfo from "./GrowInfo";
 import LedControl from "./LedControl";
-import VideoStream from "./VideoStream";
-import LastGrowIN from "./LastGrowIN";
-import LastGrowOUT from "./LastGrowOUT";
 import LastGrowAll from "./LastGrowAll";
 import VideoandPic from "./VideoandPic";
 import LineChartCom from "./LineChartCom";
@@ -39,34 +35,18 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
     const [currentPage, setCurrentPage] = useState("dashboard");
     const navigate = useNavigate();
 
-    let objectDate = new Date();
-    let day = objectDate.getDate();
-    let month = objectDate.getMonth() + 1;
-    let year = objectDate.getFullYear();
-    let fulldate = year + "-" + month + "-" + day;
+    // let objectDate = new Date();
+    // let day = objectDate.getDate();
+    // let month = objectDate.getMonth() + 1;
+    // let year = objectDate.getFullYear();
+    // let fulldate = year + "-" + month + "-" + day;
 
     useEffect(() => {
-
-        function getMessage(value) {
-            settest("From Socket Server: " + value);
-            console.log(socket.id);
-            console.log(value);
-            //------------------------
-            //http://127.0.0.1:8000/boxinfo/1
-            fetch("http://127.0.0.1:8000/boxgrowin/1/").then((response) => {
-                response.json().then((text) => {
-                    console.log(test + ": " + text.users); // 拿到 response.body 轉成的物件
-                    setMessage(text);
-                });
-            });
-        }
-
         function box_log(value) {
             console.log(new Date() + ":" + value);
         }
         console.log("D-socket", socket.connected);
         console.log("D-socket:", socket.id);
-        socket.on("getMessage", getMessage);
         socket.on("box_log", box_log);
         // 在元件卸載時斷開 Socket.IO 連線
         return () => {
@@ -90,7 +70,10 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
         setCurrentPage(pagename);
         // navigate('/ledctrl')
     }
-
+    // 如果用户未登录，则重定向到登录页面
+    if (!isLoggedIn) {
+        return navigate('/')
+    }
     return (
         <div className="dashboard">
             <ChartCtrlProvider>
