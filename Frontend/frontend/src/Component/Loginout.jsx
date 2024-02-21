@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import '../CSS/Loginout.css';
 
 const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
+    const api_url = 'http://10.100.2.109:8000'
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [regname, setRegname] = useState('');
@@ -28,7 +29,7 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
 
     const onLogin = async (username, password) => {
         try {
-            const response = await fetch(`http://192.168.1.113:8000/login/`, {
+            const response = await fetch(`${api_url}/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
 
     const registerNew = async (regusername, regpassword) => {
         try {
-            const response = await fetch(`http://192.168.1.213:8000/newuser/`, {
+            const response = await fetch(`${api_url}/newuser/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
         // 檢查用戶名是否已存在的邏輯
         // 使用 API 請求檢查用戶名是否已存在
         try {
-            const response = await fetch(`http://192.168.1.213:8000/checkname/${newUsername}/`);
+            const response = await fetch(`${api_url}/checkname/${newUsername}/`);
             if (response.ok) {
                 // 如果請求成功，解析回應的 JSON 數據
                 const data = await response.json();
@@ -153,14 +154,6 @@ const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
                
             <div className={`center_panel ${isRegistering ? 'registering' : ''}`}>
                 <h3>Login FoodMachine</h3>
-                {/* <label>
-                    Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </label>
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </label> */}
                 <TextField
                     id="standard-basic" label="Username" variant="standard"
                     InputProps={{

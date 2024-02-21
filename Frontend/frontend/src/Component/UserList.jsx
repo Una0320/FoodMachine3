@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import "../CSS/UserList.css";
 
-const UserList = ({ isLoggedIn, setLoginstatue, CurUser, onSelectClick }) => {
+const UserList = ({ isLoggedIn, setLoginstatue, CurUser, onSelectClick, url }) => {
     const navigate = useNavigate();
     const [userList, setuserList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(CurUser.userName);
@@ -54,7 +54,7 @@ const UserList = ({ isLoggedIn, setLoginstatue, CurUser, onSelectClick }) => {
 
     const fetchUserData = async () => {
         try {
-            const response = await fetch("http://192.168.1.213:8000/userlist/");
+            const response = await fetch(`${url}/userlist/`);
             if (response.ok) {
                 const jsonData = await response.json();
                 setuserList(jsonData);

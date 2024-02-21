@@ -22,6 +22,7 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
     // const [isLogin, setisLogin] = useState(false);
     const [cur_box, setCurBox] = useState(1);
     const [cur_user, setCurUser] = useState(curUser.id);
+    const api_url = "http://10.100.2.109:8000"
 
     const [message, setMessage] = useState([]);
 
@@ -82,7 +83,8 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
                 <img className="BannerBell" src="/bell.png"></img>
                 {/* <Loginout isLoggedIn={isLogin} setLoginstatue={setisLogin} setCurUser={handleUserSelect}></Loginout>) */}
                 <UserList isLoggedIn={isLoggedIn} setLoginstatue={setLoginstatue}
-                            CurUser={curUser} onSelectClick={handleUserSelect}></UserList>
+                            CurUser={curUser} onSelectClick={handleUserSelect}
+                            url={api_url}></UserList>
                 <img src="user.png" alt="" className="profile-image" />
             </div>
             <div id="Panel" className="Panel">
@@ -107,7 +109,7 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
                     </div>
                     <div id="Userboxes">
                         <h3>BOXES</h3>
-                        <BoxBtnList userId={curUser.id} onButtonClick={handleButtonClick}></BoxBtnList>
+                        <BoxBtnList userId={curUser.id} onButtonClick={handleButtonClick} url={api_url}></BoxBtnList>
                     </div>
                 </div>
                 <div className="content">
@@ -116,14 +118,12 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
                         <>
                         <div className="content_up">
                             <div className="up_right" id="box2">
-                                <LastGrowAll socket={socket} boxId={cur_box}></LastGrowAll>
+                                <LastGrowAll socket={socket} boxId={cur_box} url={api_url}></LastGrowAll>
                             </div>
-                            <VideoandPic socket={socket} boxId={cur_box}></VideoandPic>
+                            <VideoandPic socket={socket} boxId={cur_box} url={api_url}></VideoandPic>
                         </div>
-                        <div className="content_down">
-                            
-                            
-                            <LineChartCom socket={socket} boxId={cur_box}></LineChartCom>
+                        <div className="content_down">  
+                            <LineChartCom socket={socket} boxId={cur_box} url={api_url}></LineChartCom>
                         </div>
                         </>
                     )}

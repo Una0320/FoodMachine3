@@ -4,14 +4,14 @@ import AddBoxForm from "./AddBoxform";
 
 import '../CSS/BoxBtnList.css';
 
-const BoxBtnList = ({ userId, onButtonClick }) => {
+const BoxBtnList = ({ userId, onButtonClick, url }) => {
     const [boxList, setBoxList] = useState([]);
     const [showAddBoxModal, setShowAddBoxModal] = useState(false);
     const [selectedBox, setSelectedBox] = useState(1);
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://192.168.1.213:8000/boxlist/${userId}`);
+            const response = await fetch(`${url}/boxlist/${userId}`);
             if (response.ok) {
                 const jsonData = await response.json();
                 setBoxList(jsonData);

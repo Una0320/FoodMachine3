@@ -17,7 +17,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
 
-const VideoandPic = ({ socket , boxId}) =>{
+const VideoandPic = ({ socket , boxId, url}) =>{
     //Today's date
     let objectDate = new Date();
     let day = objectDate.getDate();
@@ -85,7 +85,7 @@ const VideoandPic = ({ socket , boxId}) =>{
     
     const fetchGrowPic = async (boxId) => {
         try {
-            const response = await fetch(`http://192.168.1.213:8000/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
+            const response = await fetch(`${url}/boxgrowin/${boxId}/?start_date=${fulldate}&attributes=timestamp,cur_Image`);
 
             if (response.ok) {
                 const jsonData = await response.json();

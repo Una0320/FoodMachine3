@@ -6,7 +6,7 @@ import CustomBtn from './CustomBtn';
 import { useCtrline } from './ChartCtlContext';
 import { useContent } from './ContentContext';
 
-const LastGrowAll = ({ socket, boxId }) => {
+const LastGrowAll = ({ socket, boxId, url }) => {
 
     //{ socket, boxId }
     //Today's date
@@ -21,10 +21,10 @@ const LastGrowAll = ({ socket, boxId }) => {
     const [ goutdata, setoutdata] = useState([]);
 
     // 新增一個 state 來追蹤選擇的小時
-    const [selectedHour, setSelectedHour] = useState(2); // 初始值為 2
+    // const [selectedHour, setSelectedHour] = useState(2); // 初始值為 2
     // 滑塊的範圍是2到23，步進值為1
-    const minHour = 2;
-    const maxHour = 23;
+    // const minHour = 2;
+    // const maxHour = 23;
 
     //line chart visibility
     const {chartVisibilityMap, toggleChartVisibility, updateSelectedHour} = useCtrline()
@@ -37,7 +37,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://192.168.1.213:8000/boxgrowin/${boxId}/?start_date=${fulldate}`
+                `${url}/boxgrowin/${boxId}/?start_date=${fulldate}`
             );
 
             if (response.ok) {
@@ -57,7 +57,7 @@ const LastGrowAll = ({ socket, boxId }) => {
         // -----------------growth info-------------------
         try {
             const response = await fetch(
-                `http://192.168.1.213:8000/boxgrowout/?box_id=${boxId}&start_date=${fulldate}`
+                `${url}/boxgrowout/?box_id=${boxId}&start_date=${fulldate}`
             );
 
             if (response.ok) {

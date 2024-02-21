@@ -7,7 +7,7 @@ import { useCtrline } from './ChartCtlContext';
 import { useContent } from './ContentContext';
 import moment from 'moment';
 
-const LineChartCom = ({ socket , boxId}) => {
+const LineChartCom = ({ socket , boxId, url}) => {
 
     //Today's date
     // const { chartVisibilityMap } = useCtrline();
@@ -37,7 +37,7 @@ const LineChartCom = ({ socket , boxId}) => {
     const fetchData = async (boxid, date) => {
         try {
             const attributes = 'timestamp,luminance,airtemp,humidity';
-            const encodedURL = `http://192.168.1.213:8000/boxgrowin/${boxid}/?start_date=${date}&attributes=${attributes}`;
+            const encodedURL = `${url}/boxgrowin/${boxid}/?start_date=${date}&attributes=${attributes}`;
     
             const response = await fetch(encodedURL);
             if (response.ok) {
@@ -64,7 +64,7 @@ const LineChartCom = ({ socket , boxId}) => {
         try {
 
             const attributes = 'timestamp,airtemp,humidity,ph,ec,co2,waterlevel,watertemp,oxygen';
-            const encodedURL = `http://192.168.1.213:8000/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
+            const encodedURL = `${url}/boxgrowout/?box_id=${boxid}&start_date=${date}&attributes=${attributes}`;
     
             const response = await fetch(encodedURL);
             if (response.ok) {
