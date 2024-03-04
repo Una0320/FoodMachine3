@@ -140,7 +140,7 @@ const VideoandPic = ({ socket , boxId, url}) =>{
                 <div key={index} className="swiper-slide">
                     <div className="card">
                         <img
-                            src={`http://192.168.1.213:8000/pic/${item}`}
+                            src={`${url}/pic/${item}`}
                             alt=""
                             className="card__img"
                             title = {item}
