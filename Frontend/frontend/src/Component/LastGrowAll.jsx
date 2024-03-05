@@ -4,7 +4,12 @@ import '../CSS/Dashboard.css'
 import '../CSS/LastGrowAll.css'
 import CustomBtn from './CustomBtn';
 import { useCtrline } from './ChartCtlContext';
-import { useContent } from './ContentContext';
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+// import { Button, Dialog, DialogTitle } from '@mui/material';
 
 const LastGrowAll = ({ socket, boxId, url }) => {
 
@@ -20,11 +25,9 @@ const LastGrowAll = ({ socket, boxId, url }) => {
     const [ gdata, setdata] = useState([]);
     const [ goutdata, setoutdata] = useState([]);
 
-    // 新增一個 state 來追蹤選擇的小時
-    // const [selectedHour, setSelectedHour] = useState(2); // 初始值為 2
-    // 滑塊的範圍是2到23，步進值為1
-    // const minHour = 2;
-    // const maxHour = 23;
+    //Control alert status
+    const [openAlert, setOpenAlert] = useState(false);
+    const [alertMsg, setalertMsg] = useState([]);
 
     //line chart visibility
     const {chartVisibilityMap, toggleChartVisibility, updateSelectedHour} = useCtrline()
@@ -73,13 +76,40 @@ const LastGrowAll = ({ socket, boxId, url }) => {
         }
     };
 
-    // useEffect(() => {
-    //     setdata(data[0])
-    //     setoutdata(outdata[0])
-    //     console.log(data[0])
-    //     console.log(outdata[0])
+    useEffect(() => {
+        const alertParams = [];
+        if(gdata){
+            if(gdata.luminance < 7000 || gdata.luminance > 8000){
+                alertParams.push('Luminance abnormal.');
+            }
+        }
+        if(goutdata){
+            if(goutdata.watertemp < 20 || goutdata.watertemp >= 26){
+                alertParams.push('Water Temp abnormal.');
+            }
+            if(goutdata.ec < 0.9 || goutdata.ec > 1.4){
+                alertParams.push('EC abnormal.');
+            }
+            if(goutdata.ph < 5 || goutdata.ph > 7.9){
+                alertParams.push('pH abnormal.');
+            }
+            if(goutdata.oxygen < 20 || goutdata.oxygen > 20.99){
+                alertParams.push('Oxygen abnormal.');
+            }
+            if(goutdata.co2 < 500 || goutdata.co2 > 1000){
+                alertParams.push('CO2 abnormal.')
+            }
+        }
+        if(alertParams.length > 0){
+            setalertMsg(alertParams);
+            setOpenAlert(true);
+        }
+        
+    },[gdata, goutdata])
 
-    // },[data, outdata])
+    const handleCloseAlert = () => {
+        setOpenAlert(false);
+    }
 
     useEffect(() =>{
         fetchINdata(boxId);
@@ -111,6 +141,17 @@ const LastGrowAll = ({ socket, boxId, url }) => {
 
     return(
         <>
+            <Dialog open={openAlert} onClose={handleCloseAlert}>
+                <DialogTitle>Alert</DialogTitle>
+                <DialogContent>
+                    {alertMsg.map((message, index) => (
+                        <p key={index}>{message}</p>
+                    ))}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseAlert}>OK</Button>
+                </DialogActions>
+            </Dialog>
             <div className='up_right_btnArea'>
                 {/* Data buttons */}
                 {gdata ?
@@ -193,7 +234,7 @@ const LastGrowAll = ({ socket, boxId, url }) => {
                                 onClick={() => toggleChartVisibility('watertemp')}>Out watertemp {Math.round(outdata.watertemp*100)/100 || ''} &#8451;</button> */}
                         <CustomBtn  imagePath={chartVisibilityMap['watertemp']? '/watertemp.png':'untemp.png'} 
                                     text1={Math.round(goutdata.watertemp*100)/100 + " °C"} 
-                                    text2={'Wirtemp'} 
+                                    text2={'Watertemp'} 
                                     text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['watertemp']} 
                                     onClick={() => toggleChartVisibility('watertemp')}
@@ -248,7 +289,7 @@ const LastGrowAll = ({ socket, boxId, url }) => {
                                     onClick={() => toggleChartVisibility('co2')}
                                     activeColor={'#FFA07A'}></CustomBtn>
                         <CustomBtn  imagePath={chartVisibilityMap['oxygen']? '/oxygen.png':'unoxygen.png'} 
-                                    text1={Math.round(goutdata.oxygen*100)/100} 
+                                    text1={Math.round(goutdata.oxygen*100)/100 + ' %'} 
                                     text2={'oxygen'} 
                                     text3={'Outer Box'} 
                                     isActive={chartVisibilityMap['oxygen']} 
