@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import '../CSS/Loginout.css';
 
 const Loginout = ({ isLoggedIn, setLoginstatue, setCurUser }) => {
-    const api_url = 'http://192.168.1.182:8000'
+    const api_url = 'http://192.168.1.183:8000'
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [regname, setRegname] = useState('');

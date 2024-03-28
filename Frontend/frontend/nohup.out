@@ -1,0 +1,42 @@
+
+> frontend@0.0.0 dev
+> vite --host=0.0.0.0
+
+
+  VITE v5.0.12  ready in 980 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.1.182:3000/
+9:24:51 AM [vite] hmr update /src/Component/Dashboard.jsx
+9:25:38 AM [vite] hmr update /src/Component/Loginout.jsx
+
+> frontend@0.0.0 dev
+> vite --host=0.0.0.0
+
+Port 3000 is in use, trying another one...
+
+  VITE v5.0.12  ready in 726 ms
+
+  ➜  Local:   http://localhost:3001/
+  ➜  Network: http://192.168.1.183:3001/
+
+> frontend@0.0.0 dev
+> vite --host=0.0.0.0
+
+
+  VITE v5.0.12  ready in 1067 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.1.183:3000/
+10:02:36 AM [vite] hmr update /src/Component/SocketContext.jsx
+10:02:36 AM [vite] hmr invalidate /src/Component/SocketContext.jsx Could not Fast Refresh. Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+10:02:36 AM [vite] hmr update /src/App.jsx, /src/Component/Dashboard.jsx, /src/Component/LedCtrlPage.jsx
+10:02:54 AM [vite] hmr update /src/Component/SocketContext.jsx
+10:02:54 AM [vite] hmr invalidate /src/Component/SocketContext.jsx Could not Fast Refresh. Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+10:02:54 AM [vite] hmr update /src/App.jsx, /src/Component/Dashboard.jsx, /src/Component/LedCtrlPage.jsx
+10:05:39 AM [vite] hmr update /src/Component/SocketContext.jsx
+10:05:39 AM [vite] hmr invalidate /src/Component/SocketContext.jsx Could not Fast Refresh. Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+10:05:39 AM [vite] hmr update /src/App.jsx, /src/Component/Dashboard.jsx, /src/Component/LedCtrlPage.jsx
+10:18:57 AM [vite] hmr update /src/Component/LedControl.jsx
+10:21:21 AM [vite] hmr update /src/Component/AddBoxform.jsx
+10:21:32 AM [vite] hmr update /src/Component/AddBoxform.jsx

@@ -22,7 +22,7 @@ export function Dashboard({isLoggedIn, setLoginstatue, curUser}) {
     // const [isLogin, setisLogin] = useState(false);
     const [cur_box, setCurBox] = useState(1);
     const [cur_user, setCurUser] = useState(curUser.id);
-    const api_url = "http://192.168.1.182:8000"
+    const api_url = "http://192.168.1.183:8000"
 
     const [message, setMessage] = useState([]);
 

@@ -45,7 +45,7 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
 
         // 假設 API endpoint 是 http://127.0.0.1:8000/newbox
         console.log(JSON.stringify(boxData));
-        const response = await fetch("http://192.168.1.213:8000/newbox/", {
+        const response = await fetch("http://192.168.1.183:8000/newbox/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const AddBoxForm = ({ onClose, onBoxAdded }) => {
         // 獲取使用者資料的 API 請求
         const fetchUser = async () => {
             try {
-                const response = await fetch("http://192.168.1.213:8000/userlist/");
+                const response = await fetch("http://192.168.1.183:8000/userlist/");
                 if (response.ok) {
                     const userData = await response.json();
                     // 將使用者資料轉換為選項格式（id 和 label）

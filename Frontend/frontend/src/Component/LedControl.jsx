@@ -100,7 +100,7 @@ const LedControl = ( {socket, onBack} ) =>
 
     const fetchData = async (boxId) => {
         try {
-            const response = await fetch(`http://192.168.1.213:8000/deviceinfo/${boxId}`);
+            const response = await fetch(`http://192.168.1.183:8000/deviceinfo/${boxId}`);
             
             if (response.ok) {
                 const jsonData = await response.json();
